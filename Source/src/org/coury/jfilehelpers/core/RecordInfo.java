@@ -59,7 +59,7 @@ public final class RecordInfo<T> {
 	private int ignoreFirst = 0;
 	private int ignoreLast = 0;
 	private boolean ignoreEmptyLines = false;
-	private boolean ignoreEmptySpaces = false;
+	private boolean trimBeforeEmptyLineCheck = false;
 	private String commentMarker = null;
 	private boolean commentAnyPlace = true;
 	private RecordCondition recordCondition = RecordCondition.None;
@@ -226,7 +226,10 @@ public final class RecordInfo<T> {
 	 */
 	private boolean mustIgnoreLine(String line) {
 		if (ignoreEmptyLines) {
-			if ((ignoreEmptySpaces && line.trim().length() == 0) || line.length() == 0) {
+			if(line.length() == 0){
+				return true;
+			}
+			if (trimBeforeEmptyLineCheck && line.trim().length() == 0) {
 				return true;
 			}
 		}
@@ -288,7 +291,11 @@ public final class RecordInfo<T> {
 			this.ignoreFirst = igl.lines();
 		}
 		
-		this.ignoreEmptyLines = recordClass.isAnnotationPresent(IgnoreEmptyLines.class);
+		IgnoreEmptyLines iel = recordClass.getAnnotation(IgnoreEmptyLines.class);
+		if(iel != null){
+			this.ignoreEmptyLines = true;
+			this.trimBeforeEmptyLineCheck = iel.trimBeforeCheck();
+		}
 		
 		IgnoreCommentedLines igc = recordClass.getAnnotation(IgnoreCommentedLines.class);
 		if (igc != null) {
@@ -425,11 +432,11 @@ public final class RecordInfo<T> {
 	}
 
 	public boolean isIgnoreEmptySpaces() {
-		return ignoreEmptySpaces;
+		return trimBeforeEmptyLineCheck;
 	}
 
 	public void setIgnoreEmptySpaces(boolean ignoreEmptySpaces) {
-		this.ignoreEmptySpaces = ignoreEmptySpaces;
+		this.trimBeforeEmptyLineCheck = ignoreEmptySpaces;
 	}
 
 	public String getCommentMarker() {
