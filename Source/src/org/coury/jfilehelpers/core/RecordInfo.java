@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 
 import org.coury.jfilehelpers.annotations.FixedLengthRecord;
 import org.coury.jfilehelpers.annotations.IgnoreCommentedLines;
+import org.coury.jfilehelpers.annotations.IgnoreEmptyLines;
 import org.coury.jfilehelpers.annotations.IgnoreFirst;
 import org.coury.jfilehelpers.annotations.IgnoreLast;
 import org.coury.jfilehelpers.engines.LineInfo;
@@ -287,7 +288,7 @@ public final class RecordInfo<T> {
 			this.ignoreFirst = igl.lines();
 		}
 		
-		this.ignoreEmptyLines = recordClass.isAnnotationPresent(IgnoreLast.class);
+		this.ignoreEmptyLines = recordClass.isAnnotationPresent(IgnoreEmptyLines.class);
 		
 		IgnoreCommentedLines igc = recordClass.getAnnotation(IgnoreCommentedLines.class);
 		if (igc != null) {
