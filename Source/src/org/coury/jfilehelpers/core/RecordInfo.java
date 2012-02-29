@@ -40,6 +40,7 @@ import org.coury.jfilehelpers.fields.FieldBase;
 import org.coury.jfilehelpers.fields.FieldFactory;
 import org.coury.jfilehelpers.fields.FixedLengthField;
 import org.coury.jfilehelpers.helpers.ConditionHelper;
+import org.coury.jfilehelpers.helpers.ConstructorHelper;
 import org.coury.jfilehelpers.helpers.StringHelper;
 import org.coury.jfilehelpers.interfaces.NotifyRead;
 import org.coury.jfilehelpers.interfaces.NotifyWrite;
@@ -75,7 +76,7 @@ public final class RecordInfo<T> {
 
 	private int fieldCount;
 	
-	public RecordInfo(Class<T> recordClass) {
+	public RecordInfo(final Class<T> recordClass) {
 		// this.recordObject = recordObject;
 		this.recordClass = recordClass;
 		initFields();
@@ -87,7 +88,7 @@ public final class RecordInfo<T> {
 	 * @param line current text line extracted from file 
 	 * @return parsed object
 	 */
-	public T strToRecord(LineInfo line) {
+	public T strToRecord(final LineInfo line) {
 		if (mustIgnoreLine(line.getLineStr())) {
 			return null;
 		}
@@ -140,7 +141,8 @@ public final class RecordInfo<T> {
 	static Object getInternalField(final String fieldName, final Object target) {
 	    Object value = AccessController
 	            .doPrivileged(new PrivilegedAction<Object>() {
-	                public Object run() {
+	                @Override
+					public Object run() {
 	                    Object result = null;
 	                    java.lang.reflect.Field field = null;
 	                    try {
@@ -159,7 +161,8 @@ public final class RecordInfo<T> {
 	
 	static void setInternalField(final String fieldName, final Object target, final Object value) {
 	    AccessController.doPrivileged(new PrivilegedAction<Object>() {
-	                public Object run() {
+	                @Override
+					public Object run() {
 	                    Object result = null;
 	                    java.lang.reflect.Field field = null;
 	                    try {
@@ -183,7 +186,7 @@ public final class RecordInfo<T> {
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
 	 */
-	public String recordToStr(T record) throws IllegalArgumentException, IllegalAccessException {
+	public String recordToStr(final T record) throws IllegalArgumentException, IllegalAccessException {
 		StringBuffer sb = new StringBuffer(this.sizeHint);
 		
 		Object[] values = new Object[fieldCount];
@@ -224,7 +227,7 @@ public final class RecordInfo<T> {
 	 * @param line line to be examined
 	 * @return true or false indicating if passed line should be ignored
 	 */
-	private boolean mustIgnoreLine(String line) {
+	private boolean mustIgnoreLine(final String line) {
 		if (ignoreEmptyLines) {
 			if(line.length() == 0){
 				return true;
@@ -235,7 +238,7 @@ public final class RecordInfo<T> {
 		}
 		
 		if (commentMarker != null && commentMarker.length() > 0) {
-			if ((commentAnyPlace && line.trim().startsWith(commentMarker)) || line.startsWith(commentMarker)) {
+			if (commentAnyPlace && line.trim().startsWith(commentMarker) || line.startsWith(commentMarker)) {
 				return true;
 			}
 		}
@@ -305,36 +308,15 @@ public final class RecordInfo<T> {
 		
 		// TODO ConditionalRecord
 
-		if(NotifyRead.class.isAssignableFrom(recordClass))
+		if(NotifyRead.class.isAssignableFrom(recordClass)) {
 			notifyRead = true;
-
-		if(NotifyWrite.class.isAssignableFrom(recordClass))
-			notifyWrite = true;
-		
-		try {
-			recordConstructor = recordClass.getConstructor();
-		} catch (SecurityException e) {
-			throw new RuntimeException(
-					"The class " + recordClass.getName() + 
-					" needs to be accessible to be used");
-		} catch (NoSuchMethodException e) {
-			boolean throwIt = true;
-
-			try {
-				if (recordClass.getEnclosingClass() != null) {
-					recordConstructor = recordClass.getConstructor(recordClass.getEnclosingClass());
-				}
-				throwIt = false;
-			}
-			catch (NoSuchMethodException e1) {
-			}
-
-			if (throwIt) {
-				throw new RuntimeException(
-						"The class " + recordClass.getName() + 
-						" needs to have an empty constructor to be used");
-			}
 		}
+
+		if(NotifyWrite.class.isAssignableFrom(recordClass)) {
+			notifyWrite = true;
+		}
+		
+		recordConstructor = ConstructorHelper.getAccessibleEmptyConstructor(recordClass);
 		
 		fields = createCoreFields(recordClass.getDeclaredFields(), recordClass);
 		fieldCount = this.fields.length;
@@ -350,6 +332,8 @@ public final class RecordInfo<T> {
 			throw new IllegalArgumentException("The record class " + recordClass.getName() + " don't contains any field.");
 		}
 	}
+
+	
 
 	/**
 	 * Indicates if this record is of fixed length
@@ -367,7 +351,7 @@ public final class RecordInfo<T> {
 	 * @return an array of FieldBase, field descriptor objects
 	 */
 	@SuppressWarnings("unchecked")
-	private static FieldBase[] createCoreFields(Field[] fields, Class recordClass) {
+	private static FieldBase[] createCoreFields(final Field[] fields, final Class recordClass) {
 		FieldBase field;
 		List<FieldBase> fieldArr = new ArrayList<FieldBase>();
 		
@@ -403,7 +387,7 @@ public final class RecordInfo<T> {
 		return fields;
 	}
 
-	public void setFields(FieldBase[] fields) {
+	public void setFields(final FieldBase[] fields) {
 		this.fields = fields;
 	}
 
@@ -411,7 +395,7 @@ public final class RecordInfo<T> {
 		return ignoreFirst;
 	}
 
-	public void setIgnoreFirst(int ignoreFirst) {
+	public void setIgnoreFirst(final int ignoreFirst) {
 		this.ignoreFirst = ignoreFirst;
 	}
 
@@ -419,7 +403,7 @@ public final class RecordInfo<T> {
 		return ignoreLast;
 	}
 
-	public void setIgnoreLast(int ignoreLast) {
+	public void setIgnoreLast(final int ignoreLast) {
 		this.ignoreLast = ignoreLast;
 	}
 
@@ -427,7 +411,7 @@ public final class RecordInfo<T> {
 		return ignoreEmptyLines;
 	}
 
-	public void setIgnoreEmptyLines(boolean ignoreEmptyLines) {
+	public void setIgnoreEmptyLines(final boolean ignoreEmptyLines) {
 		this.ignoreEmptyLines = ignoreEmptyLines;
 	}
 
@@ -435,7 +419,7 @@ public final class RecordInfo<T> {
 		return trimBeforeEmptyLineCheck;
 	}
 
-	public void setIgnoreEmptySpaces(boolean ignoreEmptySpaces) {
+	public void setIgnoreEmptySpaces(final boolean ignoreEmptySpaces) {
 		this.trimBeforeEmptyLineCheck = ignoreEmptySpaces;
 	}
 
@@ -443,7 +427,7 @@ public final class RecordInfo<T> {
 		return commentMarker;
 	}
 
-	public void setCommentMarker(String commentMaker) {
+	public void setCommentMarker(final String commentMaker) {
 		this.commentMarker = commentMaker;
 	}
 
@@ -451,7 +435,7 @@ public final class RecordInfo<T> {
 		return commentAnyPlace;
 	}
 
-	public void setCommentAnyPlace(boolean commentAnyPlace) {
+	public void setCommentAnyPlace(final boolean commentAnyPlace) {
 		this.commentAnyPlace = commentAnyPlace;
 	}
 
@@ -459,7 +443,7 @@ public final class RecordInfo<T> {
 		return recordCondition;
 	}
 
-	public void setRecordCondition(RecordCondition recordCondition) {
+	public void setRecordCondition(final RecordCondition recordCondition) {
 		this.recordCondition = recordCondition;
 	}
 
@@ -467,7 +451,7 @@ public final class RecordInfo<T> {
 		return recordConditionSelector;
 	}
 
-	public void setRecordConditionSelector(String recordConditionSelector) {
+	public void setRecordConditionSelector(final String recordConditionSelector) {
 		this.recordConditionSelector = recordConditionSelector;
 	}
 
@@ -475,7 +459,7 @@ public final class RecordInfo<T> {
 		return notifyRead;
 	}
 
-	public void setNotifyRead(boolean notifyRead) {
+	public void setNotifyRead(final boolean notifyRead) {
 		this.notifyRead = notifyRead;
 	}
 
@@ -483,7 +467,7 @@ public final class RecordInfo<T> {
 		return notifyWrite;
 	}
 
-	public void setNotifyWrite(boolean notifyWrite) {
+	public void setNotifyWrite(final boolean notifyWrite) {
 		this.notifyWrite = notifyWrite;
 	}
 
@@ -491,7 +475,7 @@ public final class RecordInfo<T> {
 		return conditionRegEx;
 	}
 
-	public void setConditionRegEx(String conditionRegEx) {
+	public void setConditionRegEx(final String conditionRegEx) {
 		this.conditionRegEx = conditionRegEx;
 	}
 
@@ -499,7 +483,7 @@ public final class RecordInfo<T> {
 		return fieldCount;
 	}
 
-	public void setFieldCount(int fieldCount) {
+	public void setFieldCount(final int fieldCount) {
 		this.fieldCount = fieldCount;
 	}
 
@@ -507,7 +491,7 @@ public final class RecordInfo<T> {
 		return recordConstructor;
 	}
 
-	public void setRecordConstructor(Constructor<T> recordConstructor) {
+	public void setRecordConstructor(final Constructor<T> recordConstructor) {
 		this.recordConstructor = recordConstructor;
 	}
 }
