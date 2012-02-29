@@ -22,6 +22,7 @@ package org.coury.jfilehelpers.fields;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 
 import org.coury.jfilehelpers.annotations.FieldConverter;
 import org.coury.jfilehelpers.annotations.FieldNullValue;
@@ -52,9 +53,9 @@ public abstract class FieldBase {
 	
 	private ConverterBase convertProvider;
 		
-	public FieldBase(Field field) {
+	public FieldBase(final Field field) {
 		fieldInfo = field;
-		stringField = (field.getType().equals(String.class));
+		stringField = field.getType().equals(String.class);
 		
 		FieldConverter fc = field.getAnnotation(FieldConverter.class);
 		if (fc == null) {
@@ -70,7 +71,7 @@ public abstract class FieldBase {
 		}		
 	}
 	
-	public Object extractValue(LineInfo line) throws IOException {
+	public Object extractValue(final LineInfo line) throws IOException {
 		if (this.inNewLine) {
 			if (!line.isEmptyFromPos()) {
 //				throw new BadUsageException("Text '" + line.CurrentString +
@@ -101,7 +102,7 @@ public abstract class FieldBase {
 		return assignFromString(info, line);
 	}
 
-	public Object createValueForField(Object fieldValue) {
+	public Object createValueForField(final Object fieldValue) {
 		Object val = null;
 
 		if (fieldValue == null) {
@@ -132,7 +133,7 @@ public abstract class FieldBase {
 	
 	protected abstract void createFieldString(StringBuffer sb, Object fieldValue);
 	
-	protected String baseFieldString(Object fieldValue) {
+	protected String baseFieldString(final Object fieldValue) {
 		if (convertProvider == null) {
 			if (fieldValue == null) {
 				return "";
@@ -146,7 +147,7 @@ public abstract class FieldBase {
 		}
 	}
 	
-	private Object assignFromString(ExtractedInfo fieldString, LineInfo line) {
+	private Object assignFromString(final ExtractedInfo fieldString, final LineInfo line) {
 		Object val;
 		
 		switch (trimMode) {
@@ -203,18 +204,32 @@ public abstract class FieldBase {
         return val;
 	}
 	
-	@SuppressWarnings("unchecked")
-	private Object changeType(String s, Field fieldInfo) {
-		if (fieldInfo.getType().getName().equals("int")) {
+	public static Number convertStringToNumber(final String s, final Field fieldInfo){
+		
+		String typeName = fieldInfo.getType().getName();
+		if (typeName.equals("int")  || typeName.equals("java.lang.Integer")) {
 			return Integer.parseInt(s);
-		}
-		if (fieldInfo.getType().getName().equals("double")) {
+		} else if (typeName.equals("long") || typeName.equals("java.lang.Long")) {
+			return Long.parseLong(s);
+		}else if (typeName.equals("double") || typeName.equals("java.lang.Double")) {
 			return Double.parseDouble(s);
-		}
-		if (fieldInfo.getType().getName().equals("float")) {
+		} else if (typeName.equals("float")  || typeName.equals("java.lang.Float")) {
 			return Float.parseFloat(s);
+		} else if(typeName.equals("java.math.BigDecimal")){
+			return new BigDecimal(s);
 		}
-		if (fieldInfo.getType().isEnum()) {
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private Object changeType(final String s, final Field fieldInfo) {
+		
+		Number number = convertStringToNumber(s, fieldInfo);
+		if(number != null){
+			return number;
+		}
+		
+		 if (fieldInfo.getType().isEnum()) {
 			Object ret = null;
 			try {
 				System.out.println(s);
@@ -224,10 +239,11 @@ public abstract class FieldBase {
 			}
 			return ret;
 		}
-		return s.getClass().cast(fieldInfo.getType());
+		return fieldInfo.getType().cast(s);
+		//return s.getClass().cast(fieldInfo.getType());
 	}
 
-	public void assignToString(StringBuffer sb, Object fieldValue) {
+	public void assignToString(final StringBuffer sb, final Object fieldValue) {
 		if (this.inNewLine == true) {
 			sb.append(StringHelper.NEW_LINE);
 		}
@@ -244,7 +260,7 @@ public abstract class FieldBase {
 		return stringField;
 	}
 
-	public void setStringField(boolean stringField) {
+	public void setStringField(final boolean stringField) {
 		this.stringField = stringField;
 	}
 
@@ -252,7 +268,7 @@ public abstract class FieldBase {
 		return fieldInfo;
 	}
 
-	public void setFieldInfo(Field fieldInfo) {
+	public void setFieldInfo(final Field fieldInfo) {
 		this.fieldInfo = fieldInfo;
 	}
 
@@ -260,7 +276,7 @@ public abstract class FieldBase {
 		return trimMode;
 	}
 
-	public void setTrimMode(TrimMode trimMode) {
+	public void setTrimMode(final TrimMode trimMode) {
 		this.trimMode = trimMode;
 	}
 
@@ -268,7 +284,7 @@ public abstract class FieldBase {
 		return trimChars;
 	}
 
-	public void setTrimChars(char[] trimChars) {
+	public void setTrimChars(final char[] trimChars) {
 		this.trimChars = trimChars;
 	}
 
@@ -276,7 +292,7 @@ public abstract class FieldBase {
 		return isOptional;
 	}
 
-	public void setOptional(boolean isOptional) {
+	public void setOptional(final boolean isOptional) {
 		this.isOptional = isOptional;
 	}
 
@@ -284,7 +300,7 @@ public abstract class FieldBase {
 		return nextOptional;
 	}
 
-	public void setNextOptional(boolean nextIsOptinal) {
+	public void setNextOptional(final boolean nextIsOptinal) {
 		this.nextOptional = nextIsOptinal;
 	}
 
@@ -292,7 +308,7 @@ public abstract class FieldBase {
 		return inNewLine;
 	}
 
-	public void setInNewLine(boolean inNewLine) {
+	public void setInNewLine(final boolean inNewLine) {
 		this.inNewLine = inNewLine;
 	}
 
@@ -300,7 +316,7 @@ public abstract class FieldBase {
 		return first;
 	}
 
-	public void setFirst(boolean first) {
+	public void setFirst(final boolean first) {
 		this.first = first;
 	}
 
@@ -308,7 +324,7 @@ public abstract class FieldBase {
 		return last;
 	}
 
-	public void setLast(boolean last) {
+	public void setLast(final boolean last) {
 		this.last = last;
 	}
 
@@ -316,7 +332,7 @@ public abstract class FieldBase {
 		return trailingArray;
 	}
 
-	public void setTrailingArray(boolean trailingArray) {
+	public void setTrailingArray(final boolean trailingArray) {
 		this.trailingArray = trailingArray;
 	}
 
@@ -324,7 +340,7 @@ public abstract class FieldBase {
 		return nullValue;
 	}
 
-	public void setNullValue(Object nullValue) {
+	public void setNullValue(final Object nullValue) {
 		this.nullValue = nullValue;
 	}
 
@@ -332,7 +348,7 @@ public abstract class FieldBase {
 		return nullableType;
 	}
 
-	public void setNullableType(boolean nullableType) {
+	public void setNullableType(final boolean nullableType) {
 		this.nullableType = nullableType;
 	}
 
@@ -340,7 +356,7 @@ public abstract class FieldBase {
 		return convertProvider;
 	}
 
-	public void setConvertProvider(ConverterBase converterProvider) {
+	public void setConvertProvider(final ConverterBase converterProvider) {
 		this.convertProvider = converterProvider;
 	}
 }
