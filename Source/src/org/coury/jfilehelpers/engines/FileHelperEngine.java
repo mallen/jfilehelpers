@@ -63,19 +63,19 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
     private BeforeWriteRecordHandler<T> beforeWriteRecordHandler;
     private AfterWriteRecordHandler<T> afterWriteRecordHandler;
 
-    public FileHelperEngine(Class<T> recordClass) {
+    public FileHelperEngine(final Class<T> recordClass) {
         super(recordClass);
     }
 
-    public List<T> readFile(String fileName) throws IOException {
+    public List<T> readFile(final String fileName) throws IOException {
         return readFile(fileName, Integer.MAX_VALUE);
     }
 
-    public void writeFile(String fileName, List<T> records) throws IOException {
+    public void writeFile(final String fileName, final List<T> records) throws IOException {
         writeFile(fileName, records, -1);
     }
 
-    public void writeFile(String fileName, List<T> records, int maxRecords) throws IOException {
+    public void writeFile(final String fileName, final List<T> records, final int maxRecords) throws IOException {
         FileWriter fw = null;
         try {
             fw = new FileWriter(new File(fileName));
@@ -89,13 +89,13 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
         }
     }
     
-    public String getRecordsAsString(List<T> records) throws IOException {
+    public String getRecordsAsString(final List<T> records) throws IOException {
     	StringWriter sw = new StringWriter();
     	writeStream(sw, records, -1);
     	return sw.getBuffer().toString();
     }
 
-    private void writeStream(Writer osr, Iterable<T> records, int maxRecords) throws IOException {
+    private void writeStream(final Writer osr, final Iterable<T> records, final int maxRecords) throws IOException {
         BufferedWriter writer = new BufferedWriter(osr);
 
         try {
@@ -179,7 +179,7 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
         }
     }
     
-    public List<T> readFile(String fileName, int maxRecords) throws IOException {
+    public List<T> readFile(final String fileName, final int maxRecords) throws IOException {
         List<T> tempRes = null;
         Reader r = null;
         try {
@@ -193,11 +193,11 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
         return tempRes;
     }
 
-    public List<T> readResource(String resourceName) throws IOException {
+    public List<T> readResource(final String resourceName) throws IOException {
         return readResource(resourceName, Integer.MAX_VALUE);
     }
 
-    public List<T> readResource(String fileName, int maxRecords) throws IOException {
+    public List<T> readResource(final String fileName, final int maxRecords) throws IOException {
         List<T> tempRes = null;
         Reader r = null;
         try {
@@ -212,13 +212,15 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
         return tempRes;
     }
 
-    public List<T> readStream(Reader fileReader, int maxRecords) throws IOException {
+    public List<T> readStream(final Reader fileReader, final int maxRecords) throws IOException {
         List<T> list = null;
         try {
             list = new ArrayList<T>();
             openStream(fileReader, maxRecords);
             for (T t : this) {
-                list.add(t);
+            	if(t != null){
+            		list.add(t);
+            	}
             }
         } catch (IOException e) {
             throw e;
@@ -228,26 +230,26 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
         return list;
     }
 
-    public void openFile(String fileName) throws IOException {
+    public void openFile(final String fileName) throws IOException {
         openFile(fileName, Integer.MAX_VALUE);
     }
     
-    public void openFile(String fileName, int maxRecords) throws IOException {
+    public void openFile(final String fileName, final int maxRecords) throws IOException {
         fr = new FileReader(new File(fileName));
         openStream(fr, maxRecords);
     }
     
-    public void openResource(String resourceName) throws IOException {
+    public void openResource(final String resourceName) throws IOException {
         openResource(resourceName, Integer.MAX_VALUE);
     }
 
-    public void openResource(String fileName, int maxRecords) throws IOException {
+    public void openResource(final String fileName, final int maxRecords) throws IOException {
         Reader r = null;
         r = new InputStreamReader(getClass().getResourceAsStream(fileName));
         openStream(r, maxRecords);
     }
     
-    public void openStream(Reader fileReader, int maxRecords) throws IOException {
+    public void openStream(final Reader fileReader, final int maxRecords) throws IOException {
         BufferedReader reader = new BufferedReader(fileReader);
         resetFields();
         setHeaderText("");
@@ -288,23 +290,23 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
         }
     }
     
-    public void setBeforeReadRecordHandler(BeforeReadRecordHandler<T> beforeReadRecordHandler) {
+    public void setBeforeReadRecordHandler(final BeforeReadRecordHandler<T> beforeReadRecordHandler) {
         this.beforeReadRecordHandler = beforeReadRecordHandler;
     }
 
-    public void setAfterReadRecordHandler(AfterReadRecordHandler<T> afterReadRecordHandler) {
+    public void setAfterReadRecordHandler(final AfterReadRecordHandler<T> afterReadRecordHandler) {
         this.afterReadRecordHandler = afterReadRecordHandler;
     }
 
-    public void setBeforeWriteRecordHandler(BeforeWriteRecordHandler<T> beforeWriteRecordHandler) {
+    public void setBeforeWriteRecordHandler(final BeforeWriteRecordHandler<T> beforeWriteRecordHandler) {
         this.beforeWriteRecordHandler = beforeWriteRecordHandler;
     }
 
-    public void setAfterWriteRecordHandler(AfterWriteRecordHandler<T> afterWriteRecordHandler) {
+    public void setAfterWriteRecordHandler(final AfterWriteRecordHandler<T> afterWriteRecordHandler) {
         this.afterWriteRecordHandler = afterWriteRecordHandler;
     }
 
-    private boolean onBeforeReadRecord(BeforeReadRecordEventArgs<T> e) {
+    private boolean onBeforeReadRecord(final BeforeReadRecordEventArgs<T> e) {
         if (beforeReadRecordHandler != null) {
             beforeReadRecordHandler.handleBeforeReadRecord(this, e);
             return e.getSkipThisRecord();
@@ -313,7 +315,7 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
     }
 
     @SuppressWarnings("unchecked")
-    private boolean onAfterReadRecord(String line, T record) {
+    private boolean onAfterReadRecord(final String line, final T record) {
         if (recordInfo.isNotifyRead()) {
             ((NotifyRead<T>) record).afterRead(this, line);
         }
@@ -326,7 +328,7 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
     }
 
     @SuppressWarnings("unchecked")
-    private boolean onBeforeWriteRecord(T record) {
+    private boolean onBeforeWriteRecord(final T record) {
         if (recordInfo.isNotifyWrite()) {
             ((NotifyWrite<T>) record).beforeWrite(this);
         }
@@ -338,7 +340,7 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
         return false;
     }
 
-    private String onAfterWriteRecord(String line, T record) {
+    private String onAfterWriteRecord(final String line, final T record) {
         if (afterWriteRecordHandler != null) {
             AfterWriteRecordEventArgs<T> e = new AfterWriteRecordEventArgs<T>(record, lineNumber, line);
             afterWriteRecordHandler.handleAfterWriteRecord(this, e);
@@ -348,15 +350,16 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
     }
 
     public boolean hasNext() {
-        return (currentLine != null);
+        return currentLine != null;
     }
 
-    public Iterator<T> iterator() {
+    @Override
+	public Iterator<T> iterator() {
         return new Iterator<T>() {
 
 			@Override
 			public boolean hasNext() {
-		        return (currentLine != null);
+		        return currentLine != null;
 			}
 
 			@Override
@@ -377,6 +380,9 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
 		                if (!skip) {
 		                    record = recordInfo.strToRecord(line);
 		                    skip = onAfterReadRecord(currentLine, record);
+		                }
+		                if(skip){
+		                	record = null;
 		                }
 		                currentLine = freader.readNextLine();
 		                completeLine = currentLine;
