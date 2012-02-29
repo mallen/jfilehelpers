@@ -395,10 +395,12 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
 		                }
 		                if (!skip) {
 		                    record = recordInfo.strToRecord(line);
-		                    skip = onAfterReadRecord(currentLine, record);
-		                }
-		                if(skip){
-		                	record = null;
+		                    if(record != null){
+		                    	skip = onAfterReadRecord(currentLine, record);
+		                    	if(skip){
+				                	record = null;
+				                }
+		                    }
 		                }
 		                currentLine = freader.readNextLine();
 		                completeLine = currentLine;
