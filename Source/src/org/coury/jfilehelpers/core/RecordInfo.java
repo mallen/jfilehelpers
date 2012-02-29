@@ -316,7 +316,7 @@ public final class RecordInfo<T> {
 			notifyWrite = true;
 		}
 		
-		recordConstructor = ConstructorHelper.getAccessibleEmptyConstructor(recordClass);
+		recordConstructor = ConstructorHelper.getPublicEmptyConstructor(recordClass);
 		
 		fields = createCoreFields(recordClass.getDeclaredFields(), recordClass);
 		fieldCount = this.fields.length;

@@ -23,7 +23,7 @@ import java.lang.reflect.Constructor;
 
 public class ConstructorHelper {
 
-	public static <T> Constructor<T> getAccessibleEmptyConstructor(final Class<T> clazz) {
+	public static <T> Constructor<T> getPublicEmptyConstructor(final Class<T> clazz) {
 		Constructor<T> constructor = null;
 		try {
 			constructor = clazz.getConstructor();
@@ -32,24 +32,29 @@ public class ConstructorHelper {
 					"The class " + clazz.getName() + 
 					" needs to be accessible to be used");
 		} catch (NoSuchMethodException e) {
-			boolean throwIt = true;
-
 			try {
 				if (clazz.getEnclosingClass() != null) {
 					constructor = clazz.getConstructor(clazz.getEnclosingClass());
 				}
-				throwIt = false;
 			}
 			catch (NoSuchMethodException e1) {
 			}
 
-			if (throwIt) {
-				throw new RuntimeException(
+			if (constructor == null) {
+				throw new ConstructorNotFoundException(
 						"The class " + clazz.getName() + 
-						" needs to have an empty constructor to be used");
+						" needs to have a public empty constructor to be used");
 			}
 		}
 		return constructor;
+	}
+	
+	public static class ConstructorNotFoundException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+
+		public ConstructorNotFoundException(final String message) {
+			super(message);
+		}
 	}
 	
 }
