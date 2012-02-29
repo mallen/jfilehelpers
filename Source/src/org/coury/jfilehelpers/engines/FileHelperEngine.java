@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.coury.jfilehelpers.annotations.PostReadRecordHandler;
 import org.coury.jfilehelpers.core.ForwardReader;
 import org.coury.jfilehelpers.events.AfterReadRecordEventArgs;
 import org.coury.jfilehelpers.events.AfterReadRecordHandler;
@@ -307,6 +308,7 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
     }
 
     private boolean onBeforeReadRecord(final BeforeReadRecordEventArgs e) {
+    	
         if (beforeReadRecordHandler != null) {
             beforeReadRecordHandler.handleBeforeReadRecord(this, e);
             return e.getSkipThisRecord();
@@ -319,8 +321,22 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
         if (recordInfo.isNotifyRead()) {
             ((NotifyRead<T>) record).afterRead(this, line);
         }
+        
+		PostReadRecordHandler<T> postReadRecordHandler = recordInfo.getPostReadRecordHandler();
+		
+		AfterReadRecordEventArgs<T> e = null;
+		if(postReadRecordHandler != null || afterReadRecordHandler != null){
+			e = new AfterReadRecordEventArgs<T>(line, record, lineNumber);
+		}
+		
+		if(postReadRecordHandler != null){
+			postReadRecordHandler.handleRecord(e);
+			if(e.getSkipThisRecord()){
+				return true;
+			}
+		}
+		
         if (afterReadRecordHandler != null) {
-            AfterReadRecordEventArgs<T> e = new AfterReadRecordEventArgs<T>(line, record, lineNumber);
             afterReadRecordHandler.handleAfterReadRecord(this, e);
             return e.getSkipThisRecord();
         }

@@ -34,6 +34,8 @@ import org.coury.jfilehelpers.annotations.IgnoreCommentedLines;
 import org.coury.jfilehelpers.annotations.IgnoreEmptyLines;
 import org.coury.jfilehelpers.annotations.IgnoreFirst;
 import org.coury.jfilehelpers.annotations.IgnoreLast;
+import org.coury.jfilehelpers.annotations.PostReadRecord;
+import org.coury.jfilehelpers.annotations.PostReadRecordHandler;
 import org.coury.jfilehelpers.engines.LineInfo;
 import org.coury.jfilehelpers.enums.RecordCondition;
 import org.coury.jfilehelpers.fields.FieldBase;
@@ -61,6 +63,7 @@ public final class RecordInfo<T> {
 	private int ignoreLast = 0;
 	private boolean ignoreEmptyLines = false;
 	private boolean trimBeforeEmptyLineCheck = false;
+	private PostReadRecordHandler<T> postReadRecordHandler = null;
 	private String commentMarker = null;
 	private boolean commentAnyPlace = true;
 	private RecordCondition recordCondition = RecordCondition.None;
@@ -75,6 +78,7 @@ public final class RecordInfo<T> {
 	//private ConverterBase converterProvider = null;
 
 	private int fieldCount;
+	
 	
 	public RecordInfo(final Class<T> recordClass) {
 		// this.recordObject = recordObject;
@@ -306,6 +310,24 @@ public final class RecordInfo<T> {
 			this.commentAnyPlace = igc.anyPlace();
 		}
 		
+		PostReadRecord arr = recordClass.getAnnotation(PostReadRecord.class);
+		if(arr != null){
+			Constructor<?> constructor = ConstructorHelper.getPublicEmptyConstructor(arr.handlerClass());
+			try {
+				@SuppressWarnings("unchecked")
+				PostReadRecordHandler<T> temp = (PostReadRecordHandler<T>) constructor.newInstance();
+				postReadRecordHandler = temp;
+			} catch (InstantiationException e) {
+				throw new RuntimeException("Error creating handler (1)", e);
+			} catch (IllegalAccessException e) {
+				throw new RuntimeException("Error creating handler (2)", e);
+			} catch (IllegalArgumentException e) {
+				throw new RuntimeException("Error creating handler (3)", e);
+			} catch (InvocationTargetException e) {
+				throw new RuntimeException("Error creating handler (4)", e);
+			}
+		}
+		
 		// TODO ConditionalRecord
 
 		if(NotifyRead.class.isAssignableFrom(recordClass)) {
@@ -494,4 +516,13 @@ public final class RecordInfo<T> {
 	public void setRecordConstructor(final Constructor<T> recordConstructor) {
 		this.recordConstructor = recordConstructor;
 	}
+
+	public PostReadRecordHandler<T> getPostReadRecordHandler() {
+		return postReadRecordHandler;
+	}
+
+	public void setPostReadRecordHandler(final PostReadRecordHandler<T> postReadRecordHandler) {
+		this.postReadRecordHandler = postReadRecordHandler;
+	}
+	
 }
