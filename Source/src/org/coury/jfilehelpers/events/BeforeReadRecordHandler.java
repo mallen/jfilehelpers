@@ -27,5 +27,5 @@ import org.coury.jfilehelpers.engines.EngineBase;
  *
  */
 public interface BeforeReadRecordHandler<T> {
-	public void handleBeforeReadRecord(EngineBase<T> engine, BeforeReadRecordEventArgs<T> e);
+	public void handleBeforeReadRecord(EngineBase<T> engine, BeforeReadRecordEventArgs e);
 }

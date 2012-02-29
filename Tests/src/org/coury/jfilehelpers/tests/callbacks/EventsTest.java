@@ -26,12 +26,12 @@ import org.coury.jfilehelpers.engines.EngineBase;
 import org.coury.jfilehelpers.engines.FileHelperEngine;
 import org.coury.jfilehelpers.events.AfterReadRecordEventArgs;
 import org.coury.jfilehelpers.events.AfterReadRecordHandler;
-import org.coury.jfilehelpers.events.BeforeReadRecordEventArgs;
-import org.coury.jfilehelpers.events.BeforeReadRecordHandler;
-import org.coury.jfilehelpers.events.BeforeWriteRecordHandler;
-import org.coury.jfilehelpers.events.BeforeWriteRecordEventArgs;
 import org.coury.jfilehelpers.events.AfterWriteRecordEventArgs;
 import org.coury.jfilehelpers.events.AfterWriteRecordHandler;
+import org.coury.jfilehelpers.events.BeforeReadRecordEventArgs;
+import org.coury.jfilehelpers.events.BeforeReadRecordHandler;
+import org.coury.jfilehelpers.events.BeforeWriteRecordEventArgs;
+import org.coury.jfilehelpers.events.BeforeWriteRecordHandler;
 
 /**
  * @author Robert Eccardt
@@ -40,10 +40,11 @@ import org.coury.jfilehelpers.events.AfterWriteRecordHandler;
 public class EventsTest extends CallbacksBase {
 
 	public void testBeforeRead() {
-		FileHelperEngine<Customer> fileEngine = (FileHelperEngine<Customer>) engine;
+		FileHelperEngine<Customer> fileEngine = engine;
 		fileEngine.setBeforeReadRecordHandler(
 				new BeforeReadRecordHandler<Customer>() {
-					public void handleBeforeReadRecord(EngineBase<Customer> engine, BeforeReadRecordEventArgs<Customer> e) {
+					@Override
+					public void handleBeforeReadRecord(final EngineBase<Customer> engine, final BeforeReadRecordEventArgs e) {
 						engineTester(engine);
 						incrementBeforeReadCount();
 						if(e.getRecordLine().equals("2,Jane Rowe,2")) {
@@ -54,7 +55,8 @@ public class EventsTest extends CallbacksBase {
 		);
 		fileEngine.setAfterReadRecordHandler(
 				new AfterReadRecordHandler<Customer>() {
-					public void handleAfterReadRecord(EngineBase<Customer> engine, AfterReadRecordEventArgs<Customer> e) {
+					@Override
+					public void handleAfterReadRecord(final EngineBase<Customer> engine, final AfterReadRecordEventArgs<Customer> e) {
 						engineTester(engine);
 						incrementAfterReadCount();
 						if(e.getLineNumber() == 2) {
@@ -74,10 +76,11 @@ public class EventsTest extends CallbacksBase {
 	}
 
 	public void testBeforeReadSkip() {
-		FileHelperEngine<Customer> fileEngine = (FileHelperEngine<Customer>) engine;
+		FileHelperEngine<Customer> fileEngine = engine;
 		fileEngine.setBeforeReadRecordHandler(
 				new BeforeReadRecordHandler<Customer>() {
-					public void handleBeforeReadRecord(EngineBase<Customer> engine, BeforeReadRecordEventArgs<Customer> e) {
+					@Override
+					public void handleBeforeReadRecord(final EngineBase<Customer> engine, final BeforeReadRecordEventArgs e) {
 						if(e.getLineNumber() == 1) {
 							e.setSkipThisRecord(true);
 						}
@@ -93,10 +96,11 @@ public class EventsTest extends CallbacksBase {
 	}
 
 	public void testAfterRead() {
-		FileHelperEngine<Customer> fileEngine = (FileHelperEngine<Customer>) engine;
+		FileHelperEngine<Customer> fileEngine = engine;
 		fileEngine.setAfterReadRecordHandler(
 				new AfterReadRecordHandler<Customer>() {
-					public void handleAfterReadRecord(EngineBase<Customer> engine, AfterReadRecordEventArgs<Customer> e) {
+					@Override
+					public void handleAfterReadRecord(final EngineBase<Customer> engine, final AfterReadRecordEventArgs<Customer> e) {
 						engineTester(engine);
 						incrementAfterReadCount();
 						if(e.getLineNumber() == 2) {
@@ -115,10 +119,11 @@ public class EventsTest extends CallbacksBase {
 	}
 
 	public void testAfterReadSkip() {
-		FileHelperEngine<Customer> fileEngine = (FileHelperEngine<Customer>) engine;
+		FileHelperEngine<Customer> fileEngine = engine;
 		fileEngine.setAfterReadRecordHandler(
 				new AfterReadRecordHandler<Customer>() {
-					public void handleAfterReadRecord(EngineBase<Customer> engine, AfterReadRecordEventArgs<Customer> e) {
+					@Override
+					public void handleAfterReadRecord(final EngineBase<Customer> engine, final AfterReadRecordEventArgs<Customer> e) {
 						if(e.getLineNumber() == 1) {
 							e.setSkipThisRecord(true);
 						}
@@ -134,10 +139,11 @@ public class EventsTest extends CallbacksBase {
 	}
 
 	public void testWriteRecord() {
-		FileHelperEngine<Customer> fileEngine = (FileHelperEngine<Customer>) engine;
+		FileHelperEngine<Customer> fileEngine = engine;
 		fileEngine.setBeforeWriteRecordHandler(
 				new BeforeWriteRecordHandler<Customer>() {
-					public void handleBeforeWriteRecord(EngineBase<Customer> engine, BeforeWriteRecordEventArgs<Customer> e) {
+					@Override
+					public void handleBeforeWriteRecord(final EngineBase<Customer> engine, final BeforeWriteRecordEventArgs<Customer> e) {
 						engineTester(engine);
 						incrementBeforeWriteCount();
 						if(e.getRecord().name.equals("Jane Rowe")) {
@@ -148,7 +154,8 @@ public class EventsTest extends CallbacksBase {
 		);
 		fileEngine.setAfterWriteRecordHandler(
 				new AfterWriteRecordHandler<Customer>() {
-					public void handleAfterWriteRecord(EngineBase<Customer> engine, AfterWriteRecordEventArgs<Customer> e) {
+					@Override
+					public void handleAfterWriteRecord(final EngineBase<Customer> engine, final AfterWriteRecordEventArgs<Customer> e) {
 						engineTester(engine);
 						incrementAfterWriteCount();
 						if(e.getLineNumber() == 2) {
@@ -168,10 +175,11 @@ public class EventsTest extends CallbacksBase {
 	}
 
 	public void testBeforeWriteSkip() {
-		FileHelperEngine<Customer> fileEngine = (FileHelperEngine<Customer>) engine;
+		FileHelperEngine<Customer> fileEngine = engine;
 		fileEngine.setBeforeWriteRecordHandler(
 				new BeforeWriteRecordHandler<Customer>() {
-					public void handleBeforeWriteRecord(EngineBase<Customer> engine, BeforeWriteRecordEventArgs<Customer> e) {
+					@Override
+					public void handleBeforeWriteRecord(final EngineBase<Customer> engine, final BeforeWriteRecordEventArgs<Customer> e) {
 						if(e.getLineNumber() == 1) {
 							e.setSkipThisRecord(true);
 						}

@@ -306,7 +306,7 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
         this.afterWriteRecordHandler = afterWriteRecordHandler;
     }
 
-    private boolean onBeforeReadRecord(final BeforeReadRecordEventArgs<T> e) {
+    private boolean onBeforeReadRecord(final BeforeReadRecordEventArgs e) {
         if (beforeReadRecordHandler != null) {
             beforeReadRecordHandler.handleBeforeReadRecord(this, e);
             return e.getSkipThisRecord();
@@ -372,7 +372,7 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
 		                line.reload(currentLine);
 		                boolean skip = false;
 		                ProgressHelper.notify(notifyHandler, progressMode, currentRecord, -1);
-		                BeforeReadRecordEventArgs<T> e = new BeforeReadRecordEventArgs<T>(currentLine, lineNumber);
+		                BeforeReadRecordEventArgs e = new BeforeReadRecordEventArgs(currentLine, lineNumber);
 		                skip = onBeforeReadRecord(e);
 		                if (e.getRecordLineChanged()) {
 		                    line.reload(e.getRecordLine());

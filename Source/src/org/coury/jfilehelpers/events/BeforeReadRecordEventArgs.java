@@ -24,14 +24,14 @@ package org.coury.jfilehelpers.events;
  * @author Robert Eccardt
  *
  */
-public class BeforeReadRecordEventArgs<T> extends ReadRecordEventArgs {
+public class BeforeReadRecordEventArgs extends ReadRecordEventArgs {
 	private boolean skipThisRecord = false;
 
-	public BeforeReadRecordEventArgs(String recordLine, int lineNumber) {
+	public BeforeReadRecordEventArgs(final String recordLine, final int lineNumber) {
 		super(recordLine, lineNumber);
 	}
 
-	public BeforeReadRecordEventArgs(String recordLine) {
+	public BeforeReadRecordEventArgs(final String recordLine) {
 		super(recordLine, -1);
 	}
 
@@ -39,7 +39,7 @@ public class BeforeReadRecordEventArgs<T> extends ReadRecordEventArgs {
 		return skipThisRecord;
 	}
 
-	public void setSkipThisRecord(boolean skipThisRecord) {
+	public void setSkipThisRecord(final boolean skipThisRecord) {
 		this.skipThisRecord = skipThisRecord;
 	}
 
