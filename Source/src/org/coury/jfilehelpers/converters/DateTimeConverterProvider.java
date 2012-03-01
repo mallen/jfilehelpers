@@ -74,10 +74,6 @@ public class DateTimeConverterProvider extends ConverterProvider {
 			}
 		}
 
-		public static boolean canHandle(final Class<?> fieldType) {
-			return fieldType == Date.class;
-		}
-
 		@Override
 		public Object stringToField(String from) {
 			if (from == null) {
