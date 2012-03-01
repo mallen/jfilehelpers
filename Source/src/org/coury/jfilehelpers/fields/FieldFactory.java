@@ -21,6 +21,7 @@
 package org.coury.jfilehelpers.fields;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 import org.coury.jfilehelpers.annotations.DelimitedRecord;
 import org.coury.jfilehelpers.annotations.FieldAlign;
@@ -31,6 +32,7 @@ import org.coury.jfilehelpers.annotations.FieldImpliedDecimalPlaces;
 import org.coury.jfilehelpers.annotations.FieldOptional;
 import org.coury.jfilehelpers.annotations.FieldTrim;
 import org.coury.jfilehelpers.annotations.FixedLengthRecord;
+import org.coury.jfilehelpers.converters.ConverterProvider;
 import org.coury.jfilehelpers.helpers.NumberHelper;
 
 public class FieldFactory {
@@ -49,7 +51,7 @@ public class FieldFactory {
 	 *         reflection
 	 */
 	@SuppressWarnings("unchecked")
-	public static FieldBase createField(final Field fi, final Class recordClass, final boolean someOptional) {
+	public static FieldBase createField(final Field fi, final Class recordClass, final boolean someOptional, final List<ConverterProvider> converterProviders) {
 		if (fi.isAnnotationPresent(FieldIgnored.class)) {
 			return null;
 		}
@@ -81,7 +83,7 @@ public class FieldFactory {
 			FieldAlign align = fi.getAnnotation(FieldAlign.class);
 			
 			res = new FixedLengthField(
-					fi, attb.value(), FieldAlignBean.createFromAnnotation(align, fi), fixedLengthRecord.fixedMode());
+					fi, attb.value(), FieldAlignBean.createFromAnnotation(align, fi), fixedLengthRecord.fixedMode(), converterProviders);
 		}
 		else if (fi.isAnnotationPresent(FieldDelimiter.class)) {
 			if (recordClass.isAnnotationPresent(FixedLengthRecord.class)) {
@@ -89,7 +91,7 @@ public class FieldFactory {
 						"The DelimitedAttribute is only for DelimitedRecords not for the fixed ones.");
 			}
 			
-			res = new DelimitedField(fi, fi.getAnnotation(FieldDelimiter.class).value());
+			res = new DelimitedField(fi, fi.getAnnotation(FieldDelimiter.class).value(), converterProviders);
 		}
 		else {
 			// default
@@ -98,7 +100,7 @@ public class FieldFactory {
 			if (delimitedAnn != null) {
 				delimiter = delimitedAnn.value();
 			}
-			res = new DelimitedField(fi, delimiter);		
+			res = new DelimitedField(fi, delimiter, converterProviders);		
 		}
 		
 		FieldTrim ft = fi.getAnnotation(FieldTrim.class);

@@ -22,22 +22,12 @@ package org.coury.jfilehelpers.fields;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.coury.jfilehelpers.annotations.FieldConverter;
 import org.coury.jfilehelpers.annotations.FieldNullValue;
-import org.coury.jfilehelpers.converters.BigDecimalConverterProvider;
-import org.coury.jfilehelpers.converters.BooleanConverterProvider;
 import org.coury.jfilehelpers.converters.ConverterBase;
 import org.coury.jfilehelpers.converters.ConverterProvider;
-import org.coury.jfilehelpers.converters.DateTimeConverterProvider;
-import org.coury.jfilehelpers.converters.DoubleConverterProvider;
-import org.coury.jfilehelpers.converters.EnumConverterProvider;
-import org.coury.jfilehelpers.converters.FloatConverterProvider;
-import org.coury.jfilehelpers.converters.IntConverterProvider;
-import org.coury.jfilehelpers.converters.LongConverterProvider;
-import org.coury.jfilehelpers.converters.StringConverterProvider;
 import org.coury.jfilehelpers.core.ExtractedInfo;
 import org.coury.jfilehelpers.engines.LineInfo;
 import org.coury.jfilehelpers.enums.ConverterKind;
@@ -62,25 +52,13 @@ public abstract class FieldBase {
 
 	protected int charsToDiscard = 0;
 
-	private static List<ConverterProvider> converterProviders;
+	private final List<ConverterProvider> converterProviders;
 	private ConverterBase converter;
 	private int impliedDecimalPlaces;
 
-	static {
-		converterProviders = new ArrayList<ConverterProvider>();
-		converterProviders.add(new StringConverterProvider());
-		converterProviders.add(new BooleanConverterProvider());
-		converterProviders.add(new IntConverterProvider());
-		converterProviders.add(new LongConverterProvider());
-		converterProviders.add(new DoubleConverterProvider());
-		converterProviders.add(new FloatConverterProvider());
-		converterProviders.add(new BigDecimalConverterProvider());
-		converterProviders.add(new EnumConverterProvider());
-		converterProviders.add(new DateTimeConverterProvider());
-	}
-
-	public FieldBase(final Field field) {
+	public FieldBase(final Field field, final List<ConverterProvider> converterProviders) {
 		fieldInfo = field;
+		this.converterProviders = converterProviders;
 		Class<?> fieldType = field.getType();
 
 		FieldConverter fc = field.getAnnotation(FieldConverter.class);

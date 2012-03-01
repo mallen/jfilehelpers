@@ -27,7 +27,7 @@ import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class DateTimeConverterProvider extends ConverterProvider {
 
-	private static String defaultFormat = "ddMMyyyy";
+	private String defaultFormat = "ddMMyyyy";
 	
 	@Override
 	public boolean handles(final Class<?> fieldType) {
@@ -47,12 +47,12 @@ public class DateTimeConverterProvider extends ConverterProvider {
 		return new DateTimeConverter(format);
 	}
 	
-	public static String getDefaultFormat() {
+	public String getDefaultFormat() {
 		return defaultFormat;
 	}
 
-	public static void setDefaultFormat(final String defaultFormat) {
-		DateTimeConverterProvider.defaultFormat = defaultFormat;
+	public void setDefaultFormat(final String defaultFormat) {
+		this.defaultFormat = defaultFormat;
 	}
 
 	public static class DateTimeConverter extends ConverterBase {

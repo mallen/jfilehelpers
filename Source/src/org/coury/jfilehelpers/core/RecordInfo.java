@@ -36,6 +36,16 @@ import org.coury.jfilehelpers.annotations.IgnoreFirst;
 import org.coury.jfilehelpers.annotations.IgnoreLast;
 import org.coury.jfilehelpers.annotations.PostReadRecord;
 import org.coury.jfilehelpers.annotations.PostReadRecordHandler;
+import org.coury.jfilehelpers.converters.BigDecimalConverterProvider;
+import org.coury.jfilehelpers.converters.BooleanConverterProvider;
+import org.coury.jfilehelpers.converters.ConverterProvider;
+import org.coury.jfilehelpers.converters.DateTimeConverterProvider;
+import org.coury.jfilehelpers.converters.DoubleConverterProvider;
+import org.coury.jfilehelpers.converters.EnumConverterProvider;
+import org.coury.jfilehelpers.converters.FloatConverterProvider;
+import org.coury.jfilehelpers.converters.IntConverterProvider;
+import org.coury.jfilehelpers.converters.LongConverterProvider;
+import org.coury.jfilehelpers.converters.StringConverterProvider;
 import org.coury.jfilehelpers.engines.LineInfo;
 import org.coury.jfilehelpers.enums.RecordCondition;
 import org.coury.jfilehelpers.fields.FieldBase;
@@ -76,16 +86,32 @@ public final class RecordInfo<T> {
 	private int sizeHint = 32;
 	
 	//private ConverterBase converterProvider = null;
-
+	private final List<ConverterProvider> converterProviders = new ArrayList<ConverterProvider>(); 
 	private int fieldCount;
+	private final DateTimeConverterProvider dateTimeConverterProvider;
 	
 	
 	public RecordInfo(final Class<T> recordClass) {
-		// this.recordObject = recordObject;
+		converterProviders.add(new StringConverterProvider());
+		converterProviders.add(new BooleanConverterProvider());
+		converterProviders.add(new IntConverterProvider());
+		converterProviders.add(new LongConverterProvider());
+		converterProviders.add(new DoubleConverterProvider());
+		converterProviders.add(new FloatConverterProvider());
+		converterProviders.add(new BigDecimalConverterProvider());
+		converterProviders.add(new EnumConverterProvider());
+		dateTimeConverterProvider = new DateTimeConverterProvider();
+		converterProviders.add(dateTimeConverterProvider);
+		
 		this.recordClass = recordClass;
 		initFields();
 	}
-	
+		
+	public DateTimeConverterProvider getDateTimeConverterProvider() {
+		return dateTimeConverterProvider;
+	}
+
+
 	/**
 	 * Parses a text line into a record object
 	 * 
@@ -373,13 +399,13 @@ public final class RecordInfo<T> {
 	 * @return an array of FieldBase, field descriptor objects
 	 */
 	@SuppressWarnings("unchecked")
-	private static FieldBase[] createCoreFields(final Field[] fields, final Class recordClass) {
+	private FieldBase[] createCoreFields(final Field[] fields, final Class recordClass) {
 		FieldBase field;
 		List<FieldBase> fieldArr = new ArrayList<FieldBase>();
 		
 		boolean someOptional = false;
 		for (Field f : fields) {
-			field = FieldFactory.createField(f, recordClass, someOptional);
+			field = FieldFactory.createField(f, recordClass, someOptional, converterProviders);
 			if (field != null) {
 				someOptional = field.isOptional();
 				fieldArr.add(field);

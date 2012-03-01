@@ -21,7 +21,9 @@
 package org.coury.jfilehelpers.fields;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
+import org.coury.jfilehelpers.converters.ConverterProvider;
 import org.coury.jfilehelpers.core.ExtractedInfo;
 import org.coury.jfilehelpers.engines.LineInfo;
 import org.coury.jfilehelpers.enums.AlignMode;
@@ -34,24 +36,25 @@ public class FixedLengthField extends FieldBase {
 	private final FieldAlignBean align;
 	private final FixedMode fixedMode;
 	
-	public FixedLengthField(Field fi, int length, FieldAlignBean align, FixedMode fixedMode) {
-		super(fi);
+	public FixedLengthField(final Field fi, final int length, final FieldAlignBean align, final FixedMode fixedMode, final List<ConverterProvider> converterProviders) {
+		super(fi, converterProviders);
 		this.fieldLength = length;
 		this.align = align;
 		this.fixedMode = fixedMode;
 	}
 	
 	@Override
-	protected ExtractedInfo extractFieldString(LineInfo line) {
+	protected ExtractedInfo extractFieldString(final LineInfo line) {
 		if (line.getCurrentLength() == 0) {
-			if (isOptional())
+			if (isOptional()) {
 				return ExtractedInfo.Empty;
-			else
+			} else {
 				throw new IllegalArgumentException(
 						"End Of Line found processing the field: " + 
 						getFieldInfo().getName() + " at line " + 
 						line.getLineNumber() + ". " +
 						"(You need to mark it as @FieldOptional if you want to avoid this exception)");
+			}
 		}
 		
 		ExtractedInfo res;
@@ -85,7 +88,7 @@ public class FixedLengthField extends FieldBase {
 	}
 
 	@Override
-	protected void createFieldString(StringBuffer sb, Object fieldValue) {
+	protected void createFieldString(final StringBuffer sb, final Object fieldValue) {
 		String field = super.baseFieldString(fieldValue);
 		field = StringHelper.trimBoth(field, StringHelper.WHITESPACE_CHARS);
 

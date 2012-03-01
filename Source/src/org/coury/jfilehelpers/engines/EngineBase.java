@@ -33,9 +33,17 @@ public abstract class EngineBase<T> {
 	protected int lineNumber;
 	protected int totalRecords;
 	
-	public EngineBase(Class<T> recordClass) {
+	public EngineBase(final Class<T> recordClass) {
 		this.recordClass = recordClass;
 		this.recordInfo = new RecordInfo<T>(recordClass);
+	}
+	
+	public String getDefaultDateTimeFormat(){
+		return recordInfo.getDateTimeConverterProvider().getDefaultFormat();
+	}
+	
+	public void setDefaultDateTimeFormat(final String format){
+		recordInfo.getDateTimeConverterProvider().setDefaultFormat(format);
 	}
 	
 	protected ProgressMode progressMode = ProgressMode.DontNotify;
@@ -45,11 +53,11 @@ public abstract class EngineBase<T> {
 	*/
 	protected ProgressChangeHandler notifyHandler = null;
 	
-	public void setProgressHandler(ProgressChangeHandler handler) {
+	public void setProgressHandler(final ProgressChangeHandler handler) {
 		setProgressHandler(handler, ProgressMode.NotifyRecords);
 	}
 	
-	public void setProgressHandler(ProgressChangeHandler handler, ProgressMode mode) {
+	public void setProgressHandler(final ProgressChangeHandler handler, final ProgressMode mode) {
 		this.notifyHandler = handler;
 		
 		if (mode == ProgressMode.NotifyBytes) {
@@ -68,19 +76,19 @@ public abstract class EngineBase<T> {
 	public Encoding getEncoding() {
 		return encoding;
 	}
-	public void setEncoding(Encoding encoding) {
+	public void setEncoding(final Encoding encoding) {
 		this.encoding = encoding;
 	}
 	public String getFooterText() {
 		return footerText;
 	}
-	public void setFooterText(String footerText) {
+	public void setFooterText(final String footerText) {
 		this.footerText = footerText;
 	}
 	public String getHeaderText() {
 		return headerText;
 	}
-	public void setHeaderText(String headerText) {
+	public void setHeaderText(final String headerText) {
 		this.headerText = headerText;
 	}
 	public int getLineNumber() {
@@ -93,7 +101,7 @@ public abstract class EngineBase<T> {
 //		return errorManager;
 //	}
 
-	public void setLineNumber(int lineNumber) {
+	public void setLineNumber(final int lineNumber) {
 		this.lineNumber = lineNumber;
 	}
 	

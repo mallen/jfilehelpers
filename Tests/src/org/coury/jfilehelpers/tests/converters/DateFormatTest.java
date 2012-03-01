@@ -31,6 +31,7 @@ import org.coury.jfilehelpers.engines.FileHelperEngine;
 import org.coury.jfilehelpers.tests.common.Common;
 import org.coury.jfilehelpers.tests.converters.testobjects.DateFormatType1;
 import org.coury.jfilehelpers.tests.converters.testobjects.DateFormatType2;
+import org.coury.jfilehelpers.tests.converters.testobjects.DateFormatType3;
 
 
 public class DateFormatTest extends TestCase {
@@ -83,7 +84,33 @@ public class DateFormatTest extends TestCase {
 		Common.assertSameDate(getDate(1996, 7, 15), res.get(3).shippedDate);		
 	}
 	
-	private static Date getDate(int y, int m, int d) {
+
+	@SuppressWarnings("unchecked")
+	public void testDifferentEnglishFormat_usingDefaultFormat() throws IOException {
+		engine = new FileHelperEngine<DateFormatType3>(DateFormatType3.class);
+		
+		engine.setDefaultDateTimeFormat("M-d-yyyy");
+
+		List<DateFormatType3> res = (List<DateFormatType3>) Common.readTest(engine, "Good/DateFormat2.txt");
+		assertEquals(6, res.size());
+
+		Common.assertSameDate(getDate(1996, 7, 4), res.get(0).orderDate);
+		Common.assertSameDate(getDate(1996, 7, 5), res.get(1).orderDate);
+		Common.assertSameDate(getDate(1996, 7, 8), res.get(2).orderDate);
+		Common.assertSameDate(getDate(1996, 7, 8), res.get(3).orderDate);
+
+		Common.assertSameDate(getDate(1996, 8, 1), res.get(0).requiredDate);
+		Common.assertSameDate(getDate(1996, 8, 16), res.get(1).requiredDate);
+		Common.assertSameDate(getDate(1996, 8, 5), res.get(2).requiredDate);
+		Common.assertSameDate(getDate(1996, 8, 5), res.get(3).requiredDate);
+
+		Common.assertSameDate(getDate(1996, 7, 16), res.get(0).shippedDate);
+		Common.assertSameDate(getDate(1996, 7, 10), res.get(1).shippedDate);
+		Common.assertSameDate(getDate(1996, 7, 12), res.get(2).shippedDate);
+		Common.assertSameDate(getDate(1996, 7, 15), res.get(3).shippedDate);		
+	}
+	
+	private static Date getDate(final int y, final int m, final int d) {
 		Calendar c = Calendar.getInstance();
 		c.set(y, m-1, d, 0, 0, 0);
 		return c.getTime();
