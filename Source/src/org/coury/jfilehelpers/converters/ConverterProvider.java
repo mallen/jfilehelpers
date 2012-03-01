@@ -1,5 +1,5 @@
 /*
- * ConverterKind.java
+ * ConverterProvider.java
  *
  * Copyright (C) 2007 Felipe Gonçalves Coury <felipe.coury@gmail.com>
  * 
@@ -17,16 +17,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+package org.coury.jfilehelpers.converters;
 
-package org.coury.jfilehelpers.enums;
+import org.coury.jfilehelpers.enums.ConverterKind;
 
-public enum ConverterKind {
-	Date, 
-	Boolean, 
-	Int, 
-	Long, 
-	Float, 
-	Double, 
-	BigDecimal, 
-	String;	
+public abstract class ConverterProvider {
+
+	public abstract boolean handles(Class<?> fieldType);
+	public abstract boolean handles(ConverterKind converterKind);
+	public abstract ConverterBase createConverter(Class<?> fieldType, String format);
+	
 }

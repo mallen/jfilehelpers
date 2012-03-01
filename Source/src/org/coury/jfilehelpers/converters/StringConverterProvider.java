@@ -1,5 +1,5 @@
 /*
- * ConverterBase.java
+ * IntConverter.java
  *
  * Copyright (C) 2007 Felipe Gonçalves Coury <felipe.coury@gmail.com>
  * 
@@ -17,29 +17,40 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-
 package org.coury.jfilehelpers.converters;
 
-/**
- * This is the base class for all converters.
- * 
- * @author Felipe Gonçalves Coury <felipe.coury@gmail.com>
- */
-public abstract class ConverterBase {
+import org.coury.jfilehelpers.enums.ConverterKind;
 
-	public abstract Object stringToField(String from);
+public class StringConverterProvider extends ConverterProvider {
+
+	private static final StringConverter STRING_CONVERTER = new StringConverter();
 	
-	public String fieldToString(final Object from) {
-		if (from == null) {
-			return "";
+	@Override
+	public boolean handles(final Class<?> fieldType) {
+		return fieldType == String.class;
+	}
+
+	@Override
+	public boolean handles(final ConverterKind converterKind) {
+		return converterKind.equals(ConverterKind.String);
+	}
+
+	@Override
+	public ConverterBase createConverter(final Class<?> fieldType, final String format) {
+		return STRING_CONVERTER;
+	}
+
+	public static class StringConverter extends ConverterBase {
+
+		@Override
+		public Object stringToField(final String from) {
+			return from;
 		}
-		else {
+
+		@Override
+		public String fieldToString(final Object from) {
 			return from.toString();
 		}
+
 	}
-	
-	public boolean isCustomNullHandling() {
-		return false;
-	}
-	
 }

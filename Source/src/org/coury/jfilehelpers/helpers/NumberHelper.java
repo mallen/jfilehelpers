@@ -23,23 +23,6 @@ import java.math.BigDecimal;
 
 public class NumberHelper {
 
-	public static Number convertStringToNumber(final String s, final Class<?> numberType) {
-
-		String typeName = numberType.getName();
-		if (typeName.equals("int") || typeName.equals("java.lang.Integer")) {
-			return Integer.parseInt(s);
-		} else if (typeName.equals("long") || typeName.equals("java.lang.Long")) {
-			return Long.parseLong(s);
-		} else if (typeName.equals("double") || typeName.equals("java.lang.Double")) {
-			return Double.parseDouble(s);
-		} else if (typeName.equals("float") || typeName.equals("java.lang.Float")) {
-			return Float.parseFloat(s);
-		} else if (typeName.equals("java.math.BigDecimal")) {
-			return new BigDecimal(s);
-		}
-		return null;
-	}
-	
 	public static boolean isSupportedType(final Class<?> numberType) {
 
 		String typeName = numberType.getName();
@@ -107,8 +90,5 @@ public class NumberHelper {
 			return dec.movePointLeft(impliedDecimalPlaces);
 		}
 		throw new IllegalArgumentException("Unsupported type: " + typeName);
-		
-		
 	}
-	
 }

@@ -22,221 +22,188 @@ package org.coury.jfilehelpers.fields;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.coury.jfilehelpers.annotations.FieldConverter;
 import org.coury.jfilehelpers.annotations.FieldNullValue;
-import org.coury.jfilehelpers.converters.ConvertHelpers;
+import org.coury.jfilehelpers.converters.BigDecimalConverterProvider;
+import org.coury.jfilehelpers.converters.BooleanConverterProvider;
 import org.coury.jfilehelpers.converters.ConverterBase;
+import org.coury.jfilehelpers.converters.ConverterProvider;
+import org.coury.jfilehelpers.converters.DateTimeConverterProvider;
+import org.coury.jfilehelpers.converters.DoubleConverterProvider;
+import org.coury.jfilehelpers.converters.EnumConverterProvider;
+import org.coury.jfilehelpers.converters.FloatConverterProvider;
+import org.coury.jfilehelpers.converters.IntConverterProvider;
+import org.coury.jfilehelpers.converters.LongConverterProvider;
+import org.coury.jfilehelpers.converters.StringConverterProvider;
 import org.coury.jfilehelpers.core.ExtractedInfo;
 import org.coury.jfilehelpers.engines.LineInfo;
+import org.coury.jfilehelpers.enums.ConverterKind;
 import org.coury.jfilehelpers.enums.TrimMode;
 import org.coury.jfilehelpers.helpers.NumberHelper;
 import org.coury.jfilehelpers.helpers.StringHelper;
 
 public abstract class FieldBase {
-	private boolean stringField;
 	private Field fieldInfo;
-	
+
 	private TrimMode trimMode = TrimMode.None;
 	private char[] trimChars = null;
 	private boolean isOptional = false;
 	private boolean nextOptional = false;
 	private boolean inNewLine = false;
-	
+
 	private boolean first = false;
 	private boolean last = false;
 	private boolean trailingArray = false;
 	private Object nullValue = null;
 	private boolean nullableType = false;
-	
+
 	protected int charsToDiscard = 0;
-	
-	private ConverterBase convertProvider;
+
+	private static List<ConverterProvider> converterProviders;
+	private ConverterBase converter;
 	private int impliedDecimalPlaces;
-		
+
+	static {
+		converterProviders = new ArrayList<ConverterProvider>();
+		converterProviders.add(new StringConverterProvider());
+		converterProviders.add(new BooleanConverterProvider());
+		converterProviders.add(new IntConverterProvider());
+		converterProviders.add(new LongConverterProvider());
+		converterProviders.add(new DoubleConverterProvider());
+		converterProviders.add(new FloatConverterProvider());
+		converterProviders.add(new BigDecimalConverterProvider());
+		converterProviders.add(new EnumConverterProvider());
+		converterProviders.add(new DateTimeConverterProvider());
+	}
+
 	public FieldBase(final Field field) {
 		fieldInfo = field;
-		stringField = field.getType().equals(String.class);
-		
+		Class<?> fieldType = field.getType();
+
 		FieldConverter fc = field.getAnnotation(FieldConverter.class);
 		if (fc == null) {
-			convertProvider = ConvertHelpers.getDefaultConverter(field);
+			converter = getConverter(fieldType);
+		} else {
+			converter = getConverter(field, fc.converter(), fc.format());
 		}
-		else {
-			convertProvider = ConvertHelpers.getConverter(fc.converter(), fc.format());
-		}
-		
+
 		FieldNullValue fn = field.getAnnotation(FieldNullValue.class);
 		if (fn != null) {
 			nullValue = fn.value();
-		}		
+		}
 	}
-	
+
+	private ConverterBase getConverter(final Class<?> fieldType) {
+
+		for (ConverterProvider provider : converterProviders) {
+			if (provider.handles(fieldType)) {
+				return provider.createConverter(fieldType, null);
+			}
+		}
+		throw new IllegalArgumentException("No ConverterProvider found for type: " + fieldType.getName());
+	}
+
+	private ConverterBase getConverter(final Field field, final ConverterKind converterKind, final String format) {
+		for (ConverterProvider provider : converterProviders) {
+			if (provider.handles(converterKind)) {
+				return provider.createConverter(field.getType(), format);
+			}
+		}
+		throw new IllegalArgumentException("No ConverterProvider found for converterKing: " + converterKind);
+	}
+
 	public Object extractValue(final LineInfo line) throws IOException {
 		if (this.inNewLine) {
 			if (!line.isEmptyFromPos()) {
-//				throw new BadUsageException("Text '" + line.CurrentString +
-//                        "' found before the new line of the field: " + mFieldInfo.Name +
-//                        " (this is not allowed when you use [FieldInNewLine])");
+				// throw new BadUsageException("Text '" + line.CurrentString +
+				// "' found before the new line of the field: " +
+				// mFieldInfo.Name +
+				// " (this is not allowed when you use [FieldInNewLine])");
 				throw new RuntimeException("Text '" + line.getCurrentString() +
-	              "' found before the new line of the field: " + fieldInfo.getName() +
-	              " (this is not allowed when you use [FieldInNewLine])");
+						"' found before the new line of the field: " + fieldInfo.getName() +
+						" (this is not allowed when you use [FieldInNewLine])");
 			}
 
 			line.reload(line.getReader().readNextLine());
-				
+
 			if (line.getLineStr() == null) {
-//				throw new BadUsageException("End of stream found parsing the field " + fieldInfo.getName() +
-//                ". Please check the class record.");
+				// throw new
+				// BadUsageException("End of stream found parsing the field " +
+				// fieldInfo.getName() +
+				// ". Please check the class record.");
 				throw new RuntimeException("End of stream found parsing the field " + fieldInfo.getName() +
-                ". Please check the class record.");
+						". Please check the class record.");
 			}
 		}
-		
+
 		ExtractedInfo info = extractFieldString(line);
 		if (info.getCustomExtractedString() == null) {
 			line.setCurrentPos(info.getExtractedTo() + 1);
 		}
 
 		line.setCurrentPos(line.getCurrentPos() + charsToDiscard);
-		
+
 		return assignFromString(info, line);
 	}
 
-	public Object createValueForField(final Object fieldValue) {
-		Object val = null;
-
-		if (fieldValue == null) {
-			if (nullValue == null) {
-				val = null;
-			}
- 			else {
-				val = nullValue;
-			}
-		}
-		else
-		{
-			if (convertProvider == null) {
-            	// TODO what to do in this case: we're trying to convert the extracted string to a field
-				// val = Convert.ChangeType(fieldValue, mFieldType, null);
-				val = fieldValue.toString();
-			}
-			else {
-				//val = Convert.ChangeType(fieldValue, mFieldType, null);
-				val = fieldValue.toString();
-			}
-		}
-
-		return val;
-	}
 	
+
 	protected abstract ExtractedInfo extractFieldString(LineInfo line);
-	
+
 	protected abstract void createFieldString(StringBuffer sb, Object fieldValue);
-	
+
 	protected String baseFieldString(Object fieldValue) {
-		
-		if(impliedDecimalPlaces != 0){
+
+		if (impliedDecimalPlaces != 0) {
 			fieldValue = NumberHelper.applyImpliedDecimalPlaces((Number) fieldValue, -1 * impliedDecimalPlaces);
 		}
-		
-		if (convertProvider == null) {
-			if (fieldValue == null) {
-				return "";
-			}
-			else {
-				return fieldValue.toString();
-			}
-		}
-		else {
-			return convertProvider.fieldToString(fieldValue);
-		}
+
+		return converter.fieldToString(fieldValue);
 	}
-	
+
 	private Object assignFromString(final ExtractedInfo fieldString, final LineInfo line) {
 		Object val;
-		
+
 		switch (trimMode) {
 		case None:
 			break;
-		
+
 		case Both:
 			fieldString.trimBoth(trimChars);
 			break;
-			
+
 		case Left:
 			fieldString.trimStart(trimChars);
 			break;
-			
+
 		case Right:
 			fieldString.TrimEnd(trimChars);
 			break;
 		}
-		
-        if (convertProvider == null) {
-            if (stringField) {
-                val = fieldString.extractedString();
-            }
-            else {
-                // Trim it to use Convert.ChangeType
-                fieldString.trimBoth(StringHelper.WHITESPACE_CHARS);
 
-                if (fieldString.length() == 0) {
-                    // Empty stand for null
-                    val = getNullValue();
-                }
-                else {
-                	// TODO what to do in this case: we're trying to convert the extracted string to a field
-                    //val = Convert.ChangeType(fieldString.extractedString(), fieldInfo., null);
-                	val = changeType(fieldString.extractedString(), fieldInfo);
-                }
-            }
-        }
-        else {
-            if (convertProvider.isCustomNullHandling() == false &&
-                fieldString.hasOnlyThisChars(StringHelper.WHITESPACE_CHARS)) {
-                val = getNullValue();
-            }
-            else {
-                String from = fieldString.extractedString();
-                val = convertProvider.stringToField(from);
+		if (converter.isCustomNullHandling() == false 
+				&& fieldString.hasOnlyThisChars(StringHelper.WHITESPACE_CHARS)) {
+			val = getNullValue();
+		} else {
+			String from = fieldString.extractedString();
+			val = converter.stringToField(from);
 
-                if (val == null) {
-                    val = getNullValue();
-                }
-            }
-        }
-        
-        if(impliedDecimalPlaces != 0){
-        	val = NumberHelper.applyImpliedDecimalPlaces((Number) val, impliedDecimalPlaces);
-        }
-		
-        return val;
-	}
-	
-	
-	
-	@SuppressWarnings("unchecked")
-	private Object changeType(final String s, final Field fieldInfo) {
-		
-		Number number = NumberHelper.convertStringToNumber(s, fieldInfo.getType());
-		if(number != null){
-			return number;
-		}
-		
-		 if (fieldInfo.getType().isEnum()) {
-			Object ret = null;
-			try {
-				System.out.println(s);
-				ret = Enum.valueOf((Class<Enum>) fieldInfo.getType(), s); 
+			if (val == null) {
+				val = getNullValue();
 			}
-			catch (IllegalArgumentException e) {
-			}
-			return ret;
 		}
-		return fieldInfo.getType().cast(s);
-		//return s.getClass().cast(fieldInfo.getType());
+
+		if (impliedDecimalPlaces != 0) {
+			val = NumberHelper.applyImpliedDecimalPlaces((Number) val, impliedDecimalPlaces);
+		}
+
+		return val;
 	}
+
+	
 
 	public void assignToString(final StringBuffer sb, final Object fieldValue) {
 		if (this.inNewLine == true) {
@@ -249,14 +216,6 @@ public abstract class FieldBase {
 	@Override
 	public String toString() {
 		return StringHelper.toStringBuilder(this);
-	}
-	
-	public boolean isStringField() {
-		return stringField;
-	}
-
-	public void setStringField(final boolean stringField) {
-		this.stringField = stringField;
 	}
 
 	public Field getFieldInfo() {
@@ -348,14 +307,13 @@ public abstract class FieldBase {
 	}
 
 	public ConverterBase getConvertProvider() {
-		return convertProvider;
+		return converter;
 	}
 
 	public void setConvertProvider(final ConverterBase converterProvider) {
-		this.convertProvider = converterProvider;
+		this.converter = converterProvider;
 	}
 
-	
 	public int getImpliedDecimalPlaces() {
 		return impliedDecimalPlaces;
 	}
