@@ -22,7 +22,6 @@ package org.coury.jfilehelpers.fields;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.math.BigDecimal;
 
 import org.coury.jfilehelpers.annotations.FieldConverter;
 import org.coury.jfilehelpers.annotations.FieldNullValue;
@@ -31,6 +30,7 @@ import org.coury.jfilehelpers.converters.ConverterBase;
 import org.coury.jfilehelpers.core.ExtractedInfo;
 import org.coury.jfilehelpers.engines.LineInfo;
 import org.coury.jfilehelpers.enums.TrimMode;
+import org.coury.jfilehelpers.helpers.NumberHelper;
 import org.coury.jfilehelpers.helpers.StringHelper;
 
 public abstract class FieldBase {
@@ -52,6 +52,7 @@ public abstract class FieldBase {
 	protected int charsToDiscard = 0;
 	
 	private ConverterBase convertProvider;
+	private int impliedDecimalPlaces;
 		
 	public FieldBase(final Field field) {
 		fieldInfo = field;
@@ -133,7 +134,12 @@ public abstract class FieldBase {
 	
 	protected abstract void createFieldString(StringBuffer sb, Object fieldValue);
 	
-	protected String baseFieldString(final Object fieldValue) {
+	protected String baseFieldString(Object fieldValue) {
+		
+		if(impliedDecimalPlaces != 0){
+			fieldValue = NumberHelper.applyImpliedDecimalPlaces((Number) fieldValue, -1 * impliedDecimalPlaces);
+		}
+		
 		if (convertProvider == null) {
 			if (fieldValue == null) {
 				return "";
@@ -200,31 +206,20 @@ public abstract class FieldBase {
                 }
             }
         }
+        
+        if(impliedDecimalPlaces != 0){
+        	val = NumberHelper.applyImpliedDecimalPlaces((Number) val, impliedDecimalPlaces);
+        }
 		
         return val;
 	}
 	
-	public static Number convertStringToNumber(final String s, final Field fieldInfo){
-		
-		String typeName = fieldInfo.getType().getName();
-		if (typeName.equals("int")  || typeName.equals("java.lang.Integer")) {
-			return Integer.parseInt(s);
-		} else if (typeName.equals("long") || typeName.equals("java.lang.Long")) {
-			return Long.parseLong(s);
-		}else if (typeName.equals("double") || typeName.equals("java.lang.Double")) {
-			return Double.parseDouble(s);
-		} else if (typeName.equals("float")  || typeName.equals("java.lang.Float")) {
-			return Float.parseFloat(s);
-		} else if(typeName.equals("java.math.BigDecimal")){
-			return new BigDecimal(s);
-		}
-		return null;
-	}
+	
 	
 	@SuppressWarnings("unchecked")
 	private Object changeType(final String s, final Field fieldInfo) {
 		
-		Number number = convertStringToNumber(s, fieldInfo);
+		Number number = NumberHelper.convertStringToNumber(s, fieldInfo.getType());
 		if(number != null){
 			return number;
 		}
@@ -358,5 +353,14 @@ public abstract class FieldBase {
 
 	public void setConvertProvider(final ConverterBase converterProvider) {
 		this.convertProvider = converterProvider;
+	}
+
+	
+	public int getImpliedDecimalPlaces() {
+		return impliedDecimalPlaces;
+	}
+
+	public void setImpliedDecimalPlaces(final int impliedDecimalPlaces) {
+		this.impliedDecimalPlaces = impliedDecimalPlaces;
 	}
 }

@@ -27,20 +27,29 @@ import org.coury.jfilehelpers.annotations.FieldAlign;
 import org.coury.jfilehelpers.annotations.FieldDelimiter;
 import org.coury.jfilehelpers.annotations.FieldFixedLength;
 import org.coury.jfilehelpers.annotations.FieldIgnored;
+import org.coury.jfilehelpers.annotations.FieldImpliedDecimalPlaces;
 import org.coury.jfilehelpers.annotations.FieldOptional;
 import org.coury.jfilehelpers.annotations.FieldTrim;
 import org.coury.jfilehelpers.annotations.FixedLengthRecord;
+import org.coury.jfilehelpers.helpers.NumberHelper;
 
 public class FieldFactory {
 	/**
-	 * Creates a field descriptor, given a record class field acquired by reflection
-	 * @param fi record class field to generate field information for
-	 * @param recordClass the record class
-	 * @param someOptional indicates whether some of the fields on the collection are optional
-	 * @return a FieldBase instance with informations from the field acquired by reflection 
+	 * Creates a field descriptor, given a record class field acquired by
+	 * reflection
+	 * 
+	 * @param fi
+	 *            record class field to generate field information for
+	 * @param recordClass
+	 *            the record class
+	 * @param someOptional
+	 *            indicates whether some of the fields on the collection are
+	 *            optional
+	 * @return a FieldBase instance with informations from the field acquired by
+	 *         reflection
 	 */
 	@SuppressWarnings("unchecked")
-	public static FieldBase createField(Field fi, Class recordClass, boolean someOptional) {
+	public static FieldBase createField(final Field fi, final Class recordClass, final boolean someOptional) {
 		if (fi.isAnnotationPresent(FieldIgnored.class)) {
 			return null;
 		}
@@ -84,7 +93,7 @@ public class FieldFactory {
 		}
 		else {
 			// default
-			DelimitedRecord delimitedAnn = ((DelimitedRecord) recordClass.getAnnotation(DelimitedRecord.class));
+			DelimitedRecord delimitedAnn = (DelimitedRecord) recordClass.getAnnotation(DelimitedRecord.class);
 			String delimiter = ",";
 			if (delimitedAnn != null) {
 				delimiter = delimitedAnn.value();
@@ -98,6 +107,15 @@ public class FieldFactory {
 			res.setTrimChars(ft.trimChars());
 		}
 		
+		//check for FieldImpliedDecimalPlaces
+		FieldImpliedDecimalPlaces fidp = fi.getAnnotation(FieldImpliedDecimalPlaces.class);
+		if(fidp != null){
+			//ensure field is a supported type
+			if(!NumberHelper.isSupportedType(fi.getType())){
+				throw new IllegalArgumentException("FieldImpliedDecimalPlaces can only be applied to numeric fields");
+			}
+			res.setImpliedDecimalPlaces(fidp.value());
+		}
 		res.setOptional(fi.isAnnotationPresent(FieldOptional.class));
 		
 		
