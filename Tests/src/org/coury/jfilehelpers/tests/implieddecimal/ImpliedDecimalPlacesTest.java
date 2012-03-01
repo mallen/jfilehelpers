@@ -21,12 +21,14 @@ package org.coury.jfilehelpers.tests.implieddecimal;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.coury.jfilehelpers.engines.FileHelperEngine;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -71,9 +73,9 @@ public class ImpliedDecimalPlacesTest {
 		
 	}
 	
-//	@After
-//	protected void tearDown() {
-//		new File(file).delete();
-//	}
+	@After
+	public void after() {
+		new File(file).delete();
+	}
 	
 }
