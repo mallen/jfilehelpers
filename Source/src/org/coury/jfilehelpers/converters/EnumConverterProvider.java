@@ -50,12 +50,8 @@ public class EnumConverterProvider extends ConverterProvider {
 
 		@Override
 		public Object stringToField(final String from) {
-			Object ret = null;
-			try {
-				// System.out.println(s);
-				ret = Enum.valueOf(fieldType, from);
-			} catch (IllegalArgumentException e) {
-			}
+			@SuppressWarnings("unchecked")
+			Object ret = Enum.valueOf(fieldType, from);
 			return ret;
 		}
 

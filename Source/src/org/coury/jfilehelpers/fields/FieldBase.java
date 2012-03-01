@@ -93,7 +93,7 @@ public abstract class FieldBase {
 		throw new IllegalArgumentException("No ConverterProvider found for converterKing: " + converterKind);
 	}
 
-	public Object extractValue(final LineInfo line) throws IOException {
+	public Object extractValue(final LineInfo line) {
 		if (this.inNewLine) {
 			if (!line.isEmptyFromPos()) {
 				// throw new BadUsageException("Text '" + line.CurrentString +
@@ -105,7 +105,11 @@ public abstract class FieldBase {
 						" (this is not allowed when you use [FieldInNewLine])");
 			}
 
-			line.reload(line.getReader().readNextLine());
+			try {
+				line.reload(line.getReader().readNextLine());
+			} catch (IOException e) {
+				throw new RuntimeException("Error reading next line", e);
+			}
 
 			if (line.getLineStr() == null) {
 				// throw new

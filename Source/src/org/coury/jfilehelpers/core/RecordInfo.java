@@ -132,7 +132,16 @@ public final class RecordInfo<T> {
 				values[i] = fields[i].extractValue(line);
 			}
 	
-			record = createRecordObject();
+			try {
+				record = createRecordObject();
+			} catch (InstantiationException e) {
+				throw new RuntimeException("Error creating record object", e);
+			} catch (IllegalAccessException e) {
+				throw new RuntimeException("Error creating record object", e);
+			} catch (InvocationTargetException e) {
+				throw new RuntimeException("Error creating record object", e);
+			}
+			
 			for (int i = 0; i < fieldCount; i++) {
 				// sets the field on the object
 				setInternalField(fields[i].getFieldInfo().getName(), record, values[i]);
@@ -141,9 +150,10 @@ public final class RecordInfo<T> {
 				// fields[i].getFieldInfo().set(record, values[i]);
 			}
 		}
-		catch (Exception e) {
+		catch (RuntimeException e) {
 			e.printStackTrace();
-			throw new RuntimeException("Problems while reading field values from " + record + " object", e);
+			//throw new RuntimeException("Problems while reading field values from " + record + " object", e);
+			throw e;
 		}
 		
 		return record;
