@@ -30,12 +30,12 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 public class HeaderMasterDetailEngine<HT, MT, DT> extends MasterDetailEngine<MT, DT> {
 
 	private final RecordInfo<HT> headerInfo;
-	private final HeaderSelector headerSelector;
+	private final HeaderMasterDetailSelector headerSelector;
 	private HT currentHeader;
 
 	public HeaderMasterDetailEngine(final Class<HT> headerRecordClass, final Class<MT> masterRecordClass, final Class<DT> detailRecordClass, 
-			final HeaderSelector headerSelector, final MasterDetailSelector recordSelector) {
-		super(masterRecordClass, detailRecordClass, recordSelector);
+			final HeaderMasterDetailSelector headerSelector) {
+		super(masterRecordClass, detailRecordClass, headerSelector);
 		this.headerSelector = headerSelector;
 		this.headerInfo = new RecordInfo<HT>(headerRecordClass, super.converterProviders);	
 	}

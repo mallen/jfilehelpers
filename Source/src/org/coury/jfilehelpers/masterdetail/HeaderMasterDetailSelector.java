@@ -19,6 +19,6 @@
  */
 package org.coury.jfilehelpers.masterdetail;
 
-public interface HeaderSelector {
+public interface HeaderMasterDetailSelector extends MasterDetailSelector {
 	public boolean isHeader(String recordString);
 }

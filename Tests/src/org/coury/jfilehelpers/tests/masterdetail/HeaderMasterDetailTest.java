@@ -25,9 +25,8 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.coury.jfilehelpers.masterdetail.HeaderMasterDetailEngine;
+import org.coury.jfilehelpers.masterdetail.HeaderMasterDetailSelector;
 import org.coury.jfilehelpers.masterdetail.HeaderMasterDetails;
-import org.coury.jfilehelpers.masterdetail.HeaderSelector;
-import org.coury.jfilehelpers.masterdetail.MasterDetailSelector;
 import org.coury.jfilehelpers.masterdetail.RecordAction;
 import org.coury.jfilehelpers.tests.types.customers.CustomersVerticalBar;
 import org.coury.jfilehelpers.tests.types.orders.OrdersVerticalBar;
@@ -38,15 +37,13 @@ public class HeaderMasterDetailTest extends TestCase {
 	@SuppressWarnings("unchecked")
 	public void testCustomersOrderRead() throws IOException {
 		engine = new HeaderMasterDetailEngine<HeaderVerticalBar, CustomersVerticalBar, OrdersVerticalBar>(HeaderVerticalBar.class, CustomersVerticalBar.class, OrdersVerticalBar.class,
-				new HeaderSelector() {
+				new HeaderMasterDetailSelector() {
 					
 					@Override
 					public boolean isHeader(final String recordString) {
 						return recordString.startsWith("HEADER");
 					}
-				},
-				new MasterDetailSelector() {
-
+					
 					@Override
 					public RecordAction getRecordAction(final String recordString) {
 			            if (Character.isLetter(recordString.charAt(0))) {
@@ -55,7 +52,6 @@ public class HeaderMasterDetailTest extends TestCase {
 							return RecordAction.Detail;
 						}
 					}
-			
 				});		
 		
 		List<HeaderMasterDetails<HeaderVerticalBar, CustomersVerticalBar, OrdersVerticalBar>> res = 
