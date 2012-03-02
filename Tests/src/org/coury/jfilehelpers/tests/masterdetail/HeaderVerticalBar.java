@@ -1,5 +1,5 @@
 /*
- * CustomersVerticalBar.java
+ * HeaderVerticalBar.java
  *
  * Copyright (C) 2007 Felipe Gonçalves Coury <felipe.coury@gmail.com>
  * 
@@ -17,27 +17,39 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.coury.jfilehelpers.tests.types.customers;
+package org.coury.jfilehelpers.tests.masterdetail;
 
 import org.coury.jfilehelpers.annotations.DelimitedRecord;
 
 @DelimitedRecord("|")
-public class CustomersVerticalBar  {
+public class HeaderVerticalBar /*implements ComparableRecord<HeaderVerticalBar>*/ {
+	public String headerText;
+	public int headerNumber;
 	
-	public String customerID;
-	public String companyName;
-	public String contactName;
-	public String contactTitle;
-	public String address;
-	public String city;
-	public String country;
-
 	/*@Override
-	public boolean equalsRecord(CustomersVerticalBar record) {
-		if (this.customerID == null) {
+	public boolean equalsRecord(final HeaderVerticalBar record) {
+		return headerText.equals(record.headerText) && headerNumber == record.headerNumber;
+	}*/
+	
+	@Override
+	public boolean equals(final Object obj) {
+		
+		if(obj == null){
 			return false;
 		}
-		return this.customerID.equals(record);
-	}*/
-
+		
+		if(!(obj instanceof HeaderVerticalBar)){
+			return false;
+		}
+		
+		HeaderVerticalBar other = (HeaderVerticalBar) obj;
+		
+		return other.headerText.equals(headerText) && other.headerNumber == headerNumber;
+	}
+	
+	@Override
+	public int hashCode() {
+		
+		return (headerText == null || headerText.equals("") ? 1 : headerText.hashCode()) * headerNumber;
+	}
 }

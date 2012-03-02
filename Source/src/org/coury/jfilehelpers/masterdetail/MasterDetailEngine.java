@@ -53,14 +53,14 @@ public class MasterDetailEngine<MT, DT> extends EngineBase<DT> {
 	private final RecordInfo<MT> masterInfo;
 	private final MasterDetailSelector recordSelector;
 
-	public MasterDetailEngine(Class<MT> masterRecordClass, Class<DT> detailRecordClass, MasterDetailSelector recordSelector) {
+	public MasterDetailEngine(final Class<MT> masterRecordClass, final Class<DT> detailRecordClass, final MasterDetailSelector recordSelector) {
 		super(detailRecordClass);
 		this.masterRecordClass = masterRecordClass;
 		this.masterInfo = new RecordInfo<MT>(masterRecordClass);
 		this.recordSelector = recordSelector;
 	}
 	
-	public MasterDetailEngine(Class<MT> masterRecordClass, Class<DT> detailRecordClass, CommonSelector action, String selector) {
+	public MasterDetailEngine(final Class<MT> masterRecordClass, final Class<DT> detailRecordClass, final CommonSelector action, final String selector) {
 		super(detailRecordClass);
 		this.masterInfo = new RecordInfo<MT>(masterRecordClass);
 		final CommonInternalSelector sel = new CommonInternalSelector(action, selector, masterInfo.isIgnoreEmptyLines() || recordInfo.isIgnoreEmptyLines());
@@ -68,14 +68,14 @@ public class MasterDetailEngine<MT, DT> extends EngineBase<DT> {
 		this.recordSelector = new MasterDetailSelector() {
 
 			@Override
-			public RecordAction getRecordAction(String recordString) {
+			public RecordAction getRecordAction(final String recordString) {
 				return sel.getCommonSelectorMethod(recordString);			
 			}
 			
 		};
 	}
 	
-	public List<MasterDetails<MT, DT>> readResource(String fileName) throws IOException {
+	public List<? extends MasterDetails<MT, DT>> readResource(final String fileName) throws IOException {
 		List<MasterDetails<MT, DT>> tempRes = null;		
 		
 		InputStreamReader fr = null;
@@ -92,11 +92,11 @@ public class MasterDetailEngine<MT, DT> extends EngineBase<DT> {
 		return tempRes;
 	}
 	
-	public List<MasterDetails<MT, DT>> fromString(String s) throws IOException {
+	public List<? extends MasterDetails<MT, DT>> fromString(final String s) throws IOException {
 		return readStream(new InputStreamReader(new ByteArrayInputStream(s.getBytes())));
 	}
 	
-	public List<MasterDetails<MT, DT>> readFile(String fileName) throws IOException {
+	public List<? extends MasterDetails<MT, DT>> readFile(final String fileName) throws IOException {
 		List<MasterDetails<MT, DT>> tempRes = null;
 		
 		FileReader fr = null;
@@ -113,18 +113,18 @@ public class MasterDetailEngine<MT, DT> extends EngineBase<DT> {
 		return tempRes;
 	}
 
-	public void writeFile(String fileName, MasterDetails<MT, DT> record) throws IOException {
+	public void writeFile(final String fileName, final MasterDetails<MT, DT> record) throws IOException {
 		List<MasterDetails<MT, DT>> list = new ArrayList<MasterDetails<MT, DT>>();
 		list.add(record);
 		
 		writeFile(fileName, list);
 	}
 
-	public void writeFile(String fileName, List<MasterDetails<MT, DT>> records) throws IOException {
+	public void writeFile(final String fileName, final List<? extends MasterDetails<MT, DT>> records) throws IOException {
 		writeFile(fileName, records, -1);
 	}
 	
-	public void writeFile(String fileName, List<MasterDetails<MT, DT>> records, int maxRecords) throws IOException {
+	public void writeFile(final String fileName, final List<? extends MasterDetails<MT, DT>> records, final int maxRecords) throws IOException {
 		FileWriter fw = null;
 		try {
 			fw = new FileWriter(new File(fileName));
@@ -139,7 +139,7 @@ public class MasterDetailEngine<MT, DT> extends EngineBase<DT> {
 		}
 	}
 	
-	private void writeStream(OutputStreamWriter osr, List<MasterDetails<MT, DT>> records, int maxRecords) throws IOException {
+	private void writeStream(final OutputStreamWriter osr, final List<? extends MasterDetails<MT, DT>> records, final int maxRecords) throws IOException {
 		BufferedWriter writer = new BufferedWriter(osr);
 		
 		resetFields();
@@ -211,7 +211,7 @@ public class MasterDetailEngine<MT, DT> extends EngineBase<DT> {
 		}		
 	}
 		
-	private List<MasterDetails<MT, DT>> readStream(InputStreamReader fileReader) throws IOException {
+	protected List<MasterDetails<MT, DT>> readStream(final InputStreamReader fileReader) throws IOException {
 		BufferedReader reader = new BufferedReader(fileReader);
 
 		resetFields();
@@ -259,7 +259,7 @@ public class MasterDetailEngine<MT, DT> extends EngineBase<DT> {
 				
 				ProgressHelper.notify(notifyHandler, progressMode, currentRecord, -1);
 
-				RecordAction action = recordSelector.getRecordAction(currentLine);
+				RecordAction action = getRecordAction(currentLine);
 				switch (action) {
 					case Master:
 						if (record != null) {							
@@ -268,7 +268,7 @@ public class MasterDetailEngine<MT, DT> extends EngineBase<DT> {
 						}
 
 						totalRecords++;
-						record = new MasterDetails<MT, DT>();
+						record = createMasterDetails();
 						tmpDetails.clear();
 						
 						MT lastMaster = masterInfo.strToRecord(line);
@@ -335,71 +335,87 @@ public class MasterDetailEngine<MT, DT> extends EngineBase<DT> {
 		return resArray;		
 	}
 
+	protected MasterDetails<MT, DT> createMasterDetails() {
+		return new MasterDetails<MT, DT>();
+	}
+
+	protected RecordAction getRecordAction(final String currentLine) {
+		return recordSelector.getRecordAction(currentLine);
+	}
+
 	class CommonInternalSelector {
 		
 		private final String selector;
 		private final boolean ignoreEmpty;
 		private final CommonSelector action;
 		
-		public CommonInternalSelector(CommonSelector action, String selector, boolean ignoreEmpty) {
+		public CommonInternalSelector(final CommonSelector action, final String selector, final boolean ignoreEmpty) {
 			this.action = action;
 			this.selector = selector;
 			this.ignoreEmpty = ignoreEmpty;
 		}
 		
-		protected RecordAction getCommonSelectorMethod(String recordString) {
+		protected RecordAction getCommonSelectorMethod(final String recordString) {
 			if (ignoreEmpty && recordString.length() < 1) {
 				return RecordAction.Skip;
 			}
 
 			switch (action) {
 			case DetailIfContains:
-				if (recordString.indexOf(selector) >= 0)
+				if (recordString.indexOf(selector) >= 0) {
 					return RecordAction.Detail;
-				else
+				} else {
 					return RecordAction.Master;
+				}
 
 			case MasterIfContains:
-				if (recordString.indexOf(selector) >= 0)
+				if (recordString.indexOf(selector) >= 0) {
 					return RecordAction.Master;
-				else
+				} else {
 					return RecordAction.Detail;
+				}
 
 			case DetailIfBegins:
-				if (recordString.startsWith(selector))
+				if (recordString.startsWith(selector)) {
 					return RecordAction.Detail;
-				else
+				} else {
 					return RecordAction.Master;
+				}
 			
 			case MasterIfBegins:
-				if (recordString.startsWith(selector))
+				if (recordString.startsWith(selector)) {
 					return RecordAction.Master;
-				else
+				} else {
 					return RecordAction.Detail;
+				}
 
 			case DetailIfEnds:
-				if (recordString.endsWith(selector))
+				if (recordString.endsWith(selector)) {
 					return RecordAction.Detail;
-				else
+				} else {
 					return RecordAction.Master;
+				}
 
 			case MasterIfEnds:
-				if (recordString.endsWith(selector))
+				if (recordString.endsWith(selector)) {
 					return RecordAction.Master;
-				else
+				} else {
 					return RecordAction.Detail;
+				}
 
 			case DetailIfEnclosed:
-				if (recordString.startsWith(selector) && recordString.endsWith(selector))
+				if (recordString.startsWith(selector) && recordString.endsWith(selector)) {
 					return RecordAction.Detail;
-				else
+				} else {
 					return RecordAction.Master;
+				}
 
 			case MasterIfEnclosed:
-				if (recordString.startsWith(selector) && recordString.endsWith(selector))
+				if (recordString.startsWith(selector) && recordString.endsWith(selector)) {
 					return RecordAction.Master;
-				else
+				} else {
 					return RecordAction.Detail;
+				}
 			}
 
 			return RecordAction.Skip;

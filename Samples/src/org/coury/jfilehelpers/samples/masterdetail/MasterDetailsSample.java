@@ -30,11 +30,11 @@ import org.coury.jfilehelpers.masterdetail.MasterDetails;
 import org.coury.jfilehelpers.masterdetail.RecordAction;
 
 public class MasterDetailsSample {
-	public static void main(String[] args) throws IOException {
+	public static void main(final String[] args) throws IOException {
 		MasterDetailEngine<Order, Item> engine = new MasterDetailEngine<Order, Item>(Order.class, Item.class, new MasterDetailSelector() {
 
 			@Override
-			public RecordAction getRecordAction(String recordString) {
+			public RecordAction getRecordAction(final String recordString) {
 				if (recordString.startsWith("-")) {
 					return RecordAction.Detail;
 				}
@@ -51,12 +51,12 @@ public class MasterDetailsSample {
 			"2,302512,1320.11" + "\n" +
 			"-2,awesome,14,130.01";
 		
-		List<MasterDetails<Order, Item>> orders = engine.fromString(teste);
+		List<? extends MasterDetails<Order, Item>> orders = engine.fromString(teste);
 		for (MasterDetails<Order, Item> md : orders) {
 			Order order = md.getMaster();
 			System.out.println("Order: " + order.id + " - " + order.orderNo);
 			for (Item item : md.getDetails()) {
-				System.out.println("   - " + (item.id*-1) + " - " + item.description);
+				System.out.println("   - " + item.id*-1 + " - " + item.description);
 			}
 		}
 		
@@ -91,7 +91,7 @@ public class MasterDetailsSample {
 		public Order() {
 		}
 		
-		public Order(int id, String orderNo, double total) {
+		public Order(final int id, final String orderNo, final double total) {
 			super();
 			this.id = id;
 			this.orderNo = orderNo;
@@ -110,7 +110,7 @@ public class MasterDetailsSample {
 		public Item() {
 		}
 		
-		public Item(int id, String description, int qtd, double price) {
+		public Item(final int id, final String description, final int qtd, final double price) {
 			super();
 			this.description = description;
 			this.id = id;

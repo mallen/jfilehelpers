@@ -1,5 +1,5 @@
 /*
- * CustomersVerticalBar.java
+ * HeaderMasterDetails.java
  *
  * Copyright (C) 2007 Felipe Gonçalves Coury <felipe.coury@gmail.com>
  * 
@@ -17,27 +17,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.coury.jfilehelpers.tests.types.customers;
+package org.coury.jfilehelpers.masterdetail;
 
-import org.coury.jfilehelpers.annotations.DelimitedRecord;
+public class HeaderMasterDetails<HT, MT, DT> extends MasterDetails<MT, DT> {
 
-@DelimitedRecord("|")
-public class CustomersVerticalBar  {
+	private final HT header;
 	
-	public String customerID;
-	public String companyName;
-	public String contactName;
-	public String contactTitle;
-	public String address;
-	public String city;
-	public String country;
+	public HeaderMasterDetails(final HT header) {
+		this.header = header;
+	}
 
-	/*@Override
-	public boolean equalsRecord(CustomersVerticalBar record) {
-		if (this.customerID == null) {
-			return false;
-		}
-		return this.customerID.equals(record);
-	}*/
+	public HT getHeader() {
+		return header;
+	}
 
 }
