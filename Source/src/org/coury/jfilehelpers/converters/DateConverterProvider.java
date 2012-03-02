@@ -98,7 +98,6 @@ public class DateConverterProvider extends ConverterProvider {
 				throw new RuntimeException(extra);
 			}
 
-			System.out.print(val);
 			return val;
 		}
 

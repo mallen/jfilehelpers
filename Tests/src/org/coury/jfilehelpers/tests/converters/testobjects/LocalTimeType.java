@@ -1,5 +1,5 @@
 /*
- * ConverterKind.java
+ * LocalTimeType.java
  *
  * Copyright (C) 2007 Felipe Gonçalves Coury <felipe.coury@gmail.com>
  * 
@@ -17,23 +17,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+package org.coury.jfilehelpers.tests.converters.testobjects;
 
-package org.coury.jfilehelpers.enums;
+import org.coury.jfilehelpers.annotations.DelimitedRecord;
+import org.joda.time.LocalTime;
 
-public enum ConverterKind {
-	/**
-	 * java.util.Date
-	 */
-	Date, 
-	Boolean, 
-	Int, 
-	Long, 
-	Float, 
-	Double, 
-	BigDecimal, 
-	String,
-	/**
-	 * org.joda.time.LocalTime
-	 */
-	LocalTime;	
+@DelimitedRecord
+public class LocalTimeType {
+	public LocalTime time;
 }

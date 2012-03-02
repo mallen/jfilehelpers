@@ -31,6 +31,7 @@ import org.coury.jfilehelpers.converters.DoubleConverterProvider;
 import org.coury.jfilehelpers.converters.EnumConverterProvider;
 import org.coury.jfilehelpers.converters.FloatConverterProvider;
 import org.coury.jfilehelpers.converters.IntConverterProvider;
+import org.coury.jfilehelpers.converters.LocalTimeConverterProvider;
 import org.coury.jfilehelpers.converters.LongConverterProvider;
 import org.coury.jfilehelpers.converters.StringConverterProvider;
 import org.coury.jfilehelpers.core.RecordInfo;
@@ -62,6 +63,7 @@ public abstract class EngineBase<T> {
 		converterProviders.add(new EnumConverterProvider());
 		dateConverterProvider = new DateConverterProvider();
 		converterProviders.add(dateConverterProvider);
+		converterProviders.add(new LocalTimeConverterProvider());
 		
 		this.recordClass = recordClass;
 		this.recordInfo = new RecordInfo<T>(recordClass, converterProviders);
