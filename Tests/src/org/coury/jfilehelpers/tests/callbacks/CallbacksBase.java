@@ -20,6 +20,7 @@
 
 package org.coury.jfilehelpers.tests.callbacks;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +78,7 @@ public abstract class CallbacksBase extends TestCase {
 	}
 	@Override
 	protected void tearDown() {
-		//new File(customerFile).delete();
+		new File(customerFile).delete();
 	}
 	public static void engineTester(final EngineBase<Customer> e) {
 		assertEquals(e,engine);
