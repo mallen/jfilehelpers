@@ -291,9 +291,10 @@ public class MasterDetailEngine<MT, DT> extends EngineBase<DT> {
 						break;
 				}
 			}
-			catch (Exception ex) {
+			catch (RuntimeException ex) {
 				// TODO error handling
 				ex.printStackTrace();
+				throw ex;
 //				switch (mErrorManager.ErrorMode)
 //				{
 //					case ErrorMode.ThrowException:

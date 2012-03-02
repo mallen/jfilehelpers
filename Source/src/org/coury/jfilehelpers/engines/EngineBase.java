@@ -26,7 +26,7 @@ import java.util.List;
 import org.coury.jfilehelpers.converters.BigDecimalConverterProvider;
 import org.coury.jfilehelpers.converters.BooleanConverterProvider;
 import org.coury.jfilehelpers.converters.ConverterProvider;
-import org.coury.jfilehelpers.converters.DateTimeConverterProvider;
+import org.coury.jfilehelpers.converters.DateConverterProvider;
 import org.coury.jfilehelpers.converters.DoubleConverterProvider;
 import org.coury.jfilehelpers.converters.EnumConverterProvider;
 import org.coury.jfilehelpers.converters.FloatConverterProvider;
@@ -46,7 +46,7 @@ public abstract class EngineBase<T> {
 	protected int lineNumber;
 	protected int totalRecords;
 	protected final List<ConverterProvider> converterProviders = new ArrayList<ConverterProvider>(); 
-	private final DateTimeConverterProvider dateTimeConverterProvider;
+	private final DateConverterProvider dateConverterProvider;
 	private final BooleanConverterProvider booleanConverterProvider;
 	
 	public EngineBase(final Class<T> recordClass) {
@@ -60,19 +60,19 @@ public abstract class EngineBase<T> {
 		converterProviders.add(new FloatConverterProvider());
 		converterProviders.add(new BigDecimalConverterProvider());
 		converterProviders.add(new EnumConverterProvider());
-		dateTimeConverterProvider = new DateTimeConverterProvider();
-		converterProviders.add(dateTimeConverterProvider);
+		dateConverterProvider = new DateConverterProvider();
+		converterProviders.add(dateConverterProvider);
 		
 		this.recordClass = recordClass;
 		this.recordInfo = new RecordInfo<T>(recordClass, converterProviders);
 	}
 	
-	public String getDefaultDateTimeFormat(){
-		return dateTimeConverterProvider.getDefaultFormat();
+	public String getDefaultDateFormat(){
+		return dateConverterProvider.getDefaultFormat();
 	}
 	
-	public void setDefaultDateTimeFormat(final String format){
-		dateTimeConverterProvider.setDefaultFormat(format);
+	public void setDefaultDateFormat(final String format){
+		dateConverterProvider.setDefaultFormat(format);
 	}
 	
 	public String getDefaultTrueString(){

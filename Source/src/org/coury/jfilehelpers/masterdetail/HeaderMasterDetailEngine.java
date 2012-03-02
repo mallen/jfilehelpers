@@ -46,6 +46,11 @@ public class HeaderMasterDetailEngine<HT, MT, DT> extends MasterDetailEngine<MT,
 	}
 	
 	@Override
+	public List<HeaderMasterDetails<HT, MT, DT>> readResource(final String fileName) throws IOException {
+		return (List<HeaderMasterDetails<HT, MT, DT>>) super.readResource(fileName);
+	}
+	
+	@Override
 	public List<HeaderMasterDetails<HT, MT, DT>> fromString(final String s) throws IOException {
 		
 		return (List<HeaderMasterDetails<HT, MT, DT>>) super.fromString(s);
