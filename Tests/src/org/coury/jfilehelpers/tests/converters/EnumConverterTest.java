@@ -48,15 +48,25 @@ public class EnumConverterTest extends TestCase {
 		assertEquals(5, res.size());
 
 		assertEquals(Enum2.One, res.get(0).enumValue);
+		assertEquals(Enum2.One, res.get(1).enumValue);
 		assertEquals(Enum2.Two, res.get(2).enumValue);
 		assertEquals(Enum2.Three, res.get(3).enumValue);
 		assertEquals(Enum2.Three, res.get(4).enumValue);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void testUnknownEnumValueThrows() throws IOException {
+        engine = new FileHelperEngine<EnumType2>(EnumType2.class);
 
-		// This behavior differs from original, C# version
-		// on C# the conversion from a string is not case sensitive.
-		// In Java version, it is case sensitive and the value 
-		// here "one" does not map to Enum2.One
-		assertNull(res.get(1).enumValue);
+        try{
+        	List<EnumType2> res = (ArrayList<EnumType2>) Common.readTest(engine, "Bad/BadEnum1.txt");
+        	fail("expected an IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+			// expected exception
+		} catch(Exception e){
+			fail("Unexpected exception: " + e);
+		}
+
 	}
 
 }
