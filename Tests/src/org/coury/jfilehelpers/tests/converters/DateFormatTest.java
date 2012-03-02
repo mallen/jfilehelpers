@@ -89,7 +89,7 @@ public class DateFormatTest extends TestCase {
 	public void testDifferentEnglishFormat_usingDefaultFormat() throws IOException {
 		engine = new FileHelperEngine<DateFormatType3>(DateFormatType3.class);
 		
-		engine.setDefaultDateTimeFormat("M-d-yyyy");
+		engine.setDefaultDateFormat("M-d-yyyy");
 
 		List<DateFormatType3> res = (List<DateFormatType3>) Common.readTest(engine, "Good/DateFormat2.txt");
 		assertEquals(6, res.size());

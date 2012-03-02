@@ -25,7 +25,7 @@ import java.util.Date;
 
 import org.coury.jfilehelpers.enums.ConverterKind;
 
-public class DateTimeConverterProvider extends ConverterProvider {
+public class DateConverterProvider extends ConverterProvider {
 
 	private String defaultFormat = "ddMMyyyy";
 	
@@ -44,7 +44,7 @@ public class DateTimeConverterProvider extends ConverterProvider {
 		if(format == null || format.length() == 0){
 			format = defaultFormat;
 		}
-		return new DateTimeConverter(format);
+		return new DateConverter(format);
 	}
 	
 	public String getDefaultFormat() {
@@ -55,12 +55,12 @@ public class DateTimeConverterProvider extends ConverterProvider {
 		this.defaultFormat = defaultFormat;
 	}
 
-	public static class DateTimeConverter extends ConverterBase {
+	public static class DateConverter extends ConverterBase {
 		
 		private final String format;
 		private final SimpleDateFormat sdf;
 
-		public DateTimeConverter(final String format) {
+		public DateConverter(final String format) {
 			this.format = format;
 			if (format == null || format.length() < 1) {
 				throw new IllegalArgumentException("The format of the DateTime Converter can be null or empty.");
@@ -80,7 +80,7 @@ public class DateTimeConverterProvider extends ConverterProvider {
 				from = "";
 			}
 
-			Object val;
+			Date val;
 
 			try {
 				val = sdf.parse(from);
@@ -98,6 +98,7 @@ public class DateTimeConverterProvider extends ConverterProvider {
 				throw new RuntimeException(extra);
 			}
 
+			System.out.print(val);
 			return val;
 		}
 
