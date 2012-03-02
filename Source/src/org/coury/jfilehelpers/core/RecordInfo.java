@@ -36,16 +36,7 @@ import org.coury.jfilehelpers.annotations.IgnoreFirst;
 import org.coury.jfilehelpers.annotations.IgnoreLast;
 import org.coury.jfilehelpers.annotations.PostReadRecord;
 import org.coury.jfilehelpers.annotations.PostReadRecordHandler;
-import org.coury.jfilehelpers.converters.BigDecimalConverterProvider;
-import org.coury.jfilehelpers.converters.BooleanConverterProvider;
 import org.coury.jfilehelpers.converters.ConverterProvider;
-import org.coury.jfilehelpers.converters.DateTimeConverterProvider;
-import org.coury.jfilehelpers.converters.DoubleConverterProvider;
-import org.coury.jfilehelpers.converters.EnumConverterProvider;
-import org.coury.jfilehelpers.converters.FloatConverterProvider;
-import org.coury.jfilehelpers.converters.IntConverterProvider;
-import org.coury.jfilehelpers.converters.LongConverterProvider;
-import org.coury.jfilehelpers.converters.StringConverterProvider;
 import org.coury.jfilehelpers.engines.LineInfo;
 import org.coury.jfilehelpers.enums.RecordCondition;
 import org.coury.jfilehelpers.fields.FieldBase;
@@ -84,33 +75,16 @@ public final class RecordInfo<T> {
 	private String conditionRegEx = null;
 	
 	private int sizeHint = 32;
-	
-	//private ConverterBase converterProvider = null;
-	private final List<ConverterProvider> converterProviders = new ArrayList<ConverterProvider>(); 
 	private int fieldCount;
-	private final DateTimeConverterProvider dateTimeConverterProvider;
+	private final List<ConverterProvider> converterProviders;
+	private boolean initialized = false;
 	
-	
-	public RecordInfo(final Class<T> recordClass) {
-		converterProviders.add(new StringConverterProvider());
-		converterProviders.add(new BooleanConverterProvider());
-		converterProviders.add(new IntConverterProvider());
-		converterProviders.add(new LongConverterProvider());
-		converterProviders.add(new DoubleConverterProvider());
-		converterProviders.add(new FloatConverterProvider());
-		converterProviders.add(new BigDecimalConverterProvider());
-		converterProviders.add(new EnumConverterProvider());
-		dateTimeConverterProvider = new DateTimeConverterProvider();
-		converterProviders.add(dateTimeConverterProvider);
-		
+	public RecordInfo(final Class<T> recordClass, final List<ConverterProvider> converterProviders) {
 		this.recordClass = recordClass;
-		initFields();
+		this.converterProviders = converterProviders;
+		initRecord();
 	}
 		
-	public DateTimeConverterProvider getDateTimeConverterProvider() {
-		return dateTimeConverterProvider;
-	}
-
 
 	/**
 	 * Parses a text line into a record object
@@ -119,6 +93,9 @@ public final class RecordInfo<T> {
 	 * @return parsed object
 	 */
 	public T strToRecord(final LineInfo line) {
+		
+		initFields();
+		
 		if (mustIgnoreLine(line.getLineStr())) {
 			return null;
 		}
@@ -217,6 +194,9 @@ public final class RecordInfo<T> {
 	 * @throws IllegalAccessException
 	 */
 	public String recordToStr(final T record) throws IllegalArgumentException, IllegalAccessException {
+		
+		initFields();
+		
 		StringBuffer sb = new StringBuffer(this.sizeHint);
 		
 		Object[] values = new Object[fieldCount];
@@ -308,12 +288,13 @@ public final class RecordInfo<T> {
 		
 		return false;
 	}
-
+	
 	/**
-	 * Initiate the values of member fields by looking for annotations on the
+	 * Initiate the values of record by looking for annotations and interfaces on the
 	 * record object that changes behavior
 	 */
-	private void initFields() {
+	private void initRecord() {
+		
 		IgnoreFirst igf = recordClass.getAnnotation(IgnoreFirst.class);
 		if (igf != null) {
 			this.ignoreFirst = igf.lines();
@@ -365,7 +346,22 @@ public final class RecordInfo<T> {
 		}
 		
 		recordConstructor = ConstructorHelper.getPublicEmptyConstructor(recordClass);
+
 		
+	}
+
+	/**
+	 * Initiate the values of member fields by looking for annotations on the
+	 * record object that changes behavior
+	 */
+	private void initFields() {
+		
+		if(initialized){
+			return;
+		}
+		initialized = true;
+		
+				
 		fields = createCoreFields(recordClass.getDeclaredFields(), recordClass);
 		fieldCount = this.fields.length;
 		
@@ -431,13 +427,13 @@ public final class RecordInfo<T> {
 		return StringHelper.toStringBuilder(this);
 	}
 
-	public FieldBase[] getFields() {
+	/*public FieldBase[] getFields() {
 		return fields;
 	}
 
 	public void setFields(final FieldBase[] fields) {
 		this.fields = fields;
-	}
+	}*/
 
 	public int getIgnoreFirst() {
 		return ignoreFirst;

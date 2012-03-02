@@ -20,14 +20,13 @@
 
 package org.coury.jfilehelpers.tests.callbacks;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.coury.jfilehelpers.engines.EngineBase;
 import org.coury.jfilehelpers.engines.FileHelperEngine;
-
-import junit.framework.TestCase;
 
 
 /**
@@ -78,9 +77,9 @@ public abstract class CallbacksBase extends TestCase {
 	}
 	@Override
 	protected void tearDown() {
-		new File(customerFile).delete();
+		//new File(customerFile).delete();
 	}
-	public static void engineTester(EngineBase<Customer> e) {
+	public static void engineTester(final EngineBase<Customer> e) {
 		assertEquals(e,engine);
 	}
 	public static void incrementReadCount() {
@@ -101,10 +100,10 @@ public abstract class CallbacksBase extends TestCase {
 	public static void incrementAfterWriteCount() {
 		++afterWriteCount;
 	}
-	public static void setEventLine(String s) {
+	public static void setEventLine(final String s) {
 		eventLine = s;
 	}
-	public static void setNotifyLine(String s) {
+	public static void setNotifyLine(final String s) {
 		notifyLine = s;
 	}
 }

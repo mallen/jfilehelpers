@@ -27,12 +27,12 @@ import java.io.IOException;
  *
  */
 public class NotifiersTest extends CallbacksBase {
-	public void testNotifiers() {
-		try {
+	public void testNotifiers() throws IOException {
+//		try {
 			engine.writeFile(customerFile, customers);
 			customers = engine.readFile(customerFile);
-		} catch (IOException e) {
-		}
+//		} catch (IOException e) {
+//		}
 		assertEquals(readCount,4);
 		assertEquals(writeCount,4);
 		assertEquals(notifyLine,"4,Homer Simpson,4");
