@@ -22,7 +22,8 @@ package org.coury.jfilehelpers.helpers;
 
 import java.io.IOException;
 
-import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.coury.jfilehelpers.core.ExtractedInfo;
 import org.coury.jfilehelpers.engines.LineInfo;
 
@@ -49,7 +50,7 @@ public class StringHelper {
 
 	private static String getToString(Object o) throws ClassNotFoundException {
 		Class.forName("org.apache.commons.lang.builder.ToStringBuilder");
-		return org.apache.commons.lang.builder.ToStringBuilder.reflectionToString(o, ToStringStyle.MULTI_LINE_STYLE);
+		return ToStringBuilder.reflectionToString(o, ToStringStyle.MULTI_LINE_STYLE);
 	}
 
 	public static void createQuotedString(StringBuffer sb, String source, char quoteChar) {
