@@ -20,6 +20,19 @@
 
 package org.coury.jfilehelpers.engines;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.coury.jfilehelpers.converters.BigDecimalConverterProvider;
+import org.coury.jfilehelpers.converters.BooleanConverterProvider;
+import org.coury.jfilehelpers.converters.ConverterProvider;
+import org.coury.jfilehelpers.converters.DateTimeConverterProvider;
+import org.coury.jfilehelpers.converters.DoubleConverterProvider;
+import org.coury.jfilehelpers.converters.EnumConverterProvider;
+import org.coury.jfilehelpers.converters.FloatConverterProvider;
+import org.coury.jfilehelpers.converters.IntConverterProvider;
+import org.coury.jfilehelpers.converters.LongConverterProvider;
+import org.coury.jfilehelpers.converters.StringConverterProvider;
 import org.coury.jfilehelpers.core.RecordInfo;
 import org.coury.jfilehelpers.enums.ProgressMode;
 import org.coury.jfilehelpers.progress.ProgressChangeHandler;
@@ -32,19 +45,52 @@ public abstract class EngineBase<T> {
 	protected String headerText;
 	protected int lineNumber;
 	protected int totalRecords;
+	protected final List<ConverterProvider> converterProviders = new ArrayList<ConverterProvider>(); 
+	private final DateTimeConverterProvider dateTimeConverterProvider;
+	private final BooleanConverterProvider booleanConverterProvider;
 	
 	public EngineBase(final Class<T> recordClass) {
+		
+		converterProviders.add(new StringConverterProvider());
+		booleanConverterProvider = new BooleanConverterProvider();
+		converterProviders.add(booleanConverterProvider);
+		converterProviders.add(new IntConverterProvider());
+		converterProviders.add(new LongConverterProvider());
+		converterProviders.add(new DoubleConverterProvider());
+		converterProviders.add(new FloatConverterProvider());
+		converterProviders.add(new BigDecimalConverterProvider());
+		converterProviders.add(new EnumConverterProvider());
+		dateTimeConverterProvider = new DateTimeConverterProvider();
+		converterProviders.add(dateTimeConverterProvider);
+		
 		this.recordClass = recordClass;
-		this.recordInfo = new RecordInfo<T>(recordClass);
+		this.recordInfo = new RecordInfo<T>(recordClass, converterProviders);
 	}
 	
 	public String getDefaultDateTimeFormat(){
-		return recordInfo.getDateTimeConverterProvider().getDefaultFormat();
+		return dateTimeConverterProvider.getDefaultFormat();
 	}
 	
 	public void setDefaultDateTimeFormat(final String format){
-		recordInfo.getDateTimeConverterProvider().setDefaultFormat(format);
+		dateTimeConverterProvider.setDefaultFormat(format);
 	}
+	
+	public String getDefaultTrueString(){
+		return booleanConverterProvider.getTrueString();
+	}
+	
+	public void setDefaultTrueString(final String trueString){
+		booleanConverterProvider.setTrueString(trueString);
+	}
+	
+	public String getDefaultFalseString(){
+		return booleanConverterProvider.getFalseString();
+	}
+	
+	public void setDefaultFalseString(final String falseString){
+		booleanConverterProvider.setFalseString(falseString);
+	}
+	
 	
 	protected ProgressMode progressMode = ProgressMode.DontNotify;
 	// TODO Enable this field

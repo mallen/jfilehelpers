@@ -23,8 +23,8 @@ import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class BooleanConverterProvider extends ConverterProvider {
 
-	private static String trueString = null;
-	private static String falseString = null; 
+	private String trueString = null;
+	private String falseString = null; 
 	
 	@Override
 	public boolean handles(final Class<?> fieldType) {
@@ -41,20 +41,20 @@ public class BooleanConverterProvider extends ConverterProvider {
 		return new BooleanConverter(trueString, falseString);
 	}
 	
-	public static String getTrueString() {
+	public String getTrueString() {
 		return trueString;
 	}
 
-	public static void setTrueString(final String trueString) {
-		BooleanConverterProvider.trueString = trueString;
+	public void setTrueString(final String trueString) {
+		this.trueString = trueString;
 	}
 
-	public static String getFalseString() {
+	public String getFalseString() {
 		return falseString;
 	}
 
-	public static void setFalseString(final String falseString) {
-		BooleanConverterProvider.falseString = falseString;
+	public void setFalseString(final String falseString) {
+		this.falseString = falseString;
 	}
 
 	public static class BooleanConverter extends ConverterBase {
@@ -66,8 +66,8 @@ public class BooleanConverterProvider extends ConverterProvider {
 		public BooleanConverter(final String trueString, final String falseString) {
 			this.trueString = trueString;
 			this.falseString = falseString;
-			this.trueStringLower = trueString.toLowerCase();
-			this.falseStringLower = falseString.toLowerCase();
+			this.trueStringLower = trueString == null ? null : trueString.toLowerCase();
+			this.falseStringLower = falseString == null ? null : falseString.toLowerCase();
 		}
 
 		@Override

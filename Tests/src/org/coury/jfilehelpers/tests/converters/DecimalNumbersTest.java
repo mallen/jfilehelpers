@@ -21,6 +21,7 @@
 package org.coury.jfilehelpers.tests.converters;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,20 +44,21 @@ public class DecimalNumbersTest extends TestCase {
 
 		assertEquals(10, res.size());
 
-		assertDecimal((double) 32.38, res.get(0));
-		assertDecimal((double) 11.61, res.get(1));
-		assertDecimal((double) 65.83, res.get(2));
-		assertDecimal((double) 41.34, res.get(3));
-		assertDecimal((double) 51.3, res.get(4));
-		assertDecimal((double) 58.17, res.get(5));
-		assertDecimal((double) 22.98, res.get(6));
-		assertDecimal((double) 148.33, res.get(7));
-		assertDecimal((double) 13.97, res.get(8));
-		assertDecimal((double) 81.91, res.get(9));
+		assertDecimal("32.38", res.get(0));
+		assertDecimal("11.61", res.get(1));
+		assertDecimal("65.83", res.get(2));
+		assertDecimal("41.34", res.get(3));
+		assertDecimal("51.3", res.get(4));
+		assertDecimal("58.17", res.get(5));
+		assertDecimal("22.98", res.get(6));
+		assertDecimal("148.33", res.get(7));
+		assertDecimal("13.97", res.get(8));
+		assertDecimal("81.91", res.get(9));
 	}
 
-	private static void assertDecimal(double dec, DecimalType res) {
-		assertEquals((double) dec, res.doubleField);
-		assertEquals((float) dec, res.floatField);
+	private static void assertDecimal(String dec, DecimalType res) {
+		assertEquals(Double.parseDouble(dec), res.doubleField);
+		assertEquals(Float.parseFloat(dec), res.floatField);
+		assertEquals(new BigDecimal(dec), res.decimalField);
 	}
 }

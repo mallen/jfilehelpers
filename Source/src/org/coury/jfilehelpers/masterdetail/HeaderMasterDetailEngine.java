@@ -37,7 +37,7 @@ public class HeaderMasterDetailEngine<HT, MT, DT> extends MasterDetailEngine<MT,
 			final HeaderSelector headerSelector, final MasterDetailSelector recordSelector) {
 		super(masterRecordClass, detailRecordClass, recordSelector);
 		this.headerSelector = headerSelector;
-		this.headerInfo = new RecordInfo<HT>(headerRecordClass);	
+		this.headerInfo = new RecordInfo<HT>(headerRecordClass, super.converterProviders);	
 	}
 	
 	@Override

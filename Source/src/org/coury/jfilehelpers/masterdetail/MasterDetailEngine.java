@@ -56,13 +56,13 @@ public class MasterDetailEngine<MT, DT> extends EngineBase<DT> {
 	public MasterDetailEngine(final Class<MT> masterRecordClass, final Class<DT> detailRecordClass, final MasterDetailSelector recordSelector) {
 		super(detailRecordClass);
 		this.masterRecordClass = masterRecordClass;
-		this.masterInfo = new RecordInfo<MT>(masterRecordClass);
+		this.masterInfo = new RecordInfo<MT>(masterRecordClass, converterProviders);
 		this.recordSelector = recordSelector;
 	}
 	
 	public MasterDetailEngine(final Class<MT> masterRecordClass, final Class<DT> detailRecordClass, final CommonSelector action, final String selector) {
 		super(detailRecordClass);
-		this.masterInfo = new RecordInfo<MT>(masterRecordClass);
+		this.masterInfo = new RecordInfo<MT>(masterRecordClass, converterProviders);
 		final CommonInternalSelector sel = new CommonInternalSelector(action, selector, masterInfo.isIgnoreEmptyLines() || recordInfo.isIgnoreEmptyLines());
 		
 		this.recordSelector = new MasterDetailSelector() {
@@ -211,7 +211,7 @@ public class MasterDetailEngine<MT, DT> extends EngineBase<DT> {
 		}		
 	}
 		
-	protected List<MasterDetails<MT, DT>> readStream(final InputStreamReader fileReader) throws IOException {
+	private List<MasterDetails<MT, DT>> readStream(final InputStreamReader fileReader) throws IOException {
 		BufferedReader reader = new BufferedReader(fileReader);
 
 		resetFields();
