@@ -27,7 +27,7 @@ public class PostReadFooHandler implements PostReadRecordHandler<Foo> {
 	@Override
 	public void handleRecord(final AfterReadRecordEventArgs<Foo> e) {
 		Foo record = e.getRecord();
-		if(record.number % 2 == 0){
+		if(record.getNumber() % 2 == 0){
 			e.setSkipThisRecord(true);
 		}
 	}

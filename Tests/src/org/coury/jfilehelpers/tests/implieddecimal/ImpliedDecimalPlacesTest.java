@@ -48,8 +48,8 @@ public class ImpliedDecimalPlacesTest {
 		
 		List<Foo> foos = new ArrayList<Foo>();
 		Foo foo = new Foo();
-		foo.i = 123;
-		foo.l = 1234L;
+		foo.setI(123);
+		foo.setL(1234L);
 		foo.f = 123.456F;
 		foo.d = 1234.5678;
 		foo.decimal=new BigDecimal("123.45678");
@@ -65,8 +65,8 @@ public class ImpliedDecimalPlacesTest {
 		
 		
 		foo = foos.get(0);
-		assertEquals(123, foo.i);
-		assertEquals(1234L, foo.l);
+		assertEquals(123, foo.getI());
+		assertEquals(1234L, foo.getL());
 		assertEquals(123.456F, foo.f, 0.00001);
 		assertEquals(1234.5678, foo.d, 0.00001);
 		assertEquals(new BigDecimal("123.45678"), foo.decimal);

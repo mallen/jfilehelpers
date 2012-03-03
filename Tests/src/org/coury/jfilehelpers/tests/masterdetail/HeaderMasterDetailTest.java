@@ -58,12 +58,12 @@ public class HeaderMasterDetailTest extends TestCase {
 				(List<HeaderMasterDetails<HeaderVerticalBar, CustomersVerticalBar, OrdersVerticalBar>>) engine.readResource("/test/Good/HeaderMasterDetail1.txt");
 		
 		HeaderVerticalBar header1 = new HeaderVerticalBar();
-		header1.headerText="HEADER1";
-		header1.headerNumber=999;
+		header1.setHeaderText("HEADER1");
+		header1.setHeaderNumber(999);
 		
 		HeaderVerticalBar header2 = new HeaderVerticalBar();
-		header2.headerText="HEADER2";
-		header2.headerNumber=123;
+		header2.setHeaderText("HEADER2");
+		header2.setHeaderNumber(123);
 		
         assertEquals(4, res.size());
         assertEquals(4, engine.getTotalRecords());

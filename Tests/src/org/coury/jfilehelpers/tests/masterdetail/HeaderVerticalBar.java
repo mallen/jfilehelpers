@@ -22,15 +22,26 @@ package org.coury.jfilehelpers.tests.masterdetail;
 import org.coury.jfilehelpers.annotations.DelimitedRecord;
 
 @DelimitedRecord("|")
-public class HeaderVerticalBar /*implements ComparableRecord<HeaderVerticalBar>*/ {
-	public String headerText;
-	public int headerNumber;
+public class HeaderVerticalBar {
+	private String headerText;
+	private int headerNumber;
 	
-	/*@Override
-	public boolean equalsRecord(final HeaderVerticalBar record) {
-		return headerText.equals(record.headerText) && headerNumber == record.headerNumber;
-	}*/
-	
+	public String getHeaderText() {
+		return headerText;
+	}
+
+	public void setHeaderText(String headerText) {
+		this.headerText = headerText;
+	}
+
+	public int getHeaderNumber() {
+		return headerNumber;
+	}
+
+	public void setHeaderNumber(int headerNumber) {
+		this.headerNumber = headerNumber;
+	}
+
 	@Override
 	public boolean equals(final Object obj) {
 		

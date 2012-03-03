@@ -40,7 +40,7 @@ public class PostReadRecordTest {
 		assertNotNull(foos);
 		assertEquals(2, foos.size());
 		for (Foo foo : foos) {
-			assertTrue(foo.number % 2 == 1);
+			assertTrue(foo.getNumber() % 2 == 1);
 		}
 		
 	}

@@ -28,14 +28,27 @@ import org.coury.jfilehelpers.annotations.FieldImpliedDecimalPlaces;
 public class Foo {
 
 	@FieldImpliedDecimalPlaces(1)
-	public int i;
+	private int i;
 	@FieldImpliedDecimalPlaces(2)
-	public long l;
+	private long l;
 	@FieldImpliedDecimalPlaces(3)
 	public float f;
 	@FieldImpliedDecimalPlaces(4)
 	public double d;
 	@FieldImpliedDecimalPlaces(5)
 	public BigDecimal decimal;
+	
+	public int getI() {
+		return i;
+	}
+	public void setI(int i) {
+		this.i = i;
+	}
+	public long getL() {
+		return l;
+	}
+	public void setL(long l) {
+		this.l = l;
+	}
 	
 }
