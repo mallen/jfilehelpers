@@ -31,6 +31,7 @@ public class StringHelper {
 	public static void main(String[] args) {
 		String test1 = "abcdeCAmanducaia";
 
+		
 		System.out.println(StringHelper.trimStart(test1, "abcdefghijklmnopqrstuvwxyz".toCharArray()));
 		System.out.println(StringHelper.trimEnd(test1, "abcdefghijklmnopqrstuvwxyz".toCharArray()));
 		System.out.println(StringHelper.trimBoth(test1, "abcdefghijklmnopqrstuvwxyz".toCharArray()));
@@ -41,16 +42,7 @@ public class StringHelper {
 	}
 
 	public static String toStringBuilder(Object o, String defaultString) {
-		try {
-			return getToString(o);
-		} catch (ClassNotFoundException e) {
-			return defaultString;
-		}
-	}
-
-	private static String getToString(Object o) throws ClassNotFoundException {
-		Class.forName("org.apache.commons.lang.builder.ToStringBuilder");
-		return ToStringBuilder.reflectionToString(o, ToStringStyle.MULTI_LINE_STYLE);
+			return ToStringBuilder.reflectionToString(o, ToStringStyle.MULTI_LINE_STYLE);
 	}
 
 	public static void createQuotedString(StringBuffer sb, String source, char quoteChar) {
