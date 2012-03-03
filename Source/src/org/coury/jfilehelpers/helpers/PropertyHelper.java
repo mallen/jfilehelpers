@@ -33,7 +33,7 @@ public class PropertyHelper {
 	public static PropertyDescriptor getPropertyDescriptorByName(Class<?> clazz, String name){
 		PropertyDescriptor[] propertyDescriptors;
 		try {
-			propertyDescriptors = Introspector.getBeanInfo(PropertyHelperTestObject.class).getPropertyDescriptors();
+			propertyDescriptors = Introspector.getBeanInfo(clazz).getPropertyDescriptors();
 		} catch (IntrospectionException e) {
 			throw new RuntimeException("Error introspecting class",e);
 		}
