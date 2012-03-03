@@ -121,7 +121,8 @@ public final class RecordInfo<T> {
 			
 			for (int i = 0; i < fieldCount; i++) {
 				// sets the field on the object
-				setInternalField(fields[i].getFieldInfo().getName(), record, values[i]);
+				//setInternalField(fields[i].getFieldInfo().getName(), record, values[i]);
+				fields[i].setValue(record, values[i]);
 //				Field f = record.getClass().getDeclaredField(fields[i].getFieldInfo().getName());
 //				f.set(record, values[i]);
 				// fields[i].getFieldInfo().set(record, values[i]);
@@ -212,7 +213,8 @@ public final class RecordInfo<T> {
 		Object[] values = new Object[fieldCount];
 		for (int i = 0; i < fieldCount; i++) {
 //			values[i] = fields[i].getFieldInfo().get(record);
-			values[i] = getInternalField(fields[i].getFieldInfo().getName(), record);
+			//values[i] = getInternalField(fields[i].getFieldInfo().getName(), record);
+			values[i] = fields[i].getValue(record);
 
 		}
 

@@ -20,8 +20,12 @@
 
 package org.coury.jfilehelpers.fields;
 
+import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.List;
 
 import org.coury.jfilehelpers.annotations.FieldConverter;
@@ -33,10 +37,11 @@ import org.coury.jfilehelpers.engines.LineInfo;
 import org.coury.jfilehelpers.enums.ConverterKind;
 import org.coury.jfilehelpers.enums.TrimMode;
 import org.coury.jfilehelpers.helpers.NumberHelper;
+import org.coury.jfilehelpers.helpers.PropertyHelper;
 import org.coury.jfilehelpers.helpers.StringHelper;
 
 public abstract class FieldBase {
-	private Field fieldInfo;
+	private Field field;
 
 	private TrimMode trimMode = TrimMode.None;
 	private char[] trimChars = null;
@@ -50,6 +55,9 @@ public abstract class FieldBase {
 	private Object nullValue = null;
 	private boolean nullableType = false;
 
+	private final boolean isPublic;
+	private final Method readMethod;
+	private final Method writeMethod;
 	protected int charsToDiscard = 0;
 
 	private final List<ConverterProvider> converterProviders;
@@ -57,9 +65,22 @@ public abstract class FieldBase {
 	private int impliedDecimalPlaces;
 
 	public FieldBase(final Field field, final List<ConverterProvider> converterProviders) {
-		fieldInfo = field;
+		this.field = field;
 		this.converterProviders = converterProviders;
 		Class<?> fieldType = field.getType();
+		
+		int modifiers = field.getModifiers();
+		if(Modifier.isPublic(modifiers)){
+			isPublic = true;
+			readMethod = null;
+			writeMethod = null;
+		} else {
+			isPublic = false;
+			PropertyDescriptor descriptor = PropertyHelper.getPropertyDescriptorByName(field.getDeclaringClass(), field.getName());
+			readMethod = descriptor.getReadMethod();
+			writeMethod = descriptor.getWriteMethod();
+		}
+		
 
 		FieldConverter fc = field.getAnnotation(FieldConverter.class);
 		if (fc == null) {
@@ -72,6 +93,23 @@ public abstract class FieldBase {
 		if (fn != null) {
 			nullValue = fn.value();
 		}
+	}
+	
+	public void setValue(Object obj, Object value) {
+		if(isPublic){
+			PropertyHelper.setFieldValue(field, obj, value);
+		} else {
+			PropertyHelper.setPropertyValue(writeMethod, obj, value);
+		}
+	}
+	
+	public Object getValue(Object obj){
+		if(isPublic){
+			return PropertyHelper.getFieldValue(field, obj);
+		} else {
+			return PropertyHelper.getPropertyValue(readMethod, obj);
+		}
+			
 	}
 
 	private ConverterBase getConverter(final Class<?> fieldType) {
@@ -101,7 +139,7 @@ public abstract class FieldBase {
 				// mFieldInfo.Name +
 				// " (this is not allowed when you use [FieldInNewLine])");
 				throw new RuntimeException("Text '" + line.getCurrentString() +
-						"' found before the new line of the field: " + fieldInfo.getName() +
+						"' found before the new line of the field: " + field.getName() +
 						" (this is not allowed when you use [FieldInNewLine])");
 			}
 
@@ -116,7 +154,7 @@ public abstract class FieldBase {
 				// BadUsageException("End of stream found parsing the field " +
 				// fieldInfo.getName() +
 				// ". Please check the class record.");
-				throw new RuntimeException("End of stream found parsing the field " + fieldInfo.getName() +
+				throw new RuntimeException("End of stream found parsing the field " + field.getName() +
 						". Please check the class record.");
 			}
 		}
@@ -201,11 +239,11 @@ public abstract class FieldBase {
 	}
 
 	public Field getFieldInfo() {
-		return fieldInfo;
+		return field;
 	}
 
 	public void setFieldInfo(final Field fieldInfo) {
-		this.fieldInfo = fieldInfo;
+		this.field = fieldInfo;
 	}
 
 	public TrimMode getTrimMode() {
