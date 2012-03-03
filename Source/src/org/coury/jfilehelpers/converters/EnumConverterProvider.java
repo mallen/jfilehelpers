@@ -36,15 +36,16 @@ public class EnumConverterProvider extends ConverterProvider {
 	@Override
 	public ConverterBase createConverter(final Class<?> fieldType, final String format) {
 		@SuppressWarnings("unchecked")
-		Class<? extends Enum> enumType = (Class<Enum>) fieldType;
+		Class<? extends Enum<?>> enumType = (Class<Enum<?>>) fieldType;
 		return new EnumConverter(enumType);
 	}
 
 	public static class EnumConverter extends ConverterBase {
 
+		@SuppressWarnings("rawtypes")
 		private final Class<? extends Enum> fieldType;
 
-		public EnumConverter(final Class<? extends Enum> fieldType) {
+		public EnumConverter(@SuppressWarnings("rawtypes") final Class<? extends Enum> fieldType) {
 			this.fieldType = fieldType;
 		}
 

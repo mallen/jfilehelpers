@@ -23,8 +23,6 @@ package org.coury.jfilehelpers.core;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -281,8 +279,6 @@ public final class RecordInfo<T> {
 			}
 		}
 		
-		// TODO ConditionalRecord
-
 		if(NotifyRead.class.isAssignableFrom(recordClass)) {
 			notifyRead = true;
 		}
@@ -292,8 +288,6 @@ public final class RecordInfo<T> {
 		}
 		
 		recordConstructor = ConstructorHelper.getPublicEmptyConstructor(recordClass);
-
-		
 	}
 
 	/**
@@ -340,8 +334,7 @@ public final class RecordInfo<T> {
 	 * @param recordClass the record class
 	 * @return an array of FieldBase, field descriptor objects
 	 */
-	@SuppressWarnings("unchecked")
-	private FieldBase[] createCoreFields(final Field[] fields, final Class recordClass) {
+	private FieldBase[] createCoreFields(final Field[] fields, final Class<?> recordClass) {
 		FieldBase field;
 		List<FieldBase> fieldArr = new ArrayList<FieldBase>();
 		
