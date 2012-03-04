@@ -49,6 +49,9 @@ public class StringConverterProvider extends ConverterProvider {
 
 		@Override
 		public String fieldToString(final Object from) {
+			if(from == null){
+				return "";
+			}
 			return from.toString();
 		}
 

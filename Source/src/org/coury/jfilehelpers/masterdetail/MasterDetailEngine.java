@@ -168,11 +168,13 @@ public class MasterDetailEngine<MT, DT> extends EngineBase<DT> {
 				
 				ProgressHelper.notify(notifyHandler, progressMode, i+1, max);
 
-				currentLine = masterInfo.recordToStr(records.get(i).getMaster());
+				MasterDetails<MT, DT> masterDetails = records.get(i);
+				beforeWriteMaster(masterDetails, writer);
+				currentLine = masterInfo.recordToStr(masterDetails.getMaster());
 				writer.write(currentLine + StringHelper.NEW_LINE);
 
-				if (records.get(i).getDetails() != null) { 
-					for (int d = 0; d < records.get(i).getDetails().size(); d++) {
+				if (masterDetails.getDetails() != null) { 
+					for (int d = 0; d < masterDetails.getDetails().size(); d++) {
 						currentLine = recordInfo.recordToStr(records.get(i).getDetails().get(d));
 						writer.write(currentLine + StringHelper.NEW_LINE);
 					}
@@ -211,6 +213,9 @@ public class MasterDetailEngine<MT, DT> extends EngineBase<DT> {
 		}		
 	}
 		
+	protected void beforeWriteMaster(MasterDetails<MT, DT> masterDetails, BufferedWriter writer) throws IOException {
+	}
+
 	private List<MasterDetails<MT, DT>> readStream(final InputStreamReader fileReader) throws IOException {
 		BufferedReader reader = new BufferedReader(fileReader);
 

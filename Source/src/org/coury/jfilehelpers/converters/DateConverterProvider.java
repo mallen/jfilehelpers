@@ -103,6 +103,9 @@ public class DateConverterProvider extends ConverterProvider {
 
 		@Override
 		public String fieldToString(final Object from) {
+			if(from == null){
+				return "";
+			}
 			return sdf.format(from);
 		}
 	}

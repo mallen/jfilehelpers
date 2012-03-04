@@ -19,13 +19,13 @@
  */
 package org.coury.jfilehelpers.masterdetail;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.List;
 
 import org.coury.jfilehelpers.core.RecordInfo;
 import org.coury.jfilehelpers.engines.LineInfo;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.coury.jfilehelpers.helpers.StringHelper;
 
 public class HeaderMasterDetailEngine<HT, MT, DT> extends MasterDetailEngine<MT, DT> {
 
@@ -57,6 +57,22 @@ public class HeaderMasterDetailEngine<HT, MT, DT> extends MasterDetailEngine<MT,
 	}
 	
 	@Override
+	protected void beforeWriteMaster(MasterDetails<MT, DT> masterDetails, BufferedWriter writer) throws IOException {
+		HeaderMasterDetails<HT, MT, DT> hmd = (HeaderMasterDetails<HT, MT, DT>) masterDetails;
+		HT header = hmd.getHeader();
+		if (!header.equals(currentHeader)) {
+			currentHeader = header;
+			String headerLine = null;
+			try {
+				headerLine = headerInfo.recordToStr(header);
+			} catch (IllegalAccessException e) {
+				throw new RuntimeException("Error calling recordtoStr", e);
+			}
+			writer.write(headerLine + StringHelper.NEW_LINE);
+		}
+	}
+	
+	/*@Override
 	public void writeFile(final String fileName, final List<? extends MasterDetails<MT, DT>> records) throws IOException {
 		throw new NotImplementedException();
 	}
@@ -69,7 +85,7 @@ public class HeaderMasterDetailEngine<HT, MT, DT> extends MasterDetailEngine<MT,
 	@Override
 	public void writeFile(final String fileName, final MasterDetails<MT, DT> record) throws IOException {
 		throw new NotImplementedException();
-	}
+	}*/
 	
 	@Override
 	protected MasterDetails<MT, DT> createMasterDetails() {

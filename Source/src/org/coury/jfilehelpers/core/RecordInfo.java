@@ -135,7 +135,6 @@ public final class RecordInfo<T> {
 	 * 
 	 * @param record the record object
 	 * @return string representation of the record object, respecting rules defined
-	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
 	 */
 	public String recordToStr(final T record) throws IllegalArgumentException, IllegalAccessException {
