@@ -1,5 +1,5 @@
 /*
- * BooleanTest.java
+ * DateTest.java
  *
  * Copyright (C) 2007 Felipe Gonçalves Coury <felipe.coury@gmail.com>
  * 
@@ -21,40 +21,37 @@ package org.coury.jfilehelpers.tests.converters;
 
 import static org.junit.Assert.fail;
 
-import org.coury.jfilehelpers.converters.BooleanConverterProvider;
-import org.coury.jfilehelpers.converters.BooleanConverterProvider.BooleanConverter;
+import java.util.Date;
+
+import org.coury.jfilehelpers.converters.DateConverterProvider;
+import org.coury.jfilehelpers.converters.DateConverterProvider.DateConverter;
 import org.coury.jfilehelpers.enums.ConverterKind;
 import org.junit.Test;
 
-public class BooleanTest extends ConverterTestBase<BooleanConverterProvider, BooleanConverter, Boolean> {
+public class DateTest extends ConverterTestBase<DateConverterProvider, DateConverter, Date> {
 
-	public BooleanTest() {
-		super(new Class<?>[]{Boolean.class, Boolean.TYPE}, ConverterKind.Boolean, true, "True", false, "");
+	public DateTest() {
+		super(new Class<?>[]{Date.class}, ConverterKind.Date, new Date(112, 1, 14), "20120214", null, "");
 	}
 
 	@Override
-	BooleanConverterProvider createConverterProvider() {
-		return new BooleanConverterProvider();
+	DateConverterProvider createConverterProvider() {
+		return new DateConverterProvider();
 	}
 
 	@Override
-	BooleanConverter createConverter() {
-		return new BooleanConverter(null, null);
-	}
-
-	@Override
-	@Test(expected = NullPointerException.class)
-	public void converterReturnCorrectStringForNull() {
-		super.converterReturnCorrectStringForNull();
-		fail("should have thrown");
+	DateConverter createConverter() {
+		return new DateConverter("yyyyMMdd");
 	}
 	
-	@Override
-	@Test(expected = NullPointerException.class)
-	public void converterReturnsBlankObjectForNullString() {
+	@Override()
+	@Test(expected=RuntimeException.class)
+	public void converterReturnsCorrectObjectForValidStringWithWhitespace() {
+		DateConverter converter = createConverter();
+		converter.stringToField("  20120214  ");
+		fail("should have thrown");
 		
-		super.converterReturnsBlankObjectForNullString();
-		fail("should have thrown");
 	}
 	
+
 }

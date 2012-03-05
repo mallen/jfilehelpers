@@ -72,6 +72,9 @@ public class BooleanConverterProvider extends ConverterProvider {
 
 		@Override
 		public Object stringToField(final String from) {
+			if(from == null){
+				throw new NullPointerException("from cannot be null");
+			}
 			Object val;
 			try {
 				String testTo = from.toLowerCase();
@@ -110,6 +113,9 @@ public class BooleanConverterProvider extends ConverterProvider {
 
 		@Override
 		public String fieldToString(final Object from) {
+			if(from == null){
+				throw new NullPointerException("from cannot be null");
+			}
 			boolean b = Boolean.parseBoolean(from.toString());
 			if (b) {
 				if (trueString == null) {

@@ -21,6 +21,7 @@ package org.coury.jfilehelpers.converters;
 
 import java.math.BigDecimal;
 
+import org.apache.commons.lang3.StringUtils;
 import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class BigDecimalConverterProvider extends ConverterProvider {
@@ -46,15 +47,18 @@ public class BigDecimalConverterProvider extends ConverterProvider {
 	public static class BigDecimalConverter extends ConverterBase {
 
 		@Override
-		public Object stringToField(String from) {
-			if (from != null) {
-				from = from.trim();
+		public BigDecimal stringToField(final String from) {
+			if(StringUtils.isBlank(from)){
+				return BigDecimal.ZERO;
 			}
-			return new BigDecimal(from);
+			return new BigDecimal(from.trim());
 		}
 
 		@Override
 		public String fieldToString(final Object from) {
+			if(from == null){
+				return "0";
+			}
 			BigDecimal decimal = (BigDecimal) from;
 			return decimal.toPlainString();
 		}

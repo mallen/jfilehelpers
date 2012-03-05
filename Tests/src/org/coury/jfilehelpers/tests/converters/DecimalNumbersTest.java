@@ -32,12 +32,10 @@ import org.coury.jfilehelpers.tests.common.Common;
 import org.coury.jfilehelpers.tests.converters.testobjects.DecimalType;
 
 public class DecimalNumbersTest extends TestCase {
-	@SuppressWarnings("unchecked")
-	FileHelperEngine engine;
 
 	@SuppressWarnings("unchecked")
 	public void testDecimals1() throws IOException {
-		engine = new FileHelperEngine<DecimalType>(DecimalType.class);
+		FileHelperEngine<DecimalType> engine = new FileHelperEngine<DecimalType>(DecimalType.class);
 
 		List<DecimalType> res = 
 			(ArrayList<DecimalType>) Common.readTest(engine, "Good/NumberFormat.txt");
@@ -56,7 +54,7 @@ public class DecimalNumbersTest extends TestCase {
 		assertDecimal("81.91", res.get(9));
 	}
 
-	private static void assertDecimal(String dec, DecimalType res) {
+	private static void assertDecimal(final String dec, final DecimalType res) {
 		assertEquals(Double.parseDouble(dec), res.doubleField);
 		assertEquals(Float.parseFloat(dec), res.floatField);
 		assertEquals(new BigDecimal(dec), res.decimalField);

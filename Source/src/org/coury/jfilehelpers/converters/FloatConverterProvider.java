@@ -19,6 +19,7 @@
  */
 package org.coury.jfilehelpers.converters;
 
+import org.apache.commons.lang3.StringUtils;
 import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class FloatConverterProvider extends ConverterProvider {
@@ -43,15 +44,18 @@ public class FloatConverterProvider extends ConverterProvider {
 	public static class FloatConverter extends ConverterBase {
 
 		@Override
-		public Object stringToField(String from) {
-			if (from != null) {
-				from = from.trim();
+		public Float stringToField(final String from) {
+			if(StringUtils.isBlank(from)){
+				return 0f;
 			}
 			return Float.parseFloat(from);
 		}
 
 		@Override
 		public String fieldToString(final Object from) {
+			if(from == null){
+				return "0";
+			}
 			return from.toString();
 		}
 	}

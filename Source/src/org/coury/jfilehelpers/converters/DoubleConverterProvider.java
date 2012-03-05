@@ -19,6 +19,7 @@
  */
 package org.coury.jfilehelpers.converters;
 
+import org.apache.commons.lang3.StringUtils;
 import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class DoubleConverterProvider extends ConverterProvider {
@@ -43,15 +44,18 @@ public class DoubleConverterProvider extends ConverterProvider {
 	public static class DoubleConverter extends ConverterBase {
 
 		@Override
-		public Object stringToField(String from) {
-			if (from != null) {
-				from = from.trim();
+		public Double stringToField(final String from) {
+			if(StringUtils.isBlank(from)){
+				return 0d;
 			}
-			return Double.parseDouble(from);
+			return Double.parseDouble(from.trim());
 		}
 
 		@Override
 		public String fieldToString(final Object from) {
+			if(from == null){
+				return "0";
+			}
 			return from.toString();
 		}
 

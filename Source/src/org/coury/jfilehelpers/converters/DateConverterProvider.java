@@ -23,6 +23,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class DateConverterProvider extends ConverterProvider {
@@ -68,6 +69,7 @@ public class DateConverterProvider extends ConverterProvider {
 
 			try {
 				sdf = new SimpleDateFormat(format);
+				sdf.setLenient(false);
 				sdf.format(new Date());
 			} catch (IllegalArgumentException e) {
 				throw new IllegalArgumentException("The format: '" + format + " is invalid for the DateTime Converter.");
@@ -75,13 +77,12 @@ public class DateConverterProvider extends ConverterProvider {
 		}
 
 		@Override
-		public Object stringToField(String from) {
-			if (from == null) {
-				from = "";
+		public Object stringToField(final String from) {
+			if (StringUtils.isBlank(from)) {
+				return null;
 			}
 
 			Date val;
-
 			try {
 				val = sdf.parse(from);
 			} catch (ParseException e) {

@@ -19,6 +19,7 @@
  */
 package org.coury.jfilehelpers.converters;
 
+import org.apache.commons.lang3.StringUtils;
 import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class LongConverterProvider extends ConverterProvider {
@@ -44,15 +45,18 @@ public class LongConverterProvider extends ConverterProvider {
 	public static class LongConverter extends ConverterBase {
 
 		@Override
-		public Object stringToField(String from) {
-			if (from != null) {
-				from = from.trim();
-			}
-			return Long.parseLong(from);
+		public Long stringToField(final String from) {
+			if(StringUtils.isBlank(from)){
+				return 0L;
+			} 
+			return Long.parseLong(from.trim());
 		}
 
 		@Override
 		public String fieldToString(final Object from) {
+			if(from == null){
+				return "0";
+			}
 			return from.toString();
 		}
 	}
