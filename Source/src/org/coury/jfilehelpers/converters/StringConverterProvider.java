@@ -19,7 +19,6 @@
  */
 package org.coury.jfilehelpers.converters;
 
-import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class StringConverterProvider extends ConverterProvider {
 
@@ -28,11 +27,6 @@ public class StringConverterProvider extends ConverterProvider {
 	@Override
 	public boolean handles(final Class<?> fieldType) {
 		return fieldType == String.class;
-	}
-
-	@Override
-	public boolean handles(final ConverterKind converterKind) {
-		return converterKind.equals(ConverterKind.String);
 	}
 
 	@Override

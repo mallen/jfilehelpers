@@ -26,7 +26,6 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.coury.jfilehelpers.annotations.DateFormatOptions;
-import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class DateConverterProvider extends ConverterProvider {
 
@@ -35,11 +34,6 @@ public class DateConverterProvider extends ConverterProvider {
 	@Override
 	public boolean handles(final Class<?> fieldType) {
 		return fieldType.equals(Date.class);
-	}
-
-	@Override
-	public boolean handles(final ConverterKind converterKind) {
-		return converterKind.equals(ConverterKind.Date);
 	}
 
 	@Override

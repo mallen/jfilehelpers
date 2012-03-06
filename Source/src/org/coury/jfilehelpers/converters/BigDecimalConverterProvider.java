@@ -22,7 +22,6 @@ package org.coury.jfilehelpers.converters;
 import java.math.BigDecimal;
 
 import org.apache.commons.lang3.StringUtils;
-import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class BigDecimalConverterProvider extends ConverterProvider {
 
@@ -33,11 +32,7 @@ public class BigDecimalConverterProvider extends ConverterProvider {
 		return fieldType == BigDecimal.class;
 	}
 
-	@Override
-	public boolean handles(final ConverterKind converterKind) {
-		return converterKind.equals(ConverterKind.BigDecimal);
-	}
-
+	
 	@Override
 	public ConverterBase createConverter(final Class<?> fieldType) {
 		return BIG_DECIMAL_CONVERTER;

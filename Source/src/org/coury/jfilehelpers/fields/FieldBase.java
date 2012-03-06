@@ -28,13 +28,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
-import org.coury.jfilehelpers.annotations.FieldConverter;
 import org.coury.jfilehelpers.annotations.FieldNullValue;
 import org.coury.jfilehelpers.converters.ConverterBase;
 import org.coury.jfilehelpers.converters.ConverterProvider;
 import org.coury.jfilehelpers.core.ExtractedInfo;
 import org.coury.jfilehelpers.engines.LineInfo;
-import org.coury.jfilehelpers.enums.ConverterKind;
 import org.coury.jfilehelpers.enums.TrimMode;
 import org.coury.jfilehelpers.helpers.NumberHelper;
 import org.coury.jfilehelpers.helpers.PropertyHelper;
@@ -82,13 +80,7 @@ public abstract class FieldBase {
 		}
 		
 		//get converter for field
-		FieldConverter fc = field.getAnnotation(FieldConverter.class);
-		if (fc == null) {
-			converter = getConverter(fieldType, converterProviders);
-		} else {
-			ConverterKind converterKind = fc.converter();
-			converter = getConverter(field, converterKind, converterProviders);
-		}
+		converter = getConverter(fieldType, converterProviders);
 		
 		//converter options
 		Class<? extends Annotation> optionsAnnotationClass = converter.getOptionsAnnotationType();
@@ -130,15 +122,6 @@ public abstract class FieldBase {
 			}
 		}
 		throw new IllegalArgumentException("No ConverterProvider found for type: " + fieldType.getName());
-	}
-
-	private ConverterBase getConverter(final Field field, final ConverterKind converterKind, final List<ConverterProvider> converterProviders) {
-		for (ConverterProvider provider : converterProviders) {
-			if (provider.handles(converterKind)) {
-				return provider.createConverter(field.getType());
-			}
-		}
-		throw new IllegalArgumentException("No ConverterProvider found for converterKind: " + converterKind);
 	}
 
 	public Object extractValue(final LineInfo line) {

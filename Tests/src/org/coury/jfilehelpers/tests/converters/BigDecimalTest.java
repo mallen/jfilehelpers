@@ -23,12 +23,11 @@ import java.math.BigDecimal;
 
 import org.coury.jfilehelpers.converters.BigDecimalConverterProvider;
 import org.coury.jfilehelpers.converters.BigDecimalConverterProvider.BigDecimalConverter;
-import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class BigDecimalTest extends ConverterTestBase<BigDecimalConverterProvider, BigDecimalConverter, BigDecimal> {
 
 	public BigDecimalTest() {
-		super(new Class<?>[]{BigDecimal.class}, ConverterKind.BigDecimal, new BigDecimal("12.345"), "12.345",BigDecimal.ZERO, "0");
+		super(new Class<?>[]{BigDecimal.class}, new BigDecimal("12.345"), "12.345",BigDecimal.ZERO, "0");
 	}
 	
 	@Override

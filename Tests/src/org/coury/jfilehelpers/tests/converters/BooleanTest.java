@@ -23,13 +23,12 @@ import static org.junit.Assert.fail;
 
 import org.coury.jfilehelpers.converters.BooleanConverterProvider;
 import org.coury.jfilehelpers.converters.BooleanConverterProvider.BooleanConverter;
-import org.coury.jfilehelpers.enums.ConverterKind;
 import org.junit.Test;
 
 public class BooleanTest extends ConverterTestBase<BooleanConverterProvider, BooleanConverter, Boolean> {
 
 	public BooleanTest() {
-		super(new Class<?>[]{Boolean.class, Boolean.TYPE}, ConverterKind.Boolean, true, "True", false, "");
+		super(new Class<?>[]{Boolean.class, Boolean.TYPE}, true, "True", false, "");
 	}
 
 	@Override

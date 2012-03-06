@@ -20,7 +20,6 @@
 package org.coury.jfilehelpers.converters;
 
 import org.apache.commons.lang3.StringUtils;
-import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class LongConverterProvider extends ConverterProvider {
 
@@ -29,12 +28,6 @@ public class LongConverterProvider extends ConverterProvider {
 	@Override
 	public boolean handles(final Class<?> fieldType) {
 		return fieldType == Long.class || fieldType == Long.TYPE;
-	}
-
-	@Override
-	public boolean handles(final ConverterKind converterKind) {
-		// TODO Auto-generated method stub
-		return converterKind.equals(ConverterKind.Long);
 	}
 
 	@Override

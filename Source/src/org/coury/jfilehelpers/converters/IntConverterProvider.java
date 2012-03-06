@@ -20,7 +20,6 @@
 package org.coury.jfilehelpers.converters;
 
 import org.apache.commons.lang3.StringUtils;
-import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class IntConverterProvider extends ConverterProvider {
 
@@ -29,11 +28,6 @@ public class IntConverterProvider extends ConverterProvider {
 	@Override
 	public boolean handles(final Class<?> fieldType) {
 		return fieldType == Integer.class || fieldType == Integer.TYPE;
-	}
-
-	@Override
-	public boolean handles(final ConverterKind converterKind) {
-		return converterKind.equals(ConverterKind.Int);
 	}
 
 	@Override

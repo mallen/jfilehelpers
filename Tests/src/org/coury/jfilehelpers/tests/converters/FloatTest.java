@@ -21,12 +21,11 @@ package org.coury.jfilehelpers.tests.converters;
 
 import org.coury.jfilehelpers.converters.FloatConverterProvider;
 import org.coury.jfilehelpers.converters.FloatConverterProvider.FloatConverter;
-import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class FloatTest extends ConverterTestBase<FloatConverterProvider, FloatConverter, Float> {
 
 	public FloatTest() {
-		super(new Class<?>[]{Float.class, Float.TYPE}, ConverterKind.Float, Float.valueOf(12.345f), "12.345", Float.valueOf(0), "0");
+		super(new Class<?>[]{Float.class, Float.TYPE}, Float.valueOf(12.345f), "12.345", Float.valueOf(0), "0");
 	}
 	
 	@Override

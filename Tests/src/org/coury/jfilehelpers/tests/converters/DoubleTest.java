@@ -21,12 +21,11 @@ package org.coury.jfilehelpers.tests.converters;
 
 import org.coury.jfilehelpers.converters.DoubleConverterProvider;
 import org.coury.jfilehelpers.converters.DoubleConverterProvider.DoubleConverter;
-import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class DoubleTest extends ConverterTestBase<DoubleConverterProvider, DoubleConverter, Double> {
 
 	public DoubleTest() {
-		super(new Class<?>[]{Double.class, Double.TYPE}, ConverterKind.Double, Double.valueOf(12.345), "12.345", Double.valueOf(0), "0");
+		super(new Class<?>[]{Double.class, Double.TYPE}, Double.valueOf(12.345), "12.345", Double.valueOf(0), "0");
 	}
 	
 	@Override

@@ -21,12 +21,11 @@ package org.coury.jfilehelpers.tests.converters;
 
 import org.coury.jfilehelpers.converters.LongConverterProvider;
 import org.coury.jfilehelpers.converters.LongConverterProvider.LongConverter;
-import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class LongTest extends ConverterTestBase<LongConverterProvider, LongConverter, Long> {
 
 	public LongTest() {
-		super(new Class<?>[]{Long.class, Long.TYPE}, ConverterKind.Long, Long.valueOf(12345), "12345", Long.valueOf(0), "0");
+		super(new Class<?>[]{Long.class, Long.TYPE}, Long.valueOf(12345), "12345", Long.valueOf(0), "0");
 	}
 	
 	@Override

@@ -19,18 +19,12 @@
  */
 package org.coury.jfilehelpers.converters;
 
-import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class EnumConverterProvider extends ConverterProvider {
 
 	@Override
 	public boolean handles(final Class<?> fieldType) {
 		return fieldType.isEnum();
-	}
-
-	@Override
-	public boolean handles(final ConverterKind converterKind) {
-		return false;
 	}
 
 	@Override

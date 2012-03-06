@@ -21,12 +21,11 @@ package org.coury.jfilehelpers.tests.converters;
 
 import org.coury.jfilehelpers.converters.IntConverterProvider;
 import org.coury.jfilehelpers.converters.IntConverterProvider.IntConverter;
-import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class IntegerTest extends ConverterTestBase<IntConverterProvider, IntConverter, Integer> {
 
 	public IntegerTest() {
-		super(new Class<?>[]{Integer.class, Integer.TYPE}, ConverterKind.Int, Integer.valueOf(12345), "12345", Integer.valueOf(0), "0");
+		super(new Class<?>[]{Integer.class, Integer.TYPE}, Integer.valueOf(12345), "12345", Integer.valueOf(0), "0");
 	}
 	
 	@Override

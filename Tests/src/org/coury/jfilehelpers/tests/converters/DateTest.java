@@ -25,13 +25,12 @@ import java.util.Date;
 
 import org.coury.jfilehelpers.converters.DateConverterProvider;
 import org.coury.jfilehelpers.converters.DateConverterProvider.DateConverter;
-import org.coury.jfilehelpers.enums.ConverterKind;
 import org.junit.Test;
 
 public class DateTest extends ConverterTestBase<DateConverterProvider, DateConverter, Date> {
 
 	public DateTest() {
-		super(new Class<?>[]{Date.class}, ConverterKind.Date, new Date(112, 1, 14), "20120214", null, "");
+		super(new Class<?>[]{Date.class},new Date(112, 1, 14), "20120214", null, "");
 	}
 
 	@Override

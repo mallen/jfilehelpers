@@ -4,8 +4,6 @@ import java.util.Date;
 
 import org.coury.jfilehelpers.annotations.DateFormatOptions;
 import org.coury.jfilehelpers.annotations.DelimitedRecord;
-import org.coury.jfilehelpers.annotations.FieldConverter;
-import org.coury.jfilehelpers.enums.ConverterKind;
 
 @DelimitedRecord
 public class DateFormatType1 {
@@ -16,13 +14,10 @@ public class DateFormatType1 {
 		
 	}
 	
-	@FieldConverter(converter=ConverterKind.Date)
 	@DateFormatOptions(format="d-M-yyyy")
 	public Date orderDate;
-	@FieldConverter(converter=ConverterKind.Date)
 	@DateFormatOptions(format="MMddyyyy")
 	public Date requiredDate;
-	@FieldConverter(converter=ConverterKind.Date)
 	@DateFormatOptions(format="d/M/yy")
 	public Date shippedDate;
 }

@@ -20,15 +20,12 @@
 package org.coury.jfilehelpers.tests.converters.testobjects;
 
 import org.coury.jfilehelpers.annotations.BooleanConverterOptions;
-import org.coury.jfilehelpers.annotations.FieldConverter;
-import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class BooleanTypeWithOptions {
 
 	@BooleanConverterOptions(trueString="y", falseString="n")
 	public boolean b1;
 	
-	@FieldConverter(converter=ConverterKind.Boolean)
 	@BooleanConverterOptions(trueString="y", falseString="n")
 	public boolean b2;
 }

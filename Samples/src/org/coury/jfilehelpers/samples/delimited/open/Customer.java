@@ -24,8 +24,6 @@ import java.util.Date;
 
 import org.coury.jfilehelpers.annotations.DateFormatOptions;
 import org.coury.jfilehelpers.annotations.DelimitedRecord;
-import org.coury.jfilehelpers.annotations.FieldConverter;
-import org.coury.jfilehelpers.enums.ConverterKind;
 import org.coury.jfilehelpers.helpers.StringHelper;
 
 @DelimitedRecord(",")
@@ -34,7 +32,6 @@ public class Customer {
 	private String name;
 	private Integer rating;
 	
-	@FieldConverter(converter = ConverterKind.Date)
 	@DateFormatOptions(format="dd-MM-yyyy")
 	private Date addedDate;
 

@@ -19,12 +19,10 @@
  */
 package org.coury.jfilehelpers.converters;
 
-import org.coury.jfilehelpers.enums.ConverterKind;
 
 public abstract class ConverterProvider {
 
 	public abstract boolean handles(Class<?> fieldType);
-	public abstract boolean handles(ConverterKind converterKind);
 	public abstract ConverterBase createConverter(Class<?> fieldType);
 	
 }

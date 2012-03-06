@@ -30,13 +30,11 @@ import java.util.Date;
 
 import org.coury.jfilehelpers.converters.ConverterBase;
 import org.coury.jfilehelpers.converters.ConverterProvider;
-import org.coury.jfilehelpers.enums.ConverterKind;
 import org.junit.Test;
 
 public abstract class ConverterTestBase<TCP extends ConverterProvider, TC extends ConverterBase, T> {
 
 	private final Collection<Class<?>> validClasses;
-	private final ConverterKind validConverterKind;
 	private final String validString;
 	private final Class<?>[] numberClasses = new Class<?>[]{Integer.class, Integer.TYPE, 
 															Long.class, Long.TYPE, 
@@ -50,12 +48,11 @@ public abstract class ConverterTestBase<TCP extends ConverterProvider, TC extend
 	private final String nullString;
 	
 
-	public ConverterTestBase(final Class<?>[] validClasses, final ConverterKind validConverterKind, 
+	public ConverterTestBase(final Class<?>[] validClasses, 
 							final T validObject, final String validString, 
 							final T blankObject, final String nullString) {
 		
 		this.validClasses = Arrays.asList(validClasses);
-		this.validConverterKind = validConverterKind;
 		this.validString = validString;
 		this.validObject = validObject;
 		this.blankObject = blankObject;
@@ -76,12 +73,6 @@ public abstract class ConverterTestBase<TCP extends ConverterProvider, TC extend
 	}
 
 	@Test
-	public void providerReturnTrueForValidConverterKind() {
-		TCP provider = createConverterProvider();
-		assertTrue(provider.handles(validConverterKind));
-	}
-
-	@Test
 	public void providerReturnFalseForInvalidClass() {
 		TCP provider = createConverterProvider();
 		for (Class<?> clazz : numberClasses) {
@@ -91,17 +82,6 @@ public abstract class ConverterTestBase<TCP extends ConverterProvider, TC extend
 			assertFalse(provider.handles(clazz));
 		}
 		
-	}
-
-	@Test
-	public void providerReturnFalseForInvalidConverterKind() {
-		TCP provider = createConverterProvider();
-		for(ConverterKind converterKind : ConverterKind.values()){
-			if(converterKind.equals(validConverterKind)){
-				continue;
-			}
-			assertFalse(provider.handles(converterKind));
-		}
 	}
 
 	@Test

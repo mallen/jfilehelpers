@@ -22,7 +22,6 @@ package org.coury.jfilehelpers.converters;
 import java.lang.annotation.Annotation;
 
 import org.coury.jfilehelpers.annotations.BooleanConverterOptions;
-import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class BooleanConverterProvider extends ConverterProvider {
 
@@ -32,11 +31,6 @@ public class BooleanConverterProvider extends ConverterProvider {
 	@Override
 	public boolean handles(final Class<?> fieldType) {
 		return fieldType == Boolean.class || fieldType == Boolean.TYPE;
-	}
-
-	@Override
-	public boolean handles(final ConverterKind converterKind) {
-		return converterKind.equals(ConverterKind.Boolean);
 	}
 
 	@Override

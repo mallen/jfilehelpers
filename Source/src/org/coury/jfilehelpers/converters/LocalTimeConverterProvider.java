@@ -22,7 +22,6 @@ package org.coury.jfilehelpers.converters;
 import java.lang.annotation.Annotation;
 
 import org.coury.jfilehelpers.annotations.DateFormatOptions;
-import org.coury.jfilehelpers.enums.ConverterKind;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -36,11 +35,6 @@ public class LocalTimeConverterProvider extends ConverterProvider {
 		return fieldType.equals(LocalTime.class);
 	}
 
-	@Override
-	public boolean handles(final ConverterKind converterKind) {
-		return converterKind.equals(ConverterKind.LocalTime);
-	}
-	
 	public String getDefaultFormat() {
 		return defaultFormat;
 	}
