@@ -26,7 +26,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface DateConverterOptions {
+public @interface DateFormatOptions {
 	String format();
-	static final String NULL = "-**-NULL-**-";
 }

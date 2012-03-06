@@ -19,6 +19,9 @@
  */
 package org.coury.jfilehelpers.converters;
 
+import java.lang.annotation.Annotation;
+
+import org.coury.jfilehelpers.annotations.DateFormatOptions;
 import org.coury.jfilehelpers.enums.ConverterKind;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
@@ -53,18 +56,34 @@ public class LocalTimeConverterProvider extends ConverterProvider {
 	
 	public static class LocalTimeConverter extends ConverterBase {
 		
-		private final DateTimeFormatter formatter;
+		private DateTimeFormatter formatter;
+		private String format;
 
 		public LocalTimeConverter(final String format) {
+			this.format = format;
+		}
+
+		private void checkFormatter() {
 			if (format == null || format.length() < 1) {
 				throw new IllegalArgumentException("The format of the DateTime Converter can be null or empty.");
 			}
-			
 			formatter = DateTimeFormat.forPattern(format);
+		}
+		
+		@Override
+		public Class<? extends Annotation> getOptionsAnnotationType() {
+			return DateFormatOptions.class;
+		}
+		
+		@Override
+		public void setOptionsFromAnnotation(final Annotation annotation) {
+			DateFormatOptions options = (DateFormatOptions) annotation;
+			format = options.format();
 		}
 
 		@Override
 		public Object stringToField(final String from) {
+			checkFormatter();
 			return LocalTime.parse(from, formatter);
 		}
 		
@@ -73,6 +92,7 @@ public class LocalTimeConverterProvider extends ConverterProvider {
 			if(from == null){
 				return "";
 			}
+			checkFormatter();
 			return ((LocalTime) from).toString(formatter);
 		}
 		

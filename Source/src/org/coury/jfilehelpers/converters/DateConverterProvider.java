@@ -25,7 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
-import org.coury.jfilehelpers.annotations.DateConverterOptions;
+import org.coury.jfilehelpers.annotations.DateFormatOptions;
 import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class DateConverterProvider extends ConverterProvider {
@@ -84,12 +84,12 @@ public class DateConverterProvider extends ConverterProvider {
 		
 		@Override
 		public Class<? extends Annotation> getOptionsAnnotationType() {
-			return DateConverterOptions.class;
+			return DateFormatOptions.class;
 		}
 		
 		@Override
 		public void setOptionsFromAnnotation(final Annotation annotation) {
-			DateConverterOptions options = (DateConverterOptions) annotation;
+			DateFormatOptions options = (DateFormatOptions) annotation;
 			this.format = options.format();
 		}
 
