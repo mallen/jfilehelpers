@@ -52,6 +52,7 @@ public abstract class EngineBase<T> {
 	
 	public EngineBase(final Class<T> recordClass) {
 		
+		//default providers
 		converterProviders.add(new StringConverterProvider());
 		booleanConverterProvider = new BooleanConverterProvider();
 		converterProviders.add(booleanConverterProvider);

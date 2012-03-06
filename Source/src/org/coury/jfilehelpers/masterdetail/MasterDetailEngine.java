@@ -213,7 +213,7 @@ public class MasterDetailEngine<MT, DT> extends EngineBase<DT> {
 		}		
 	}
 		
-	protected void beforeWriteMaster(MasterDetails<MT, DT> masterDetails, BufferedWriter writer) throws IOException {
+	protected void beforeWriteMaster(final MasterDetails<MT, DT> masterDetails, final BufferedWriter writer) throws IOException {
 	}
 
 	private List<MasterDetails<MT, DT>> readStream(final InputStreamReader fileReader) throws IOException {

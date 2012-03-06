@@ -19,6 +19,9 @@
  */
 package org.coury.jfilehelpers.converters;
 
+import java.lang.annotation.Annotation;
+
+import org.coury.jfilehelpers.annotations.BooleanConverterOptions;
 import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class BooleanConverterProvider extends ConverterProvider {
@@ -64,12 +67,29 @@ public class BooleanConverterProvider extends ConverterProvider {
 		private String falseStringLower = null;
 
 		public BooleanConverter(final String trueString, final String falseString) {
+			initOptions(trueString, falseString);
+		}
+
+		private void initOptions(final String trueString, final String falseString) {
 			this.trueString = trueString;
 			this.falseString = falseString;
 			this.trueStringLower = trueString == null ? null : trueString.toLowerCase();
 			this.falseStringLower = falseString == null ? null : falseString.toLowerCase();
 		}
-
+		
+		@Override
+		public Class<? extends Annotation> getOptionsAnnotationType() {
+			return BooleanConverterOptions.class;
+		}
+		
+		@Override
+		public void setOptionsFromAnnotation(final Annotation annotation) {
+			BooleanConverterOptions options = (BooleanConverterOptions) annotation;
+			String t = options.trueString().equals(BooleanConverterOptions.NULL) ? null : options.trueString(); 
+			String f = options.falseString().equals(BooleanConverterOptions.NULL) ? null : options.falseString(); 
+			initOptions(t, f);
+		}
+		
 		@Override
 		public Object stringToField(final String from) {
 			if(from == null){

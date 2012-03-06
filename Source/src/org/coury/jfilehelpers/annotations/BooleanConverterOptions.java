@@ -1,5 +1,5 @@
 /*
- * FieldConverter.java
+ * BooleanConverterKindOptions.java
  *
  * Copyright (C) 2007 Felipe Gonçalves Coury <felipe.coury@gmail.com>
  * 
@@ -17,7 +17,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-
 package org.coury.jfilehelpers.annotations;
 
 import java.lang.annotation.ElementType;
@@ -25,11 +24,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.coury.jfilehelpers.enums.ConverterKind;
-
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface FieldConverter {
-	ConverterKind converter();
-	String format() default "";
+public @interface BooleanConverterOptions {
+	
+	String trueString() default NULL;
+	String falseString() default NULL;
+	static final String NULL = "-**-NULL-**-";
 }

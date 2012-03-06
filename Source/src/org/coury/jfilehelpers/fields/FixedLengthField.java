@@ -36,7 +36,8 @@ public class FixedLengthField extends FieldBase {
 	private final FieldAlignBean align;
 	private final FixedMode fixedMode;
 	
-	public FixedLengthField(final Field fi, final int length, final FieldAlignBean align, final FixedMode fixedMode, final List<ConverterProvider> converterProviders) {
+	public FixedLengthField(final Field fi, final int length, final FieldAlignBean align, final FixedMode fixedMode, 
+			final List<ConverterProvider> converterProviders) {
 		super(fi, converterProviders);
 		this.fieldLength = length;
 		this.align = align;

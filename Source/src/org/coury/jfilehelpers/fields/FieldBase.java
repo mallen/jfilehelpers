@@ -22,8 +22,8 @@ package org.coury.jfilehelpers.fields;
 
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
@@ -60,13 +60,13 @@ public abstract class FieldBase {
 	private final Method writeMethod;
 	protected int charsToDiscard = 0;
 
-	private final List<ConverterProvider> converterProviders;
 	private ConverterBase converter;
 	private int impliedDecimalPlaces;
 
-	public FieldBase(final Field field, final List<ConverterProvider> converterProviders) {
+
+	public FieldBase(final Field field, 
+			final List<ConverterProvider> converterProviders) {
 		this.field = field;
-		this.converterProviders = converterProviders;
 		Class<?> fieldType = field.getType();
 		
 		int modifiers = field.getModifiers();
@@ -81,12 +81,22 @@ public abstract class FieldBase {
 			writeMethod = descriptor.getWriteMethod();
 		}
 		
-
+		//get converter for field
 		FieldConverter fc = field.getAnnotation(FieldConverter.class);
 		if (fc == null) {
-			converter = getConverter(fieldType);
+			converter = getConverter(fieldType, converterProviders);
 		} else {
-			converter = getConverter(field, fc.converter(), fc.format());
+			ConverterKind converterKind = fc.converter();
+			converter = getConverter(field, converterKind, fc.format(), converterProviders);
+		}
+		
+		//converter options
+		Class<? extends Annotation> optionsAnnotationClass = converter.getOptionsAnnotationType();
+		if(optionsAnnotationClass != null){
+			Annotation annotation = field.getAnnotation(optionsAnnotationClass);
+			if(annotation != null){
+				converter.setOptionsFromAnnotation(annotation);
+			}
 		}
 
 		FieldNullValue fn = field.getAnnotation(FieldNullValue.class);
@@ -95,7 +105,7 @@ public abstract class FieldBase {
 		}
 	}
 	
-	public void setValue(Object obj, Object value) {
+	public void setValue(final Object obj, final Object value) {
 		if(isPublic){
 			PropertyHelper.setFieldValue(field, obj, value);
 		} else {
@@ -103,7 +113,7 @@ public abstract class FieldBase {
 		}
 	}
 	
-	public Object getValue(Object obj){
+	public Object getValue(final Object obj){
 		if(isPublic){
 			return PropertyHelper.getFieldValue(field, obj);
 		} else {
@@ -112,7 +122,7 @@ public abstract class FieldBase {
 			
 	}
 
-	private ConverterBase getConverter(final Class<?> fieldType) {
+	private ConverterBase getConverter(final Class<?> fieldType, final List<ConverterProvider> converterProviders) {
 
 		for (ConverterProvider provider : converterProviders) {
 			if (provider.handles(fieldType)) {
@@ -122,13 +132,13 @@ public abstract class FieldBase {
 		throw new IllegalArgumentException("No ConverterProvider found for type: " + fieldType.getName());
 	}
 
-	private ConverterBase getConverter(final Field field, final ConverterKind converterKind, final String format) {
+	private ConverterBase getConverter(final Field field, final ConverterKind converterKind, final String format,  final List<ConverterProvider> converterProviders) {
 		for (ConverterProvider provider : converterProviders) {
 			if (provider.handles(converterKind)) {
 				return provider.createConverter(field.getType(), format);
 			}
 		}
-		throw new IllegalArgumentException("No ConverterProvider found for converterKing: " + converterKind);
+		throw new IllegalArgumentException("No ConverterProvider found for converterKind: " + converterKind);
 	}
 
 	public Object extractValue(final LineInfo line) {

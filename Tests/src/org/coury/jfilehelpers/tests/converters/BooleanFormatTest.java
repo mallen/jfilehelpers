@@ -29,6 +29,7 @@ import java.util.List;
 import org.coury.jfilehelpers.engines.FileHelperEngine;
 import org.coury.jfilehelpers.tests.common.Common;
 import org.coury.jfilehelpers.tests.converters.testobjects.BooleanType;
+import org.coury.jfilehelpers.tests.converters.testobjects.BooleanTypeWithOptions;
 import org.junit.Test;
 
 public class BooleanFormatTest {
@@ -58,6 +59,23 @@ public class BooleanFormatTest {
 		engine.setDefaultFalseString("n");
 
 		List<BooleanType> res = (List<BooleanType>) Common.readTest(engine, "Good/BooleanTest2.txt");
+		
+		assertEquals(2, res.size());
+		
+		assertTrue(res.get(0).b1);
+		assertFalse(res.get(0).b2);
+		
+		assertFalse(res.get(1).b1);
+		assertTrue(res.get(1).b2);
+		
+	}
+	
+	@Test
+	public void test3() throws IOException{
+		
+		FileHelperEngine<BooleanTypeWithOptions> engine = new FileHelperEngine<BooleanTypeWithOptions>(BooleanTypeWithOptions.class);
+	
+		List<BooleanTypeWithOptions> res = (List<BooleanTypeWithOptions>) Common.readTest(engine, "Good/BooleanTest2.txt");
 		
 		assertEquals(2, res.size());
 		

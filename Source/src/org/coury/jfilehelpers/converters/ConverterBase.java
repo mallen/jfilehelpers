@@ -20,6 +20,8 @@
 
 package org.coury.jfilehelpers.converters;
 
+import java.lang.annotation.Annotation;
+
 /**
  * This is the base class for all converters.
  * 
@@ -40,6 +42,14 @@ public abstract class ConverterBase {
 	
 	public boolean isCustomNullHandling() {
 		return false;
+	}
+	
+	public Class<? extends Annotation> getOptionsAnnotationType(){
+		return null;
+	}
+	
+	public void setOptionsFromAnnotation(final Annotation annotation){
+		
 	}
 	
 }

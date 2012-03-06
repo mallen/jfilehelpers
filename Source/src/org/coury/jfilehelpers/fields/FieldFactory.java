@@ -47,11 +47,13 @@ public class FieldFactory {
 	 * @param someOptional
 	 *            indicates whether some of the fields on the collection are
 	 *            optional
+	 * @param converterOptionsMap 
 	 * @return a FieldBase instance with informations from the field acquired by
 	 *         reflection
 	 */
 	@SuppressWarnings("unchecked")
-	public static FieldBase createField(final Field fi, final Class recordClass, final boolean someOptional, final List<ConverterProvider> converterProviders) {
+	public static FieldBase createField(final Field fi, final Class recordClass, final boolean someOptional, 
+			final List<ConverterProvider> converterProviders) {
 		if (fi.isAnnotationPresent(FieldIgnored.class)) {
 			return null;
 		}

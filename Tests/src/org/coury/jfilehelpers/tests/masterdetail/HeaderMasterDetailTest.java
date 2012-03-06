@@ -61,7 +61,7 @@ public class HeaderMasterDetailTest extends TestCase {
 					}
 				});
 
-		List<HeaderMasterDetails<HeaderVerticalBar, CustomersVerticalBar, OrdersVerticalBar>> res = (List<HeaderMasterDetails<HeaderVerticalBar, CustomersVerticalBar, OrdersVerticalBar>>) engine
+		List<HeaderMasterDetails<HeaderVerticalBar, CustomersVerticalBar, OrdersVerticalBar>> res = engine
 				.readResource("/test/Good/HeaderMasterDetail1.txt");
 
 		HeaderVerticalBar header1 = new HeaderVerticalBar();
@@ -124,6 +124,7 @@ public class HeaderMasterDetailTest extends TestCase {
 		cust1.companyName="big co";
 		cust1.contactTitle="mr";
 		cust1.city = "City1";
+		cust1.country="";
 
 		OrdersVerticalBar order1 = new OrdersVerticalBar();
 		order1.customerID = "C1";
@@ -145,6 +146,11 @@ public class HeaderMasterDetailTest extends TestCase {
 		cust2.customerID = "C2";
 		cust2.contactName = "Contact2";
 		cust2.city = "City2";
+		cust2.address="";
+		cust2.companyName="";
+		cust2.contactTitle="";
+		cust2.country="";
+		
 
 		OrdersVerticalBar order3 = new OrdersVerticalBar();
 		order3.customerID = "C2";

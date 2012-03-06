@@ -37,7 +37,7 @@ public class HeaderMasterDetailEngine<HT, MT, DT> extends MasterDetailEngine<MT,
 			final HeaderMasterDetailSelector headerSelector) {
 		super(masterRecordClass, detailRecordClass, headerSelector);
 		this.headerSelector = headerSelector;
-		this.headerInfo = new RecordInfo<HT>(headerRecordClass, super.converterProviders);	
+		this.headerInfo = new RecordInfo<HT>(headerRecordClass, converterProviders);	
 	}
 	
 	@Override
@@ -57,7 +57,7 @@ public class HeaderMasterDetailEngine<HT, MT, DT> extends MasterDetailEngine<MT,
 	}
 	
 	@Override
-	protected void beforeWriteMaster(MasterDetails<MT, DT> masterDetails, BufferedWriter writer) throws IOException {
+	protected void beforeWriteMaster(final MasterDetails<MT, DT> masterDetails, final BufferedWriter writer) throws IOException {
 		HeaderMasterDetails<HT, MT, DT> hmd = (HeaderMasterDetails<HT, MT, DT>) masterDetails;
 		HT header = hmd.getHeader();
 		if (!header.equals(currentHeader)) {

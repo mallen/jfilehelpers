@@ -39,7 +39,8 @@ public class DelimitedField extends FieldBase {
 	private QuoteMode quoteMode;
 	private final MultilineMode quoteMultiline = MultilineMode.AllowForBoth;
 	
-	public DelimitedField(final Field fi, final String sep, final List<ConverterProvider> converterProviders) {
+	public DelimitedField(final Field fi, final String sep, 
+			final List<ConverterProvider> converterProviders) {
 		super(fi, converterProviders);
 		this.separator = sep;
 	}

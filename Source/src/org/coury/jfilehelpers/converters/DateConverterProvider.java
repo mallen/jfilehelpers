@@ -42,7 +42,7 @@ public class DateConverterProvider extends ConverterProvider {
 
 	@Override
 	public ConverterBase createConverter(final Class<?> fieldType, String format) {
-		if(format == null || format.length() == 0){
+		if(StringUtils.isBlank(format)){
 			format = defaultFormat;
 		}
 		return new DateConverter(format);

@@ -54,6 +54,11 @@ public class StringConverterProvider extends ConverterProvider {
 			}
 			return from.toString();
 		}
+		
+		@Override
+		public boolean isCustomNullHandling() {
+			return true;
+		}
 
 	}
 }
