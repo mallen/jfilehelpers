@@ -38,7 +38,7 @@ public class LongConverterProvider extends ConverterProvider {
 	}
 
 	@Override
-	public ConverterBase createConverter(final Class<?> fieldType, final String format) {
+	public ConverterBase createConverter(final Class<?> fieldType) {
 		return LONG_CONVERTER;
 	}
 

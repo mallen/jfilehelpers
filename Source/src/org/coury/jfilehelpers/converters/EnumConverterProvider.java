@@ -34,7 +34,7 @@ public class EnumConverterProvider extends ConverterProvider {
 	}
 
 	@Override
-	public ConverterBase createConverter(final Class<?> fieldType, final String format) {
+	public ConverterBase createConverter(final Class<?> fieldType) {
 		@SuppressWarnings("unchecked")
 		Class<? extends Enum<?>> enumType = (Class<Enum<?>>) fieldType;
 		return new EnumConverter(enumType);

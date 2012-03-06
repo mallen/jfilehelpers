@@ -87,7 +87,7 @@ public abstract class FieldBase {
 			converter = getConverter(fieldType, converterProviders);
 		} else {
 			ConverterKind converterKind = fc.converter();
-			converter = getConverter(field, converterKind, fc.format(), converterProviders);
+			converter = getConverter(field, converterKind, converterProviders);
 		}
 		
 		//converter options
@@ -126,16 +126,16 @@ public abstract class FieldBase {
 
 		for (ConverterProvider provider : converterProviders) {
 			if (provider.handles(fieldType)) {
-				return provider.createConverter(fieldType, null);
+				return provider.createConverter(fieldType);
 			}
 		}
 		throw new IllegalArgumentException("No ConverterProvider found for type: " + fieldType.getName());
 	}
 
-	private ConverterBase getConverter(final Field field, final ConverterKind converterKind, final String format,  final List<ConverterProvider> converterProviders) {
+	private ConverterBase getConverter(final Field field, final ConverterKind converterKind, final List<ConverterProvider> converterProviders) {
 		for (ConverterProvider provider : converterProviders) {
 			if (provider.handles(converterKind)) {
-				return provider.createConverter(field.getType(), format);
+				return provider.createConverter(field.getType());
 			}
 		}
 		throw new IllegalArgumentException("No ConverterProvider found for converterKind: " + converterKind);

@@ -25,6 +25,6 @@ public abstract class ConverterProvider {
 
 	public abstract boolean handles(Class<?> fieldType);
 	public abstract boolean handles(ConverterKind converterKind);
-	public abstract ConverterBase createConverter(Class<?> fieldType, String format);
+	public abstract ConverterBase createConverter(Class<?> fieldType);
 	
 }

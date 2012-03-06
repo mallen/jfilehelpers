@@ -2,6 +2,7 @@ package org.coury.jfilehelpers.tests.converters.testobjects;
 
 import java.util.Date;
 
+import org.coury.jfilehelpers.annotations.DateConverterOptions;
 import org.coury.jfilehelpers.annotations.DelimitedRecord;
 import org.coury.jfilehelpers.annotations.FieldConverter;
 import org.coury.jfilehelpers.enums.ConverterKind;
@@ -15,10 +16,13 @@ public class DateFormatType1 {
 		
 	}
 	
-	@FieldConverter(converter=ConverterKind.Date, format="d-M-yyyy") 
+	@FieldConverter(converter=ConverterKind.Date)
+	@DateConverterOptions(format="d-M-yyyy")
 	public Date orderDate;
-	@FieldConverter(converter=ConverterKind.Date, format="MMddyyyy")
+	@FieldConverter(converter=ConverterKind.Date)
+	@DateConverterOptions(format="MMddyyyy")
 	public Date requiredDate;
-	@FieldConverter(converter=ConverterKind.Date, format="d/M/yy") 
+	@FieldConverter(converter=ConverterKind.Date)
+	@DateConverterOptions(format="d/M/yy")
 	public Date shippedDate;
 }

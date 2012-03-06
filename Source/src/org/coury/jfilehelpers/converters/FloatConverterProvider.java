@@ -37,7 +37,7 @@ public class FloatConverterProvider extends ConverterProvider {
 	}
 
 	@Override
-	public ConverterBase createConverter(final Class<?> fieldType, final String format) {
+	public ConverterBase createConverter(final Class<?> fieldType) {
 		return FLOAT_CONVERTER;
 	}
 

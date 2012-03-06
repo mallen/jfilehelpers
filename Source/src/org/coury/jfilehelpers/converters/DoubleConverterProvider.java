@@ -37,7 +37,7 @@ public class DoubleConverterProvider extends ConverterProvider {
 	}
 
 	@Override
-	public ConverterBase createConverter(final Class<?> fieldType, final String format) {
+	public ConverterBase createConverter(final Class<?> fieldType) {
 		return DOUBLE_CONVERTER;
 	}
 

@@ -26,8 +26,8 @@ import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class BooleanConverterProvider extends ConverterProvider {
 
-	private String trueString = null;
-	private String falseString = null; 
+	private String defaultTrueString = null;
+	private String defaultFalseString = null; 
 	
 	@Override
 	public boolean handles(final Class<?> fieldType) {
@@ -40,24 +40,24 @@ public class BooleanConverterProvider extends ConverterProvider {
 	}
 
 	@Override
-	public ConverterBase createConverter(final Class<?> fieldType, final String format) {
-		return new BooleanConverter(trueString, falseString);
+	public ConverterBase createConverter(final Class<?> fieldType) {
+		return new BooleanConverter(defaultTrueString, defaultFalseString);
 	}
 	
-	public String getTrueString() {
-		return trueString;
+	public String getDefaultTrueString() {
+		return defaultTrueString;
 	}
 
-	public void setTrueString(final String trueString) {
-		this.trueString = trueString;
+	public void setDefaultTrueString(final String trueString) {
+		this.defaultTrueString = trueString;
 	}
 
-	public String getFalseString() {
-		return falseString;
+	public String getDefaultFalseString() {
+		return defaultFalseString;
 	}
 
-	public void setFalseString(final String falseString) {
-		this.falseString = falseString;
+	public void setDefaultFalseString(final String falseString) {
+		this.defaultFalseString = falseString;
 	}
 
 	public static class BooleanConverter extends ConverterBase {

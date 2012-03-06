@@ -36,7 +36,7 @@ public class StringConverterProvider extends ConverterProvider {
 	}
 
 	@Override
-	public ConverterBase createConverter(final Class<?> fieldType, final String format) {
+	public ConverterBase createConverter(final Class<?> fieldType) {
 		return STRING_CONVERTER;
 	}
 

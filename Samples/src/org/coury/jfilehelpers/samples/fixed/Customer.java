@@ -22,14 +22,13 @@ package org.coury.jfilehelpers.samples.fixed;
 
 import java.util.Date;
 
+import org.coury.jfilehelpers.annotations.DateConverterOptions;
 import org.coury.jfilehelpers.annotations.FieldAlign;
-import org.coury.jfilehelpers.annotations.FieldConverter;
 import org.coury.jfilehelpers.annotations.FieldFixedLength;
 import org.coury.jfilehelpers.annotations.FieldOptional;
 import org.coury.jfilehelpers.annotations.FieldTrim;
 import org.coury.jfilehelpers.annotations.FixedLengthRecord;
 import org.coury.jfilehelpers.enums.AlignMode;
-import org.coury.jfilehelpers.enums.ConverterKind;
 import org.coury.jfilehelpers.enums.TrimMode;
 import org.coury.jfilehelpers.helpers.StringHelper;
 
@@ -47,7 +46,8 @@ public class Customer {
 
 	@FieldTrim(trimMode=TrimMode.Right)
 	@FieldFixedLength(10)
-	@FieldConverter(converter = ConverterKind.Date, format = "dd-MM-yyyy")
+//	@FieldConverter(converter = ConverterKind.Date)
+	@DateConverterOptions(format="dd-MM-yyyy")
 	private Date addedDate;
 	
 	@FieldFixedLength(3)
@@ -71,7 +71,7 @@ public class Customer {
 		return custId;
 	}
 
-	public void setCustId(Integer custId) {
+	public void setCustId(final Integer custId) {
 		this.custId = custId;
 	}
 
@@ -79,7 +79,7 @@ public class Customer {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -87,7 +87,7 @@ public class Customer {
 		return rating;
 	}
 
-	public void setRating(Integer rating) {
+	public void setRating(final Integer rating) {
 		this.rating = rating;
 	}
 
@@ -95,7 +95,7 @@ public class Customer {
 		return addedDate;
 	}
 
-	public void setAddedDate(Date addedDate) {
+	public void setAddedDate(final Date addedDate) {
 		this.addedDate = addedDate;
 	}
 
@@ -103,7 +103,7 @@ public class Customer {
 		return stockSimbol;
 	}
 
-	public void setStockSimbol(String stockSimbol) {
+	public void setStockSimbol(final String stockSimbol) {
 		this.stockSimbol = stockSimbol;
 	}
 }

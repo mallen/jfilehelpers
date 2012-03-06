@@ -47,11 +47,8 @@ public class LocalTimeConverterProvider extends ConverterProvider {
 	}
 
 	@Override
-	public ConverterBase createConverter(final Class<?> fieldType, String format) {
-		if(format == null || format.length() == 0){
-			format = defaultFormat;
-		}
-		return new LocalTimeConverter(format);
+	public ConverterBase createConverter(final Class<?> fieldType) {
+		return new LocalTimeConverter(defaultFormat);
 	}
 	
 	public static class LocalTimeConverter extends ConverterBase {

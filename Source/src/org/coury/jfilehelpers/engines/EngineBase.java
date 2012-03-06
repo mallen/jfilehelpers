@@ -79,19 +79,19 @@ public abstract class EngineBase<T> {
 	}
 	
 	public String getDefaultTrueString(){
-		return booleanConverterProvider.getTrueString();
+		return booleanConverterProvider.getDefaultTrueString();
 	}
 	
 	public void setDefaultTrueString(final String trueString){
-		booleanConverterProvider.setTrueString(trueString);
+		booleanConverterProvider.setDefaultTrueString(trueString);
 	}
 	
 	public String getDefaultFalseString(){
-		return booleanConverterProvider.getFalseString();
+		return booleanConverterProvider.getDefaultFalseString();
 	}
 	
 	public void setDefaultFalseString(final String falseString){
-		booleanConverterProvider.setFalseString(falseString);
+		booleanConverterProvider.setDefaultFalseString(falseString);
 	}
 	
 	

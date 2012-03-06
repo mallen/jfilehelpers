@@ -19,11 +19,13 @@
  */
 package org.coury.jfilehelpers.converters;
 
+import java.lang.annotation.Annotation;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
+import org.coury.jfilehelpers.annotations.DateConverterOptions;
 import org.coury.jfilehelpers.enums.ConverterKind;
 
 public class DateConverterProvider extends ConverterProvider {
@@ -41,11 +43,8 @@ public class DateConverterProvider extends ConverterProvider {
 	}
 
 	@Override
-	public ConverterBase createConverter(final Class<?> fieldType, String format) {
-		if(StringUtils.isBlank(format)){
-			format = defaultFormat;
-		}
-		return new DateConverter(format);
+	public ConverterBase createConverter(final Class<?> fieldType) {
+		return new DateConverter(defaultFormat);
 	}
 	
 	public String getDefaultFormat() {
@@ -58,13 +57,20 @@ public class DateConverterProvider extends ConverterProvider {
 
 	public static class DateConverter extends ConverterBase {
 		
-		private final String format;
-		private final SimpleDateFormat sdf;
+		private String format;
+		private SimpleDateFormat sdf;
 
 		public DateConverter(final String format) {
 			this.format = format;
+		}
+
+		private void checkFormat() {
+			if(sdf != null){
+				return;
+			}
+			
 			if (format == null || format.length() < 1) {
-				throw new IllegalArgumentException("The format of the DateTime Converter can be null or empty.");
+				throw new IllegalArgumentException("The format of the DateTime Converter cannot be null or empty.");
 			}
 
 			try {
@@ -75,12 +81,25 @@ public class DateConverterProvider extends ConverterProvider {
 				throw new IllegalArgumentException("The format: '" + format + " is invalid for the DateTime Converter.");
 			}
 		}
+		
+		@Override
+		public Class<? extends Annotation> getOptionsAnnotationType() {
+			return DateConverterOptions.class;
+		}
+		
+		@Override
+		public void setOptionsFromAnnotation(final Annotation annotation) {
+			DateConverterOptions options = (DateConverterOptions) annotation;
+			this.format = options.format();
+		}
 
 		@Override
 		public Object stringToField(final String from) {
 			if (StringUtils.isBlank(from)) {
 				return null;
 			}
+			
+			checkFormat();
 
 			Date val;
 			try {
@@ -107,6 +126,7 @@ public class DateConverterProvider extends ConverterProvider {
 			if(from == null){
 				return "";
 			}
+			checkFormat();
 			return sdf.format(from);
 		}
 	}

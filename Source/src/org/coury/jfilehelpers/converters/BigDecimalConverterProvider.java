@@ -39,8 +39,7 @@ public class BigDecimalConverterProvider extends ConverterProvider {
 	}
 
 	@Override
-	public ConverterBase createConverter(final Class<?> fieldType, final String format) {
-		
+	public ConverterBase createConverter(final Class<?> fieldType) {
 		return BIG_DECIMAL_CONVERTER;
 	}
 
