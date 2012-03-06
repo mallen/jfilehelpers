@@ -60,8 +60,8 @@ public abstract class ConverterTestBase<TCP extends ConverterProvider, TC extend
 	}
 
 
-	abstract TCP createConverterProvider();
-	abstract TC createConverter();
+	protected abstract TCP createConverterProvider();
+	protected abstract TC createConverter();
 	
 	@Test
 	public void providerReturnTrueForValidClass() {

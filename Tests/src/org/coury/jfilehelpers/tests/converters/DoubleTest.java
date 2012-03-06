@@ -29,12 +29,12 @@ public class DoubleTest extends ConverterTestBase<DoubleConverterProvider, Doubl
 	}
 	
 	@Override
-	DoubleConverter createConverter() {
+	protected DoubleConverter createConverter() {
 		return new DoubleConverter();
 	}
 	
 	@Override
-	DoubleConverterProvider createConverterProvider() {
+	protected DoubleConverterProvider createConverterProvider() {
 		return new DoubleConverterProvider();
 	}
 	

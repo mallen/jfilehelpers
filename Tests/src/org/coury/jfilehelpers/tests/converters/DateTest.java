@@ -34,12 +34,12 @@ public class DateTest extends ConverterTestBase<DateConverterProvider, DateConve
 	}
 
 	@Override
-	DateConverterProvider createConverterProvider() {
+	protected DateConverterProvider createConverterProvider() {
 		return new DateConverterProvider();
 	}
 
 	@Override
-	DateConverter createConverter() {
+	protected DateConverter createConverter() {
 		return new DateConverter("yyyyMMdd");
 	}
 	

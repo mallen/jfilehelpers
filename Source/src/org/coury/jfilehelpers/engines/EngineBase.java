@@ -21,6 +21,7 @@
 package org.coury.jfilehelpers.engines;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.coury.jfilehelpers.converters.BigDecimalConverterProvider;
@@ -31,12 +32,12 @@ import org.coury.jfilehelpers.converters.DoubleConverterProvider;
 import org.coury.jfilehelpers.converters.EnumConverterProvider;
 import org.coury.jfilehelpers.converters.FloatConverterProvider;
 import org.coury.jfilehelpers.converters.IntConverterProvider;
-import org.coury.jfilehelpers.converters.LocalTimeConverterProvider;
 import org.coury.jfilehelpers.converters.LongConverterProvider;
 import org.coury.jfilehelpers.converters.StringConverterProvider;
 import org.coury.jfilehelpers.core.RecordInfo;
 import org.coury.jfilehelpers.enums.ProgressMode;
 import org.coury.jfilehelpers.progress.ProgressChangeHandler;
+
 
 public abstract class EngineBase<T> {
 	protected RecordInfo<T> recordInfo;
@@ -64,16 +65,37 @@ public abstract class EngineBase<T> {
 		converterProviders.add(new EnumConverterProvider());
 		dateConverterProvider = new DateConverterProvider();
 		converterProviders.add(dateConverterProvider);
-		converterProviders.add(new LocalTimeConverterProvider());
 		
 		this.recordClass = recordClass;
 		this.recordInfo = new RecordInfo<T>(recordClass, converterProviders);
+	}
+	
+	/**
+	 * Adds a ConverterProvider to the list that is searched when finding a converter
+	 * for a field<br>
+	 * ConverterProviders added here take precedence over the built in providers 
+	 */
+	public void addConverterProvider(final ConverterProvider converterProvider){
+		this.converterProviders.add(0, converterProvider);
+	}
+	
+	/**
+	 * Adds the supplied ConverterProviders to the list that is searched when finding a converter
+	 * for a field<br>
+	 * ConverterProviders added here take precedence over the built in providers 
+	 */
+	public void addConverterProviders(final Collection<ConverterProvider> converterProviders){
+		this.converterProviders.addAll(0, converterProviders);
 	}
 	
 	public String getDefaultDateFormat(){
 		return dateConverterProvider.getDefaultFormat();
 	}
 	
+	/**
+	 * Set the default date format used by the converter that handles the java.util.Date class 
+	 * @param format default date format
+	 */
 	public void setDefaultDateFormat(final String format){
 		dateConverterProvider.setDefaultFormat(format);
 	}
@@ -82,6 +104,10 @@ public abstract class EngineBase<T> {
 		return booleanConverterProvider.getDefaultTrueString();
 	}
 	
+	/**
+	 * Set the default true string used by the converter that handles the java.lang.Boolean class and boolean primitive 
+	 * @param format default true string
+	 */
 	public void setDefaultTrueString(final String trueString){
 		booleanConverterProvider.setDefaultTrueString(trueString);
 	}
@@ -90,6 +116,10 @@ public abstract class EngineBase<T> {
 		return booleanConverterProvider.getDefaultFalseString();
 	}
 	
+	/**
+	 * Set the default false string used by the converter that handles the java.lang.Boolean class and boolean primitive 
+	 * @param format default false string
+	 */
 	public void setDefaultFalseString(final String falseString){
 		booleanConverterProvider.setDefaultFalseString(falseString);
 	}

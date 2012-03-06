@@ -29,12 +29,12 @@ public class IntegerTest extends ConverterTestBase<IntConverterProvider, IntConv
 	}
 	
 	@Override
-	IntConverter createConverter() {
+	protected IntConverter createConverter() {
 		return new IntConverter();
 	}
 	
 	@Override
-	IntConverterProvider createConverterProvider() {
+	protected IntConverterProvider createConverterProvider() {
 		return new IntConverterProvider();
 	}
 	

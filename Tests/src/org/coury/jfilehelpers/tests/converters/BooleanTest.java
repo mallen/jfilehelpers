@@ -32,12 +32,12 @@ public class BooleanTest extends ConverterTestBase<BooleanConverterProvider, Boo
 	}
 
 	@Override
-	BooleanConverterProvider createConverterProvider() {
+	protected BooleanConverterProvider createConverterProvider() {
 		return new BooleanConverterProvider();
 	}
 
 	@Override
-	BooleanConverter createConverter() {
+	protected BooleanConverter createConverter() {
 		return new BooleanConverter(null, null);
 	}
 

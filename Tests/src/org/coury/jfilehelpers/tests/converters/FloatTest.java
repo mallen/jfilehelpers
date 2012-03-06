@@ -29,12 +29,12 @@ public class FloatTest extends ConverterTestBase<FloatConverterProvider, FloatCo
 	}
 	
 	@Override
-	FloatConverter createConverter() {
+	protected FloatConverter createConverter() {
 		return new FloatConverter();
 	}
 	
 	@Override
-	FloatConverterProvider createConverterProvider() {
+	protected FloatConverterProvider createConverterProvider() {
 		return new FloatConverterProvider();
 	}
 	

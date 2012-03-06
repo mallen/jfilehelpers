@@ -1,5 +1,5 @@
 /*
- * LocalTimeType.java
+ * BooleanConverterKindOptions.java
  *
  * Copyright (C) 2007 Felipe Gonçalves Coury <felipe.coury@gmail.com>
  * 
@@ -17,12 +17,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.coury.jfilehelpers.tests.converters.testobjects;
+package org.coury.jfilehelpers.annotations;
 
-import org.coury.jfilehelpers.annotations.DelimitedRecord;
-import org.joda.time.LocalTime;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@DelimitedRecord
-public class LocalTimeType {
-	public LocalTime time;
+/**
+ * Annotation used to specify the format of a field
+ * <p>
+ * Of the built-in converters it is only supported by the DateConverter 
+ * @author Mark Allen
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface FieldFormat {
+	String format();
 }

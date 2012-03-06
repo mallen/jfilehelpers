@@ -31,12 +31,12 @@ public class BigDecimalTest extends ConverterTestBase<BigDecimalConverterProvide
 	}
 	
 	@Override
-	BigDecimalConverter createConverter() {
+	protected BigDecimalConverter createConverter() {
 		return new BigDecimalConverter();
 	}
 	
 	@Override
-	BigDecimalConverterProvider createConverterProvider() {
+	protected BigDecimalConverterProvider createConverterProvider() {
 		return new BigDecimalConverterProvider();
 	}
 	

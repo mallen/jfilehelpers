@@ -29,12 +29,12 @@ public class LongTest extends ConverterTestBase<LongConverterProvider, LongConve
 	}
 	
 	@Override
-	LongConverter createConverter() {
+	protected LongConverter createConverter() {
 		return new LongConverter();
 	}
 	
 	@Override
-	LongConverterProvider createConverterProvider() {
+	protected LongConverterProvider createConverterProvider() {
 		return new LongConverterProvider();
 	}
 	
