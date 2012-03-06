@@ -84,7 +84,7 @@ public class DateConverterProvider extends ConverterProvider {
 		@Override
 		public void setOptionsFromAnnotation(final Annotation annotation) {
 			FieldFormat options = (FieldFormat) annotation;
-			this.format = options.format();
+			this.format = options.value();
 		}
 
 		@Override

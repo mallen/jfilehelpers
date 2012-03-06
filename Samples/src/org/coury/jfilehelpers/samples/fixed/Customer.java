@@ -22,9 +22,9 @@ package org.coury.jfilehelpers.samples.fixed;
 
 import java.util.Date;
 
-import org.coury.jfilehelpers.annotations.FieldFormat;
 import org.coury.jfilehelpers.annotations.FieldAlign;
 import org.coury.jfilehelpers.annotations.FieldFixedLength;
+import org.coury.jfilehelpers.annotations.FieldFormat;
 import org.coury.jfilehelpers.annotations.FieldOptional;
 import org.coury.jfilehelpers.annotations.FieldTrim;
 import org.coury.jfilehelpers.annotations.FixedLengthRecord;
@@ -46,8 +46,7 @@ public class Customer {
 
 	@FieldTrim(trimMode=TrimMode.Right)
 	@FieldFixedLength(10)
-//	@FieldConverter(converter = ConverterKind.Date)
-	@FieldFormat(format="dd-MM-yyyy")
+	@FieldFormat("dd-MM-yyyy")
 	private Date addedDate;
 	
 	@FieldFixedLength(3)

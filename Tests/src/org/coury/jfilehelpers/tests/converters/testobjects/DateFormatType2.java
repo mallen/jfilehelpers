@@ -2,17 +2,17 @@ package org.coury.jfilehelpers.tests.converters.testobjects;
 
 import java.util.Date;
 
-import org.coury.jfilehelpers.annotations.FieldFormat;
 import org.coury.jfilehelpers.annotations.DelimitedRecord;
+import org.coury.jfilehelpers.annotations.FieldFormat;
 
 @DelimitedRecord(",")
 public class DateFormatType2 {
 	public int orderID;
 	public int employeeID;
-	@FieldFormat(format="M-d-yyyy")
+	@FieldFormat("M-d-yyyy")
 	public Date orderDate;
-	@FieldFormat(format="MMddyyyy")
+	@FieldFormat("MMddyyyy")
 	public Date requiredDate;
-	@FieldFormat(format="M/d/yy")
+	@FieldFormat("M/d/yy")
 	public Date shippedDate;
 }
