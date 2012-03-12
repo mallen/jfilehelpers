@@ -46,4 +46,36 @@ public class Customer {
 		b.append("   addedDate = " + addedDate).append(l);
 		return StringHelper.toStringBuilder(this, b.toString());
 	}
+
+	public Integer getCustId() {
+		return custId;
+	}
+
+	public void setCustId(final Integer custId) {
+		this.custId = custId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(final String name) {
+		this.name = name;
+	}
+
+	public Integer getRating() {
+		return rating;
+	}
+
+	public void setRating(final Integer rating) {
+		this.rating = rating;
+	}
+
+	public Date getAddedDate() {
+		return addedDate;
+	}
+
+	public void setAddedDate(final Date addedDate) {
+		this.addedDate = addedDate;
+	}
 }
