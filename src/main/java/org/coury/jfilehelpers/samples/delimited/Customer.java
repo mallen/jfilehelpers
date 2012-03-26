@@ -23,7 +23,7 @@ package org.coury.jfilehelpers.samples.delimited;
 import java.util.Date;
 
 import org.coury.jfilehelpers.annotations.DelimitedRecord;
-import org.coury.jfilehelpers.annotations.FieldFormat;
+import org.coury.jfilehelpers.annotations.FieldDateFormat;
 import org.coury.jfilehelpers.helpers.StringHelper;
 
 @DelimitedRecord(",")
@@ -32,7 +32,7 @@ public class Customer {
 	private String name;
 	private Integer rating;
 	
-	@FieldFormat("dd-MM-yyyy")
+	@FieldDateFormat("dd-MM-yyyy")
 	private Date addedDate;
 	
 	@Override

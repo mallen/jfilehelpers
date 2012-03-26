@@ -23,9 +23,11 @@ import java.lang.annotation.Annotation;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import org.apache.commons.lang3.StringUtils;
-import org.coury.jfilehelpers.annotations.FieldFormat;
+import org.coury.jfilehelpers.annotations.FieldDateFormat;
 
 public class DateConverterProvider extends ConverterProvider {
 
@@ -53,6 +55,7 @@ public class DateConverterProvider extends ConverterProvider {
 		
 		private String format;
 		private SimpleDateFormat sdf;
+		private String timeZone;
 
 		public DateConverter(final String format) {
 			this.format = format;
@@ -66,11 +69,19 @@ public class DateConverterProvider extends ConverterProvider {
 			if (format == null || format.length() < 1) {
 				throw new IllegalArgumentException("The format of the DateTime Converter cannot be null or empty.");
 			}
+			
+			TimeZone tz = null;
+			if(StringUtils.isNotBlank(timeZone)){
+				tz = TimeZone.getTimeZone(timeZone);
+			}
 
 			try {
-				sdf = new SimpleDateFormat(format);
+				sdf = new SimpleDateFormat(format, Locale.ENGLISH);
 				sdf.setLenient(false);
 				sdf.format(new Date());
+				if(tz != null){
+					sdf.setTimeZone(tz);
+				}
 			} catch (IllegalArgumentException e) {
 				throw new IllegalArgumentException("The format: '" + format + " is invalid for the DateTime Converter.");
 			}
@@ -78,13 +89,14 @@ public class DateConverterProvider extends ConverterProvider {
 		
 		@Override
 		public Class<? extends Annotation> getOptionsAnnotationType() {
-			return FieldFormat.class;
+			return FieldDateFormat.class;
 		}
 		
 		@Override
 		public void setOptionsFromAnnotation(final Annotation annotation) {
-			FieldFormat options = (FieldFormat) annotation;
+			FieldDateFormat options = (FieldDateFormat) annotation;
 			this.format = options.value();
+			this.timeZone = options.timeZone();
 		}
 
 		@Override
@@ -107,9 +119,9 @@ public class DateConverterProvider extends ConverterProvider {
 				} else {
 					extra = " Using the format: '" + format + "'";
 				}
-
+				
 				// throw new ConvertException(from, typeof (DateTime), extra);
-				throw new RuntimeException(extra);
+				throw new RuntimeException(extra + " - from:" + from, e);
 			}
 
 			return val;

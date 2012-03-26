@@ -3,7 +3,7 @@ package org.coury.jfilehelpers.tests.converters.testobjects;
 import java.util.Date;
 
 import org.coury.jfilehelpers.annotations.DelimitedRecord;
-import org.coury.jfilehelpers.annotations.FieldFormat;
+import org.coury.jfilehelpers.annotations.FieldDateFormat;
 
 @DelimitedRecord
 public class DateFormatType1 {
@@ -14,10 +14,10 @@ public class DateFormatType1 {
 		
 	}
 	
-	@FieldFormat("d-M-yyyy")
+	@FieldDateFormat("d-M-yyyy")
 	public Date orderDate;
-	@FieldFormat("MMddyyyy")
+	@FieldDateFormat("MMddyyyy")
 	public Date requiredDate;
-	@FieldFormat("d/M/yy")
+	@FieldDateFormat("d/M/yy")
 	public Date shippedDate;
 }

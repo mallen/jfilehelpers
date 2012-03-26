@@ -21,9 +21,12 @@
 package org.coury.jfilehelpers.tests.converters;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import junit.framework.TestCase;
 
@@ -36,7 +39,23 @@ import org.coury.jfilehelpers.tests.converters.testobjects.DateFormatType3;
 
 public class DateFormatTest extends TestCase {
 	
-	@SuppressWarnings("unchecked")
+	public void test() throws ParseException{
+		//DateConverter converter = new DateConverter("dd/MM/yyyy HH:mm");
+		//Date parsed = (Date) converter.stringToField("25/03/2012 01:45");
+		
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		format.setTimeZone(TimeZone.getTimeZone("UTC"));
+		format.setLenient(false);
+		format.parse("25/03/2012 01:45");
+		
+//		DateFormat format2 = DateFormat.getDateTimeInstance();
+//		((SimpleDateFormat) format2).applyPattern("dd/MM/yyyy HH:mm");
+//		format2.setLenient(false);
+//		format2.parse("25/03/2012 01:45");
+		
+	}
+	
+	
 	public void testDifferentSpanishFormat() throws IOException {
 		FileHelperEngine<DateFormatType1> engine = new FileHelperEngine<DateFormatType1>(DateFormatType1.class);
 
@@ -59,7 +78,6 @@ public class DateFormatTest extends TestCase {
 		Common.assertSameDate(getDate(1996, 7, 15), res.get(3).shippedDate);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void testDifferentEnglishFormat() throws IOException {
 		FileHelperEngine<DateFormatType2> engine = new FileHelperEngine<DateFormatType2>(DateFormatType2.class);
 
@@ -83,7 +101,6 @@ public class DateFormatTest extends TestCase {
 	}
 	
 
-	@SuppressWarnings("unchecked")
 	public void testDifferentEnglishFormat_usingDefaultFormat() throws IOException {
 		FileHelperEngine<DateFormatType3> engine = new FileHelperEngine<DateFormatType3>(DateFormatType3.class);
 		

@@ -32,6 +32,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface FieldFormat {
+public @interface FieldDateFormat {
 	String value();
+	String timeZone() default "";
 }
