@@ -41,7 +41,6 @@ import org.coury.jfilehelpers.progress.ProgressChangeHandler;
 
 public abstract class EngineBase<T> {
 	protected RecordInfo<T> recordInfo;
-	protected Class<T> recordClass;
 	protected Encoding encoding;	
 	protected String footerText;
 	protected String headerText;
@@ -66,7 +65,6 @@ public abstract class EngineBase<T> {
 		dateConverterProvider = new DateConverterProvider();
 		converterProviders.add(dateConverterProvider);
 		
-		this.recordClass = recordClass;
 		this.recordInfo = new RecordInfo<T>(recordClass, converterProviders);
 	}
 	

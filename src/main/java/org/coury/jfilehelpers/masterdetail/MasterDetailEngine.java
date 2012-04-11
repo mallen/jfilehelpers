@@ -58,8 +58,6 @@ import org.coury.jfilehelpers.helpers.StringHelper;
  */
 public class MasterDetailEngine<MT, DT> extends EngineBase<DT> {
 
-	@SuppressWarnings("unused")
-	private Class<MT> masterRecordClass;
 	private final RecordInfo<MT> masterInfo;
 	private final MasterDetailSelector recordSelector;
 	private BeforeReadRecordHandler beforeReadRecordHandler;
@@ -73,7 +71,6 @@ public class MasterDetailEngine<MT, DT> extends EngineBase<DT> {
 
 	public MasterDetailEngine(final Class<MT> masterRecordClass, final Class<DT> detailRecordClass, final MasterDetailSelector recordSelector) {
 		super(detailRecordClass);
-		this.masterRecordClass = masterRecordClass;
 		this.masterInfo = new RecordInfo<MT>(masterRecordClass, converterProviders);
 		this.recordSelector = recordSelector;
 	}
