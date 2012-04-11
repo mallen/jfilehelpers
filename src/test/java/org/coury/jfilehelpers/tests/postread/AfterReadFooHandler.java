@@ -19,13 +19,13 @@
  */
 package org.coury.jfilehelpers.tests.postread;
 
-import org.coury.jfilehelpers.annotations.PostReadRecordHandler;
 import org.coury.jfilehelpers.events.AfterReadRecordEventArgs;
+import org.coury.jfilehelpers.events.AfterReadRecordHandler;
 
-public class PostReadFooHandler implements PostReadRecordHandler<Foo> {
+public class AfterReadFooHandler implements AfterReadRecordHandler<Foo> {
 
 	@Override
-	public void handleRecord(final AfterReadRecordEventArgs<Foo> e) {
+	public void handleAfterReadRecord(final AfterReadRecordEventArgs<Foo> e) {
 		Foo record = e.getRecord();
 		if(record.getNumber() % 2 == 0){
 			e.setSkipThisRecord(true);

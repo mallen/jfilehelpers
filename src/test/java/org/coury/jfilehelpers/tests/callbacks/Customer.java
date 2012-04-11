@@ -21,28 +21,15 @@
 package org.coury.jfilehelpers.tests.callbacks;
 
 import org.coury.jfilehelpers.annotations.DelimitedRecord;
-import org.coury.jfilehelpers.engines.EngineBase;
-import org.coury.jfilehelpers.interfaces.NotifyRead;
-import org.coury.jfilehelpers.interfaces.NotifyWrite;
 
 /**
  * @author Robert Eccardt
  *
  */
 @DelimitedRecord(",")
-public class Customer implements NotifyWrite<Customer>, NotifyRead<Customer> {
+public class Customer {
 	public Integer custId;
 	public String name;
 	public Integer rating;
-	@Override
-	public void beforeWrite(EngineBase<Customer> e) {
-		NotifiersTest.engineTester(e);
-		NotifiersTest.incrementWriteCount();
-	}
-	@Override
-	public void afterRead(EngineBase<Customer> e, String line) {
-		NotifiersTest.engineTester(e);
-		NotifiersTest.setNotifyLine(line);
-		NotifiersTest.incrementReadCount();
-	}
+	
 }

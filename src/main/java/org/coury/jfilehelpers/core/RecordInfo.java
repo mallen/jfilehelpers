@@ -27,24 +27,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.coury.jfilehelpers.annotations.AfterReadRecord;
 import org.coury.jfilehelpers.annotations.FixedLengthRecord;
 import org.coury.jfilehelpers.annotations.IgnoreCommentedLines;
 import org.coury.jfilehelpers.annotations.IgnoreEmptyLines;
 import org.coury.jfilehelpers.annotations.IgnoreFirst;
 import org.coury.jfilehelpers.annotations.IgnoreLast;
-import org.coury.jfilehelpers.annotations.PostReadRecord;
-import org.coury.jfilehelpers.annotations.PostReadRecordHandler;
 import org.coury.jfilehelpers.converters.ConverterProvider;
 import org.coury.jfilehelpers.engines.LineInfo;
 import org.coury.jfilehelpers.enums.RecordCondition;
+import org.coury.jfilehelpers.events.AfterReadRecordHandler;
 import org.coury.jfilehelpers.fields.FieldBase;
 import org.coury.jfilehelpers.fields.FieldFactory;
 import org.coury.jfilehelpers.fields.FixedLengthField;
 import org.coury.jfilehelpers.helpers.ConditionHelper;
 import org.coury.jfilehelpers.helpers.ConstructorHelper;
 import org.coury.jfilehelpers.helpers.StringHelper;
-import org.coury.jfilehelpers.interfaces.NotifyRead;
-import org.coury.jfilehelpers.interfaces.NotifyWrite;
 
 /**
  * Information about one record of information. Keep field types and its values
@@ -62,14 +60,12 @@ public final class RecordInfo<T> {
 	private int ignoreLast = 0;
 	private boolean ignoreEmptyLines = false;
 	private boolean trimBeforeEmptyLineCheck = false;
-	private PostReadRecordHandler<T> postReadRecordHandler = null;
+	private AfterReadRecordHandler<T> afterReadRecordHandler = null;
 	private String commentMarker = null;
 	private boolean commentAnyPlace = true;
 	private RecordCondition recordCondition = RecordCondition.None;
 	private String recordConditionSelector = "";
 
-	private boolean notifyRead = false;
-	private boolean notifyWrite = false;
 	private String conditionRegEx = null;
 	
 	private int sizeHint = 32;
@@ -260,13 +256,13 @@ public final class RecordInfo<T> {
 			this.commentAnyPlace = igc.anyPlace();
 		}
 		
-		PostReadRecord arr = recordClass.getAnnotation(PostReadRecord.class);
+		AfterReadRecord arr = recordClass.getAnnotation(AfterReadRecord.class);
 		if(arr != null){
 			Constructor<?> constructor = ConstructorHelper.getPublicEmptyConstructor(arr.handlerClass());
 			try {
 				@SuppressWarnings("unchecked")
-				PostReadRecordHandler<T> temp = (PostReadRecordHandler<T>) constructor.newInstance();
-				postReadRecordHandler = temp;
+				AfterReadRecordHandler<T> temp = (AfterReadRecordHandler<T>) constructor.newInstance();
+				afterReadRecordHandler = temp;
 			} catch (InstantiationException e) {
 				throw new RuntimeException("Error creating handler (1)", e);
 			} catch (IllegalAccessException e) {
@@ -276,14 +272,6 @@ public final class RecordInfo<T> {
 			} catch (InvocationTargetException e) {
 				throw new RuntimeException("Error creating handler (4)", e);
 			}
-		}
-		
-		if(NotifyRead.class.isAssignableFrom(recordClass)) {
-			notifyRead = true;
-		}
-
-		if(NotifyWrite.class.isAssignableFrom(recordClass)) {
-			notifyWrite = true;
 		}
 		
 		recordConstructor = ConstructorHelper.getPublicEmptyConstructor(recordClass);
@@ -429,22 +417,6 @@ public final class RecordInfo<T> {
 		this.recordConditionSelector = recordConditionSelector;
 	}
 
-	public boolean isNotifyRead() {
-		return notifyRead;
-	}
-
-	public void setNotifyRead(final boolean notifyRead) {
-		this.notifyRead = notifyRead;
-	}
-
-	public boolean isNotifyWrite() {
-		return notifyWrite;
-	}
-
-	public void setNotifyWrite(final boolean notifyWrite) {
-		this.notifyWrite = notifyWrite;
-	}
-
 	public String getConditionRegEx() {
 		return conditionRegEx;
 	}
@@ -469,11 +441,11 @@ public final class RecordInfo<T> {
 		this.recordConstructor = recordConstructor;
 	}
 
-	public PostReadRecordHandler<T> getPostReadRecordHandler() {
-		return postReadRecordHandler;
+	public AfterReadRecordHandler<T> getAfterReadRecordHandler() {
+		return afterReadRecordHandler;
 	}
 
-	public void setPostReadRecordHandler(final PostReadRecordHandler<T> postReadRecordHandler) {
-		this.postReadRecordHandler = postReadRecordHandler;
+	public void setAfterReadRecordHandler(final AfterReadRecordHandler<T> afterReadRecordHandler) {
+		this.afterReadRecordHandler = afterReadRecordHandler;
 	}
 }

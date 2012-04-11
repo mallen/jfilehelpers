@@ -34,7 +34,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.coury.jfilehelpers.annotations.PostReadRecordHandler;
 import org.coury.jfilehelpers.core.ForwardReader;
 import org.coury.jfilehelpers.events.AfterReadRecordEventArgs;
 import org.coury.jfilehelpers.events.AfterReadRecordHandler;
@@ -46,8 +45,6 @@ import org.coury.jfilehelpers.events.BeforeWriteRecordEventArgs;
 import org.coury.jfilehelpers.events.BeforeWriteRecordHandler;
 import org.coury.jfilehelpers.helpers.ProgressHelper;
 import org.coury.jfilehelpers.helpers.StringHelper;
-import org.coury.jfilehelpers.interfaces.NotifyRead;
-import org.coury.jfilehelpers.interfaces.NotifyWrite;
 
 public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
 
@@ -59,7 +56,7 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
     private FileReader fr = null;
     private ForwardReader freader = null;
     
-    private BeforeReadRecordHandler<T> beforeReadRecordHandler;
+    private BeforeReadRecordHandler beforeReadRecordHandler;
     private AfterReadRecordHandler<T> afterReadRecordHandler;
     private BeforeWriteRecordHandler<T> beforeWriteRecordHandler;
     private AfterWriteRecordHandler<T> afterWriteRecordHandler;
@@ -291,7 +288,7 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
         }
     }
     
-    public void setBeforeReadRecordHandler(final BeforeReadRecordHandler<T> beforeReadRecordHandler) {
+    public void setBeforeReadRecordHandler(final BeforeReadRecordHandler beforeReadRecordHandler) {
         this.beforeReadRecordHandler = beforeReadRecordHandler;
     }
 
@@ -310,7 +307,7 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
     private boolean onBeforeReadRecord(final BeforeReadRecordEventArgs e) {
     	
         if (beforeReadRecordHandler != null) {
-            beforeReadRecordHandler.handleBeforeReadRecord(this, e);
+            beforeReadRecordHandler.handleBeforeReadRecord(e);
             return e.getSkipThisRecord();
         }
         return false;
@@ -318,11 +315,8 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
 
     @SuppressWarnings("unchecked")
     private boolean onAfterReadRecord(final String line, final T record) {
-        if (recordInfo.isNotifyRead()) {
-            ((NotifyRead<T>) record).afterRead(this, line);
-        }
         
-		PostReadRecordHandler<T> postReadRecordHandler = recordInfo.getPostReadRecordHandler();
+		AfterReadRecordHandler<T> postReadRecordHandler = recordInfo.getAfterReadRecordHandler();
 		
 		AfterReadRecordEventArgs<T> e = null;
 		if(postReadRecordHandler != null || afterReadRecordHandler != null){
@@ -330,14 +324,14 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
 		}
 		
 		if(postReadRecordHandler != null){
-			postReadRecordHandler.handleRecord(e);
+			postReadRecordHandler.handleAfterReadRecord(e);
 			if(e.getSkipThisRecord()){
 				return true;
 			}
 		}
 		
         if (afterReadRecordHandler != null) {
-            afterReadRecordHandler.handleAfterReadRecord(this, e);
+            afterReadRecordHandler.handleAfterReadRecord(e);
             return e.getSkipThisRecord();
         }
         return false;
@@ -345,12 +339,9 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
 
     @SuppressWarnings("unchecked")
     private boolean onBeforeWriteRecord(final T record) {
-        if (recordInfo.isNotifyWrite()) {
-            ((NotifyWrite<T>) record).beforeWrite(this);
-        }
         if (beforeWriteRecordHandler != null) {
             BeforeWriteRecordEventArgs<T> e = new BeforeWriteRecordEventArgs<T>(record, lineNumber);
-            beforeWriteRecordHandler.handleBeforeWriteRecord(this, e);
+            beforeWriteRecordHandler.handleBeforeWriteRecord(e);
             return e.getSkipThisRecord();
         }
         return false;
@@ -359,7 +350,7 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
     private String onAfterWriteRecord(final String line, final T record) {
         if (afterWriteRecordHandler != null) {
             AfterWriteRecordEventArgs<T> e = new AfterWriteRecordEventArgs<T>(record, lineNumber, line);
-            afterWriteRecordHandler.handleAfterWriteRecord(this, e);
+            afterWriteRecordHandler.handleAfterWriteRecord(e);
             return e.getRecordLine();
         }
         return line;

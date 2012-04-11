@@ -20,10 +20,10 @@
 package org.coury.jfilehelpers.tests.postread;
 
 import org.coury.jfilehelpers.annotations.DelimitedRecord;
-import org.coury.jfilehelpers.annotations.PostReadRecord;
+import org.coury.jfilehelpers.annotations.AfterReadRecord;
 
 @DelimitedRecord
-@PostReadRecord(handlerClass=PostReadFooHandler.class)
+@AfterReadRecord(handlerClass=AfterReadFooHandler.class)
 public class Foo {
 	private int number;
 	private String text;

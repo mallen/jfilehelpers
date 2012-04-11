@@ -29,7 +29,7 @@ import java.util.List;
 import org.coury.jfilehelpers.engines.FileHelperEngine;
 import org.junit.Test;
 
-public class PostReadRecordTest {
+public class AfterReadRecordTest {
 
 	@Test
 	public void postReadHandlerWorks() throws IOException{

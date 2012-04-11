@@ -24,13 +24,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.coury.jfilehelpers.events.AfterReadRecordHandler;
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface PostReadRecord {
+public @interface AfterReadRecord {
 	/**
-	 * Gives the oppertunity to alter/skip a record afetr it has been read<br>
+	 * Gives the oppertunity to alter/skip a record after it has been read<br>
 	 * The handler class must have a public empty constructor
 	 * @return the handler class
 	 */
-	Class<? extends PostReadRecordHandler<?>> handlerClass();
+	Class<? extends AfterReadRecordHandler<?>> handlerClass();
 }

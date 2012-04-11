@@ -20,7 +20,6 @@
 
 package org.coury.jfilehelpers.events;
 
-import org.coury.jfilehelpers.engines.EngineBase;
 
 /**
  * @author Robert Eccardt
@@ -28,5 +27,5 @@ import org.coury.jfilehelpers.engines.EngineBase;
  * @param <T> the data record type
  */
 public interface AfterReadRecordHandler<T> {
-	public void handleAfterReadRecord(EngineBase<T> engine, AfterReadRecordEventArgs<T> e);
+	public void handleAfterReadRecord(AfterReadRecordEventArgs<T> e);
 }

@@ -45,7 +45,6 @@ public abstract class CallbacksBase extends TestCase {
 	static int beforeWriteCount;
 	static int afterWriteCount;
 	static String eventLine;
-	static String notifyLine;
 	@Override
 	protected void setUp() {
 		engine = new FileHelperEngine<Customer>(Customer.class);
@@ -54,7 +53,6 @@ public abstract class CallbacksBase extends TestCase {
 		beforeReadCount = beforeWriteCount = 0;
 		afterReadCount = afterWriteCount = 0;
 		eventLine = "";
-		notifyLine = "";
 		Customer c = new Customer();
 		c.custId = 1;
 		c.name = "John Doe";
@@ -103,8 +101,5 @@ public abstract class CallbacksBase extends TestCase {
 	}
 	public static void setEventLine(final String s) {
 		eventLine = s;
-	}
-	public static void setNotifyLine(final String s) {
-		notifyLine = s;
 	}
 }

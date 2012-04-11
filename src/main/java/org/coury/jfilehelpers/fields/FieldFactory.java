@@ -52,7 +52,7 @@ public class FieldFactory {
 	 *         reflection
 	 */
 	@SuppressWarnings("unchecked")
-	public static FieldBase createField(final Field fi, final Class recordClass, final boolean someOptional, 
+	public static FieldBase createField(final Field fi, final Class<?> recordClass, final boolean someOptional, 
 			final List<ConverterProvider> converterProviders) {
 		if (fi.isAnnotationPresent(FieldIgnored.class) || fi.getName().startsWith("$")) {
 			return null;
@@ -80,7 +80,7 @@ public class FieldFactory {
 						"The FieldFixedLength is only for the FixedLength not for the delimited ones.");
 			}
 			
-			FixedLengthRecord fixedLengthRecord = (FixedLengthRecord) recordClass.getAnnotation(FixedLengthRecord.class);
+			FixedLengthRecord fixedLengthRecord = recordClass.getAnnotation(FixedLengthRecord.class);
 			FieldFixedLength attb = fi.getAnnotation(FieldFixedLength.class);
 			FieldAlign align = fi.getAnnotation(FieldAlign.class);
 			
@@ -97,7 +97,7 @@ public class FieldFactory {
 		}
 		else {
 			// default
-			DelimitedRecord delimitedAnn = (DelimitedRecord) recordClass.getAnnotation(DelimitedRecord.class);
+			DelimitedRecord delimitedAnn = recordClass.getAnnotation(DelimitedRecord.class);
 			String delimiter = ",";
 			if (delimitedAnn != null) {
 				delimiter = delimitedAnn.value();

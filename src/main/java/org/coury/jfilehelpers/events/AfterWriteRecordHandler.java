@@ -20,7 +20,6 @@
 
 package org.coury.jfilehelpers.events;
 
-import org.coury.jfilehelpers.engines.EngineBase;
 
 /**
  * @author Robert Eccardt
@@ -34,5 +33,5 @@ public interface AfterWriteRecordHandler<T> {
 	 * opportunity to examine the proposed output and make any desired
 	 * modifications.
 	 */
-	public void handleAfterWriteRecord(EngineBase<T> engine, AfterWriteRecordEventArgs<T> e);
+	public void handleAfterWriteRecord(AfterWriteRecordEventArgs<T> e);
 }

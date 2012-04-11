@@ -22,7 +22,6 @@ package org.coury.jfilehelpers.tests.callbacks;
 
 import java.io.IOException;
 
-import org.coury.jfilehelpers.engines.EngineBase;
 import org.coury.jfilehelpers.engines.FileHelperEngine;
 import org.coury.jfilehelpers.events.AfterReadRecordEventArgs;
 import org.coury.jfilehelpers.events.AfterReadRecordHandler;
@@ -42,10 +41,9 @@ public class EventsTest extends CallbacksBase {
 	public void testBeforeRead() {
 		FileHelperEngine<Customer> fileEngine = engine;
 		fileEngine.setBeforeReadRecordHandler(
-				new BeforeReadRecordHandler<Customer>() {
+				new BeforeReadRecordHandler() {
 					@Override
-					public void handleBeforeReadRecord(final EngineBase<Customer> engine, final BeforeReadRecordEventArgs e) {
-						engineTester(engine);
+					public void handleBeforeReadRecord(final BeforeReadRecordEventArgs e) {
 						incrementBeforeReadCount();
 						if(e.getRecordLine().equals("2,Jane Rowe,2")) {
 							e.setRecordLine("2,Groucho Marx,2");
@@ -56,8 +54,7 @@ public class EventsTest extends CallbacksBase {
 		fileEngine.setAfterReadRecordHandler(
 				new AfterReadRecordHandler<Customer>() {
 					@Override
-					public void handleAfterReadRecord(final EngineBase<Customer> engine, final AfterReadRecordEventArgs<Customer> e) {
-						engineTester(engine);
+					public void handleAfterReadRecord(final AfterReadRecordEventArgs<Customer> e) {
 						incrementAfterReadCount();
 						if(e.getLineNumber() == 2) {
 							assertEquals(e.getRecord().name,"Groucho Marx");
@@ -78,9 +75,9 @@ public class EventsTest extends CallbacksBase {
 	public void testBeforeReadSkip() {
 		FileHelperEngine<Customer> fileEngine = engine;
 		fileEngine.setBeforeReadRecordHandler(
-				new BeforeReadRecordHandler<Customer>() {
+				new BeforeReadRecordHandler() {
 					@Override
-					public void handleBeforeReadRecord(final EngineBase<Customer> engine, final BeforeReadRecordEventArgs e) {
+					public void handleBeforeReadRecord(final BeforeReadRecordEventArgs e) {
 						if(e.getLineNumber() == 1) {
 							e.setSkipThisRecord(true);
 						}
@@ -100,7 +97,7 @@ public class EventsTest extends CallbacksBase {
 		fileEngine.setAfterReadRecordHandler(
 				new AfterReadRecordHandler<Customer>() {
 					@Override
-					public void handleAfterReadRecord(final EngineBase<Customer> engine, final AfterReadRecordEventArgs<Customer> e) {
+					public void handleAfterReadRecord(final AfterReadRecordEventArgs<Customer> e) {
 						engineTester(engine);
 						incrementAfterReadCount();
 						if(e.getLineNumber() == 2) {
@@ -123,7 +120,7 @@ public class EventsTest extends CallbacksBase {
 		fileEngine.setAfterReadRecordHandler(
 				new AfterReadRecordHandler<Customer>() {
 					@Override
-					public void handleAfterReadRecord(final EngineBase<Customer> engine, final AfterReadRecordEventArgs<Customer> e) {
+					public void handleAfterReadRecord(final AfterReadRecordEventArgs<Customer> e) {
 						if(e.getLineNumber() == 1) {
 							e.setSkipThisRecord(true);
 						}
@@ -143,7 +140,7 @@ public class EventsTest extends CallbacksBase {
 		fileEngine.setBeforeWriteRecordHandler(
 				new BeforeWriteRecordHandler<Customer>() {
 					@Override
-					public void handleBeforeWriteRecord(final EngineBase<Customer> engine, final BeforeWriteRecordEventArgs<Customer> e) {
+					public void handleBeforeWriteRecord(final BeforeWriteRecordEventArgs<Customer> e) {
 						engineTester(engine);
 						incrementBeforeWriteCount();
 						if(e.getRecord().name.equals("Jane Rowe")) {
@@ -155,7 +152,7 @@ public class EventsTest extends CallbacksBase {
 		fileEngine.setAfterWriteRecordHandler(
 				new AfterWriteRecordHandler<Customer>() {
 					@Override
-					public void handleAfterWriteRecord(final EngineBase<Customer> engine, final AfterWriteRecordEventArgs<Customer> e) {
+					public void handleAfterWriteRecord(final AfterWriteRecordEventArgs<Customer> e) {
 						engineTester(engine);
 						incrementAfterWriteCount();
 						if(e.getLineNumber() == 2) {
@@ -179,7 +176,7 @@ public class EventsTest extends CallbacksBase {
 		fileEngine.setBeforeWriteRecordHandler(
 				new BeforeWriteRecordHandler<Customer>() {
 					@Override
-					public void handleBeforeWriteRecord(final EngineBase<Customer> engine, final BeforeWriteRecordEventArgs<Customer> e) {
+					public void handleBeforeWriteRecord(final BeforeWriteRecordEventArgs<Customer> e) {
 						if(e.getLineNumber() == 1) {
 							e.setSkipThisRecord(true);
 						}

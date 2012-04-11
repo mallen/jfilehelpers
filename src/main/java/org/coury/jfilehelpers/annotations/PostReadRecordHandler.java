@@ -19,8 +19,3 @@
  */
 package org.coury.jfilehelpers.annotations;
 
-import org.coury.jfilehelpers.events.AfterReadRecordEventArgs;
-
-public interface PostReadRecordHandler<T> {
-	void handleRecord(AfterReadRecordEventArgs<T> e);
-}

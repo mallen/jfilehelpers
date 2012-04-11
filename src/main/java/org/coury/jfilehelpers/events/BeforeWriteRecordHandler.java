@@ -20,7 +20,6 @@
 
 package org.coury.jfilehelpers.events;
 
-import org.coury.jfilehelpers.engines.EngineBase;
 
 /**
  * @author Robert Eccardt
@@ -28,5 +27,5 @@ import org.coury.jfilehelpers.engines.EngineBase;
  * @param <T> the data record type
  */
 public interface BeforeWriteRecordHandler<T> {
-	public void handleBeforeWriteRecord(EngineBase<T> engine, BeforeWriteRecordEventArgs<T> e);
+	public void handleBeforeWriteRecord(BeforeWriteRecordEventArgs<T> e);
 }
