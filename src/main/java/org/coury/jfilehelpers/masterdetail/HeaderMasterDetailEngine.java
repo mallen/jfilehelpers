@@ -40,24 +40,27 @@ public class HeaderMasterDetailEngine<HT, MT, DT> extends MasterDetailEngine<MT,
 		this.headerInfo = new RecordInfo<HT>(headerRecordClass, converterProviders);	
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<HeaderMasterDetails<HT, MT, DT>> readFile(final String fileName) throws IOException {
 		return (List<HeaderMasterDetails<HT, MT, DT>>) super.readFile(fileName);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<HeaderMasterDetails<HT, MT, DT>> readResource(final String fileName) throws IOException {
 		return (List<HeaderMasterDetails<HT, MT, DT>>) super.readResource(fileName);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<HeaderMasterDetails<HT, MT, DT>> fromString(final String s) throws IOException {
-		
 		return (List<HeaderMasterDetails<HT, MT, DT>>) super.fromString(s);
 	}
 	
 	@Override
 	protected void beforeWriteMaster(final MasterDetails<MT, DT> masterDetails, final BufferedWriter writer) throws IOException {
+		@SuppressWarnings("unchecked")
 		HeaderMasterDetails<HT, MT, DT> hmd = (HeaderMasterDetails<HT, MT, DT>) masterDetails;
 		HT header = hmd.getHeader();
 		if (!header.equals(currentHeader)) {
@@ -71,21 +74,6 @@ public class HeaderMasterDetailEngine<HT, MT, DT> extends MasterDetailEngine<MT,
 			writer.write(headerLine + StringHelper.NEW_LINE);
 		}
 	}
-	
-	/*@Override
-	public void writeFile(final String fileName, final List<? extends MasterDetails<MT, DT>> records) throws IOException {
-		throw new NotImplementedException();
-	}
-	
-	@Override
-	public void writeFile(final String fileName, final List<? extends MasterDetails<MT, DT>> records, final int maxRecords) throws IOException {
-		throw new NotImplementedException();
-	}
-	
-	@Override
-	public void writeFile(final String fileName, final MasterDetails<MT, DT> record) throws IOException {
-		throw new NotImplementedException();
-	}*/
 	
 	@Override
 	protected MasterDetails<MT, DT> createMasterDetails() {

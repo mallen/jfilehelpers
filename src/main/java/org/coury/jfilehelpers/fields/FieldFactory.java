@@ -51,7 +51,6 @@ public class FieldFactory {
 	 * @return a FieldBase instance with informations from the field acquired by
 	 *         reflection
 	 */
-	@SuppressWarnings("unchecked")
 	public static FieldBase createField(final Field fi, final Class<?> recordClass, final boolean someOptional, 
 			final List<ConverterProvider> converterProviders) {
 		if (fi.isAnnotationPresent(FieldIgnored.class) || fi.getName().startsWith("$")) {

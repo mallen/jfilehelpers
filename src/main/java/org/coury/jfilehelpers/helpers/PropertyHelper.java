@@ -44,7 +44,8 @@ public class PropertyHelper {
 	}
 	
 	public static class PropertyNotFoundException extends RuntimeException {
-		
+		private static final long serialVersionUID = 1L;
+
 		public PropertyNotFoundException(final String message) {
 			super(message);
 		}
@@ -88,6 +89,8 @@ public class PropertyHelper {
 	}
 	
 	public static class CannotSetPropertyException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+
 		public CannotSetPropertyException(final String message, final Throwable e) {
 			super(message, e);
 		}
@@ -129,6 +132,8 @@ public class PropertyHelper {
 	}
 	
 	public static class CannotGetPropertyException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+
 		public CannotGetPropertyException(final String message, final Throwable e) {
 			super(message, e);
 		}

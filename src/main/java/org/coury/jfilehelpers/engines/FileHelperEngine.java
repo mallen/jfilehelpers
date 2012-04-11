@@ -313,7 +313,6 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
         return false;
     }
 
-    @SuppressWarnings("unchecked")
     private boolean onAfterReadRecord(final String line, final T record) {
         
 		AfterReadRecordHandler<T> postReadRecordHandler = recordInfo.getAfterReadRecordHandler();
@@ -337,7 +336,6 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
         return false;
     }
 
-    @SuppressWarnings("unchecked")
     private boolean onBeforeWriteRecord(final T record) {
         if (beforeWriteRecordHandler != null) {
             BeforeWriteRecordEventArgs<T> e = new BeforeWriteRecordEventArgs<T>(record, lineNumber);
