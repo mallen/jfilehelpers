@@ -66,7 +66,7 @@ public class DateConverterProvider extends ConverterProvider {
 				return;
 			}
 			
-			if (format == null || format.length() < 1) {
+			if (StringUtils.isBlank(format)) {
 				throw new IllegalArgumentException("The format of the DateTime Converter cannot be null or empty.");
 			}
 			

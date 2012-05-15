@@ -59,7 +59,6 @@ public class ImpliedDecimalPlacesTest {
 			engine.writeFile(file, foos);
 			foos = engine.readFile(file);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

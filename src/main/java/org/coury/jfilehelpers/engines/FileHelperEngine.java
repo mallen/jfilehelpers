@@ -52,7 +52,6 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
     private int currentRecord = 0;
     private LineInfo line;
     private String currentLine;
-    private String completeLine;
     private FileReader fr = null;
     private ForwardReader freader = null;
     
@@ -77,7 +76,6 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
         FileWriter fw = null;
         try {
             fw = new FileWriter(new File(fileName));
-            //fw.write("ABCDEF\n");
             writeStream(fw, records, maxRecords);
         } finally {
             if (fw != null) {
@@ -257,8 +255,7 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
         freader.setDiscardForward(true);
 
         setLineNumber(1);
-        completeLine = freader.readNextLine();
-        currentLine = completeLine;
+        currentLine = freader.readNextLine();;
 
         ProgressHelper.notify(notifyHandler, progressMode, 0, -1);
 
@@ -392,7 +389,6 @@ public class FileHelperEngine<T> extends EngineBase<T> implements Iterable<T> {
 		                    }
 		                }
 		                currentLine = freader.readNextLine();
-		                completeLine = currentLine;
 		                lineNumber++;
 		            } catch (IOException ex) {
 		                throw new Error(ex);
