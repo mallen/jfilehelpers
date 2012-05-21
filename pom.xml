@@ -49,4 +49,21 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<distributionManagement>
+		<!-- Publish the releases here -->
+		<repository>
+			<id>wind-nexus</id>
+			<name>wind nexus</name>
+			<url>http://har-116662s:8081/nexus/content/repositories/releases</url>
+		</repository>
+
+		<!-- Publish the snapshots here -->
+		<snapshotRepository>
+			<id>wind-nexus</id>
+			<name>wind nexus</name>
+			<url>http://har-116662s:8081/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+	
 </project>
