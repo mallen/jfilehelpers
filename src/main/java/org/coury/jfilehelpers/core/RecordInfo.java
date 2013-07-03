@@ -193,6 +193,9 @@ public final class RecordInfo<T> {
 		}
 		
 		switch (recordCondition) {
+		case None:
+			//no op
+			break;
 		case ExcludeIfBegins:
 			return ConditionHelper.beginsWith(line, recordConditionSelector);
 			

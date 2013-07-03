@@ -27,5 +27,5 @@ package org.coury.jfilehelpers.events;
  * @param <T> the data record type
  */
 public interface AfterReadRecordHandler<T> {
-	public void handleAfterReadRecord(AfterReadRecordEventArgs<T> e);
+	public void handleAfterReadRecord(AfterReadRecordEventArgs<T> args);
 }
